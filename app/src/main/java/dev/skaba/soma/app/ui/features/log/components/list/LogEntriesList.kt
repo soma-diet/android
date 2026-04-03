@@ -6,7 +6,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import dev.skaba.soma.app.ui.theme.SOMATheme
 
 @Composable
-fun LogEntriesList() {
+fun LogEntriesList(
+
+) {
   LazyColumn(
 
   ) {
