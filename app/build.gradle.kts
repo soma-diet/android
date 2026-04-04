@@ -74,4 +74,7 @@ dependencies {
   implementation(libs.androidx.room.ktx)
   // optional - Paging 3 Integration
   implementation(libs.androidx.room.paging)
+
+  // coil knihovna pro obrazky
+  implementation(libs.coil.compose)
 }

@@ -19,17 +19,17 @@ val AppTypography = Typography(
   headlineLarge = TextStyle(
     fontFamily = OutfitFontFamily,
     fontWeight = FontWeight.Bold,
-    fontSize = 32.sp
+    fontSize = 28.sp
   ),
   headlineMedium = TextStyle(
     fontFamily = OutfitFontFamily,
     fontWeight = FontWeight.SemiBold,
-    fontSize = 28.sp,
+    fontSize = 24.sp,
   ),
   headlineSmall = TextStyle(
     fontFamily = OutfitFontFamily,
     fontWeight = FontWeight.SemiBold,
-    fontSize = 24.sp,
+    fontSize = 20.sp,
   ),
 
   bodyLarge = TextStyle(
@@ -51,16 +51,16 @@ val AppTypography = Typography(
   labelLarge = TextStyle(
     fontFamily = OutfitFontFamily,
     fontWeight = FontWeight.Light,
-    fontSize = 20.sp,
+    fontSize = 16.sp,
   ),
   labelMedium = TextStyle(
     fontFamily = OutfitFontFamily,
     fontWeight = FontWeight.Light,
-    fontSize = 16.sp,
+    fontSize = 12.sp,
   ),
   labelSmall = TextStyle(
     fontFamily = OutfitFontFamily,
     fontWeight = FontWeight.ExtraLight,
-    fontSize = 12.sp,
+    fontSize = 8.sp,
   )
 )
