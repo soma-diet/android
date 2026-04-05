@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ServingDto(
-  @SerialName("id") val id: String? = null,
+  @SerialName("id") val id: String,
   @SerialName("name") val name: String,
-  @SerialName("size") val size: Float
+  @SerialName("size") val size: Float,
 )
 
 fun ServingDto.toDomainModel(): Serving {

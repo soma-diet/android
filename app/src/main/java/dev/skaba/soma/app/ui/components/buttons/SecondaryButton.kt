@@ -21,6 +21,10 @@ fun SecondaryButton(
     border = ButtonDefaults.outlinedButtonBorder(),
     modifier = modifier,
   ) {
-    Text(text = text, style = MaterialTheme.typography.bodyMedium)
+    Text(
+      text = text,
+      style = MaterialTheme.typography.bodyMedium,
+      color = MaterialTheme.colorScheme.onSurface
+    )
   }
 }

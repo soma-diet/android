@@ -15,7 +15,12 @@ import dev.skaba.soma.app.ui.theme.SOMATheme
 @Composable
 fun LogScreen() {
   Scaffold(
-    topBar = { LogScreenTopBar() },
+    topBar = {
+      LogScreenTopBar(
+        onDayBackwards = {},
+        onDayForwards = {},
+      )
+    },
   ) { paddingValues ->
     Column(modifier = Modifier.padding(paddingValues)) {
       ProgressOverview(modifier = Modifier.padding(12.dp))

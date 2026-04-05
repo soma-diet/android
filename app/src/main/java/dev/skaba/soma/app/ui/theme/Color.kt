@@ -14,5 +14,5 @@ val ColorSemiRed = Color(0xfffd3e3e)
 val ColorGreen = Color(0xff00ff00)
 
 val ColorGray = Color(0xffbbbbbb)
-val ColorSemiGray = Color(0xFFF5F5F5)
+val ColorSemiGray = Color(0xFFE5E5E5)
 val ColorSubtleGray = Color(0xFFE0E0E0)
