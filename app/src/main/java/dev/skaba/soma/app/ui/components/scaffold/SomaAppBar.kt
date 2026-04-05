@@ -28,14 +28,14 @@ fun SomaAppBar(
       Row(
         horizontalArrangement = horizontalArrangement,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
           .fillMaxWidth()
           .padding(end = 16.dp) // matchnout padding ktery je prirozene v title,
       ) {
         content()
       }
     },
-    modifier = modifier
+    modifier = Modifier
       .clip(
         // neoriznout horni rohy
         MaterialTheme.shapes.medium.copy(
