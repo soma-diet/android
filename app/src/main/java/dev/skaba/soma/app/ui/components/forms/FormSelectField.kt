@@ -2,10 +2,11 @@ package dev.skaba.soma.app.ui.components.forms
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,7 +27,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.skaba.soma.app.ui.theme.SOMATheme
 
 @Composable
 fun FormSelectField(
@@ -45,12 +48,10 @@ fun FormSelectField(
         modifier = modifier,
         required = required,
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.CenterEnd
+        Column(
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.End
         ) {
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
@@ -58,16 +59,10 @@ fun FormSelectField(
                     .clickable { expanded = !expanded }
                     .padding(vertical = 4.dp)
             ) {
-                val isPlaceholder = value.value.isEmpty()
-                val textColor = when {
-                    isPlaceholder -> MaterialTheme.colorScheme.onSurfaceVariant
-                    else -> MaterialTheme.colorScheme.onSurface
-                }
-
                 Text(
                     text = if (value.value != "") value.value else placeholder ?: "",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = textColor,
+//                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.End
                 )
 
@@ -84,18 +79,43 @@ fun FormSelectField(
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
+                containerColor = MaterialTheme.colorScheme.surface,
+                shape = MaterialTheme.shapes.small,
             ) {
                 options.forEach { option ->
                     DropdownMenuItem(
-                        text = { Text(option) },
+                        text = {
+                            Text(
+                                text = option,
+                                textAlign = TextAlign.End,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        },
                         onClick = {
                             value.value = option
                             onValueChange(option)
                             expanded = false
-                        }
+                        },
                     )
                 }
             }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun FormSelectFieldPreview() {
+    SOMATheme {
+        FormSection(
+            title = "test section"
+        ) {
+            FormSelectField(
+                name = "testovaci pole",
+                options = listOf("option 1", "option 2"),
+                value = remember { mutableStateOf("option 1") },
+            )
+            Spacer(Modifier.height(300.dp))
         }
     }
 }

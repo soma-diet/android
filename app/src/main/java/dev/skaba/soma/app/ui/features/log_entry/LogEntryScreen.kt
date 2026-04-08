@@ -54,7 +54,6 @@ fun LogEntryForm(modifier: Modifier = Modifier) {
             name = "Serving",
             options = listOf("g","test serving 1", "serving 2"),
             value = servingInput,
-            error = null,
             onValueChange = { },
         )
         FormNumberField(

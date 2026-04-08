@@ -24,6 +24,7 @@ fun FormImageUpload(
 ) {
   ImageBox(
     imageModel = imageModel,
+    subtext = "Upload an image",
     modifier = modifier.clickable {
       // TODO load image
     }

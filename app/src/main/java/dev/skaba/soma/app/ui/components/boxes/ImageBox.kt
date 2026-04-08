@@ -24,6 +24,7 @@ import dev.skaba.soma.app.R
 fun ImageBox(
     imageModel: Any?, // coil prelozi zvladne interpretovat URL i Uri, takze se pouziva any
     modifier: Modifier = Modifier,
+    subtext: String? = null,
     content: (@Composable BoxScope.() -> Unit)? = null, // BoxScope aby vedel ze to bude v boxu a mohl pouzit Modifier.align
 ) {
     Box(
@@ -52,11 +53,14 @@ fun ImageBox(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.image_search),
+                    painter = painterResource(id = R.drawable.outline_image_24),
                     contentDescription = "No image",
                     modifier = Modifier.size(48.dp),
                 )
-                Text(text = "Upload an image", style = MaterialTheme.typography.labelLarge)
+
+                if (subtext != null) {
+                    Text(text = subtext, style = MaterialTheme.typography.labelLarge)
+                }
             }
         }
     }
