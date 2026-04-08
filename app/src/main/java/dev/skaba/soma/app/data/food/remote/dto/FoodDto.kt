@@ -1,6 +1,5 @@
 package dev.skaba.soma.app.data.food.remote.dto
 
-import dev.skaba.soma.app.data.util.getFoodImages
 import dev.skaba.soma.app.domain.food.Food
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -18,7 +17,7 @@ data class FoodResponseDto(
   @SerialName("type") val type: String,
   @SerialName("barcode") val barcode: String, // redundant
   @SerialName("brand") val brand: String,
-  @SerialName("servings") val servings: List<ServingDto>
+  @SerialName("servings") val servings: List<ServingDto>,
 )
 
 @Serializable
@@ -30,17 +29,17 @@ data class FoodRequestDto(
   @SerialName("isMass") val isMass: Boolean,
   @SerialName("macronutrients") val macronutrients: MacronutrientsDto,
   @SerialName("micronutrients") val micronutrients: MicronutrientsDto? = null,
-  @SerialName("servings") val servings: List<ServingDto>? = null
+  @SerialName("servings") val servings: List<ServingDto>? = null,
 )
 
 fun FoodResponseDto.toDomainModel(): Food {
-  val images = if (this.imageFileName != null) getFoodImages(this.imageFileName) else null
   return Food(
     id = this.id,
     name = this.name,
     isMass = this.isMass,
     isPrivate = this.isPrivate,
-    remoteImages = images,
+    localImageUri = null,
+    remoteImageUrl = this.imageFileName, // TODO rozsirit o full url, tohle je jen jmeno
     author = this.author,
     barcode = this.barcode,
     brand = this.brand,

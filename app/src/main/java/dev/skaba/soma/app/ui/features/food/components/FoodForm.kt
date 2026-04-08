@@ -23,6 +23,7 @@ import dev.skaba.soma.app.domain.food.Serving
 import dev.skaba.soma.app.ui.components.buttons.PrimaryButton
 import dev.skaba.soma.app.ui.components.buttons.SecondaryButton
 import dev.skaba.soma.app.ui.components.forms.FormCheckField
+import dev.skaba.soma.app.ui.components.forms.FormDecimalField
 import dev.skaba.soma.app.ui.components.forms.FormImageUpload
 import dev.skaba.soma.app.ui.components.forms.FormNumberField
 import dev.skaba.soma.app.ui.components.forms.FormSection
@@ -31,187 +32,187 @@ import java.util.UUID
 
 @Composable
 fun FoodForm(modifier: Modifier = Modifier) {
-    FoodDetailsSection()
-    FoodServingsSection()
-    FoodNutrientsSection()
-    PrimaryButton(text="Add", onClick = {}, modifier = Modifier.fillMaxWidth())
+  FoodDetailsSection()
+  FoodServingsSection()
+  FoodNutrientsSection()
+  PrimaryButton(text = "Add", onClick = {}, modifier = Modifier.fillMaxWidth())
 }
 
 @Composable
 fun FoodDetailsSection(modifier: Modifier = Modifier) {
-    val foodName = remember { mutableStateOf("") }
-    val brand = remember { mutableStateOf("") }
-    val isLiquid = remember { mutableStateOf(false) }
+  val foodName = remember { mutableStateOf("") }
+  val brand = remember { mutableStateOf("") }
+  val isLiquid = remember { mutableStateOf(false) }
 
-    FormSection(
-        title = "Food Details",
-    ) {
-        var selectedImageUri = null
-        //var backendImageUrl = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-        var backendImageUrl = null
-        FormImageUpload(
-            imageModel = selectedImageUri ?: backendImageUrl,
-            onClearImage = {
-                selectedImageUri = null
-                // backendImageUrl = null
-            },
-            modifier = Modifier.height(150.dp)
-        )
-        FormTextField(
-            name = "Food Name", value = foodName, placeholder = "Apple", required = true
-        ) { value ->
-            //   handle vlaue
-        }
-        FormTextField(
-            name = "Brand",
-            value = brand,
-            placeholder = "Walmart",
-            error = "Invalid characters",
-            required = false
-        ) { value ->
-            //   handle vlaue
-        }
-        FormCheckField(
-            name = "Is a liquid",
-            value = isLiquid,
-            onValueChange = {
-                // handle value
-            }
-        )
+  FormSection(
+    title = "Food Details",
+  ) {
+    var selectedImageUri = null
+    // var backendImageUrl = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+    var backendImageUrl = null
+    FormImageUpload(
+      imageModel = selectedImageUri ?: backendImageUrl,
+      onClearImage = {
+        selectedImageUri = null
+        // backendImageUrl = null
+      },
+      modifier = Modifier.height(150.dp)
+    )
+    FormTextField(
+      name = "Food Name", value = foodName, placeholder = "Apple", required = true
+    ) { value ->
+      //   handle vlaue
     }
+    FormTextField(
+      name = "Brand",
+      value = brand,
+      placeholder = "Walmart",
+      error = "Invalid characters",
+      required = false
+    ) { value ->
+      //   handle vlaue
+    }
+    FormCheckField(
+      name = "Is a liquid",
+      value = isLiquid,
+      onValueChange = {
+        // handle value
+      }
+    )
+  }
 }
 
 @Composable
 fun FoodServingsSection(modifier: Modifier = Modifier) {
-    val servings: MutableList<Serving> = remember {
-        mutableStateListOf(
-            Serving("serving_id1", "Sample name", 50.3f),
-            Serving("serving_id2", "Sample name", 50.3f)
+  val servings: MutableList<Serving> = remember {
+    mutableStateListOf(
+      Serving("serving_id1", "Sample name", 50.3f),
+      Serving("serving_id2", "Sample name", 50.3f)
+    )
+  };
+  FormSection(
+    title = "Servings"
+  ) {
+    servings.forEachIndexed { index, serving ->
+      key(serving.id) {
+        ServingEditor(
+          serving = serving,
+          onServingRemoved = {
+            servings.removeAt(index)
+          }
         )
-    };
-    FormSection(
-        title = "Servings"
-    ) {
-        servings.forEachIndexed { index, serving ->
-            key(serving.id) {
-                ServingEditor(
-                    serving = serving,
-                    onServingRemoved = {
-                        servings.removeAt(index)
-                    }
-                )
-            }
-        }
-        SecondaryButton(
-            text = "Add a serving",
-            onClick = {
-                servings.add(
-                    Serving(
-                        id = UUID.randomUUID().toString(),
-                        name = "",
-                        size = 0f,
-                    )
-                )
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
+      }
     }
+    SecondaryButton(
+      text = "Add a serving",
+      onClick = {
+        servings.add(
+          Serving(
+            id = UUID.randomUUID().toString(),
+            name = "",
+            size = 0f,
+          )
+        )
+      },
+      modifier = Modifier.fillMaxWidth()
+    )
+  }
 }
 
 @Composable
 fun ServingEditor(
-    serving: Serving,
-    onServingRemoved: () -> Unit,
-    modifier: Modifier = Modifier,
+  serving: Serving,
+  onServingRemoved: () -> Unit,
+  modifier: Modifier = Modifier,
 ) {
-    val nameInput = remember { mutableStateOf(serving.name) }
-    val sizeInput = remember { mutableStateOf<Int?>(null) }
+  val nameInput = remember { mutableStateOf(serving.name) }
+  val sizeInput = remember { mutableStateOf<Float?>(null) }
 
-    Row(
-        horizontalArrangement = Arrangement.End,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
+  Row(
+    horizontalArrangement = Arrangement.End,
+    verticalAlignment = Alignment.CenterVertically,
+    modifier = Modifier.fillMaxWidth()
+  ) {
+    IconButton(
+      onClick = onServingRemoved,
+      modifier = Modifier.padding(0.dp)
     ) {
-        IconButton(
-            onClick = onServingRemoved,
-            modifier = Modifier.padding(0.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Clear,
-                contentDescription = "Delete serving"
-            )
-        }
+      Icon(
+        imageVector = Icons.Default.Clear,
+        contentDescription = "Delete serving"
+      )
     }
-    FormTextField(
-        name = "Serving name",
-        value = nameInput,
-        placeholder = "Piece",
-    ) { }
-    FormNumberField(
-        name = "Size (g)",
-        value = sizeInput,
-        placeholder = "15 g"
-    ) { }
+  }
+  FormTextField(
+    name = "Serving name",
+    value = nameInput,
+    placeholder = "Piece",
+  ) { }
+  FormDecimalField(
+    name = "Size (g)",
+    value = sizeInput,
+    placeholder = "15 g"
+  ) { }
 }
 
 @Composable
 fun FoodNutrientsSection(modifier: Modifier = Modifier) {
-    val kcal = remember { mutableStateOf<Int?>(null) }
-    val protein = remember { mutableStateOf<Int?>(null) }
-    val fats = remember { mutableStateOf<Int?>(null) }
-    val carbs = remember { mutableStateOf<Int?>(null) }
-    val fiber = remember { mutableStateOf<Int?>(null) }
-    val sodium = remember { mutableStateOf<Int?>(null) }
+  val kcal = remember { mutableStateOf<Int?>(null) }
+  val protein = remember { mutableStateOf<Int?>(null) }
+  val fats = remember { mutableStateOf<Int?>(null) }
+  val carbs = remember { mutableStateOf<Int?>(null) }
+  val fiber = remember { mutableStateOf<Int?>(null) }
+  val sodium = remember { mutableStateOf<Int?>(null) }
 
-    FormSection(
-        title = "Nutritional data",
-    ) {
-        Text(text = "Please enter values per 100g", style = MaterialTheme.typography.labelMedium)
+  FormSection(
+    title = "Nutritional data",
+  ) {
+    Text(text = "Please enter values per 100g", style = MaterialTheme.typography.labelMedium)
 
-        // macronutrients
-        FormNumberField(
-            name = "Energy (kcal)",
-            value = kcal,
-            placeholder = "150 kcal",
-            error = null,
-            required = true
-        ) { }
-        FormNumberField(
-            name = "Fats",
-            value = fats,
-            placeholder = "10 g",
-            error = null,
-            required = true
-        ) { }
-        FormNumberField(
-            name = "Carbohydrates",
-            value = carbs,
-            placeholder = "67 g",
-            error = null,
-            required = true
-        ) { }
-        FormNumberField(
-            name = "Protein",
-            value = protein,
-            placeholder = "15 g",
-            error = null,
-            required = true
-        ) { }
+    // macronutrients
+    FormNumberField(
+      name = "Energy (kcal)",
+      value = kcal,
+      placeholder = "150 kcal",
+      error = null,
+      required = true
+    ) { }
+    FormNumberField(
+      name = "Fats",
+      value = fats,
+      placeholder = "10 g",
+      error = null,
+      required = true
+    ) { }
+    FormNumberField(
+      name = "Carbohydrates",
+      value = carbs,
+      placeholder = "67 g",
+      error = null,
+      required = true
+    ) { }
+    FormNumberField(
+      name = "Protein",
+      value = protein,
+      placeholder = "15 g",
+      error = null,
+      required = true
+    ) { }
 
-        // micronutrients
-        FormNumberField(
-            name = "Fiber",
-            value = fiber,
-            placeholder = "2 g",
-            error = null,
-            required = true
-        ) { }
-        FormNumberField(
-            name = "Salt",
-            value = sodium,
-            placeholder = "0.5 g",
-            error = null,
-            required = true
-        ) { }
-    }
+    // micronutrients
+    FormNumberField(
+      name = "Fiber",
+      value = fiber,
+      placeholder = "2 g",
+      error = null,
+      required = true
+    ) { }
+    FormNumberField(
+      name = "Salt",
+      value = sodium,
+      placeholder = "0.5 g",
+      error = null,
+      required = true
+    ) { }
+  }
 }

@@ -14,48 +14,49 @@ import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun FormTextField(
-    name: String,
-    value: MutableState<String>,
-    placeholder: String,
-    modifier: Modifier = Modifier,
-    error: String? = null,
-    required: Boolean = true,
-    onValueChange: (String) -> Unit,
+  name: String,
+  value: MutableState<String>,
+  placeholder: String,
+  modifier: Modifier = Modifier,
+  error: String? = null,
+  required: Boolean = true,
+  onValueChange: (String) -> Unit,
 ) {
-    FormInputField(
-        name = name,
-        modifier = modifier,
-        error = error,
-        required = required,
-    ) {
-        BasicTextField(
-            value = value.value, onValueChange = { newValue ->
-                value.value = newValue
-                onValueChange(newValue)
-            }, modifier = modifier, textStyle = MaterialTheme.typography.bodyLarge.copy(
-                color = if (error == null || error == "") MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.error,
-                textAlign = TextAlign.End
-            ),
-            // primary color indikator psani
-            cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-            // nevykreslovat klasicky design
-            decorationBox = { innerTextField ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.CenterEnd,
-                ) {
-                    if (value.value.isEmpty()) {
-                        Text(
-                            text = placeholder,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+  FormInputField(
+    name = name,
+    modifier = modifier,
+    error = error,
+    required = required,
+  ) {
+    BasicTextField(
+      value = value.value, onValueChange = { newValue ->
+        value.value = newValue
+        onValueChange(newValue)
+      }, modifier = modifier, textStyle = MaterialTheme.typography.bodyLarge.copy(
+        color = if (error == null || error == "") MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.error,
+        textAlign = TextAlign.End
+      ),
+      // primary color indikator psani
+      cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+      singleLine = true,
+      // nevykreslovat klasicky design
+      decorationBox = { innerTextField ->
+        Box(
+          modifier = Modifier
+            .fillMaxWidth(),
+          contentAlignment = Alignment.CenterEnd,
+        ) {
+          if (value.value.isEmpty()) {
+            Text(
+              text = placeholder,
+              style = MaterialTheme.typography.bodyLarge,
+              color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+          }
 
-                    innerTextField()
-                }
-            }
-        )
-    }
+          innerTextField()
+        }
+      }
+    )
+  }
 }

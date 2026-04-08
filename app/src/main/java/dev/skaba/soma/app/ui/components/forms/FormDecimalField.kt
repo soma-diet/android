@@ -9,6 +9,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
@@ -17,16 +19,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun FormNumberField(
+fun FormDecimalField(
   name: String,
-  value: MutableState<Int?>,
+  value: MutableState<Float?>,
   placeholder: String,
   modifier: Modifier = Modifier,
   error: String? = null,
   required: Boolean = true,
-  onValueChange: (Int?) -> Unit = {},
+  onValueChange: (Float?) -> Unit = {},
 ) {
-  val stringValue = value.value?.toString() ?: "" // vnitrne prevadet na string
+  // bez by protoze android studio si pak mysli ze je nepouzivana?
+  val stringValue = remember {
+    mutableStateOf(
+      value.value?.let {
+        if (it % 1f == 0f) it.toInt()
+          .toString() // pokud vyjde na cely cislo tak vypsat jako cislo bez tecky
+        else it.toString()  // bohuzel
+      } ?: ""
+    )
+  }
 
   FormInputField(
     name = name,
@@ -35,18 +46,25 @@ fun FormNumberField(
     required = required,
   ) {
     BasicTextField(
-      value = stringValue,
-      onValueChange = { newValue ->
-        // filtrovani pouze na cislice
-        val digitsOnly = newValue.filter { it.isDigit() }
+      value = stringValue.value,
+      onValueChange = { input ->
+        val safeInput = input.replace(',', '.') // pro ceskou klavesnici
 
-        // prevod zpatky na int
-        val intValue = digitsOnly.toIntOrNull()
+        if (safeInput.isEmpty()) {
+          stringValue.value = ""
+          value.value = null
+          onValueChange(null)
+        } else {
+          val converted = safeInput.toFloatOrNull()
 
-        value.value = intValue
-        onValueChange(intValue)
+          if (converted != null) {
+            stringValue.value = safeInput
+            value.value = converted
+            onValueChange(converted)
+          }
+        }
       },
-      keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+      keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
       modifier = modifier,
       textStyle = MaterialTheme.typography.bodyLarge.copy(
         color = if (error == null || error == "") MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.error,
@@ -61,7 +79,7 @@ fun FormNumberField(
             .padding(end = 0.dp),
           contentAlignment = Alignment.CenterEnd,
         ) {
-          if (stringValue.isEmpty()) {
+          if (stringValue.value.isEmpty()) {
             Text(
               text = placeholder,
               style = MaterialTheme.typography.bodyLarge,
