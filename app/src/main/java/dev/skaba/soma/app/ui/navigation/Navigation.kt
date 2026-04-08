@@ -5,7 +5,9 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -47,6 +49,16 @@ val navigationItems = listOf(
     name = "Food form screen",
     icon = Icons.Default.Edit,
     route = FoodFormScreenRoute
+  ),
+  BottomNavigationItem(
+    name = "Targets form screen",
+    icon = Icons.Default.Star,
+    route = TargetsFormScreenRoute
+  ),
+  BottomNavigationItem(
+    name = "log entry test",
+    icon = Icons.Default.Lock,
+    route = LogEntryScreenRoute
   ),
 )
 

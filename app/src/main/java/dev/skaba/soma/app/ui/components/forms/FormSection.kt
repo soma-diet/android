@@ -10,19 +10,21 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun FormSection(
   title: String,
   modifier: Modifier = Modifier,
+  verticalSpacing: Dp? = null,
   content: @Composable () -> Unit,
 ) {
   Surface(
     shape = MaterialTheme.shapes.medium, modifier = modifier.fillMaxWidth()
   ) {
     Column(
-      verticalArrangement = Arrangement.spacedBy(8.dp),
+      verticalArrangement = Arrangement.spacedBy(verticalSpacing ?: 8.dp),
       modifier = Modifier.padding(16.dp),
     ) {
       Text(text = title, style = MaterialTheme.typography.headlineMedium)

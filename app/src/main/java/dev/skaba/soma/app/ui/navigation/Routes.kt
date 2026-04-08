@@ -13,7 +13,7 @@ object LogScreenRoute
 object FoodFormScreenRoute
 
 @Serializable
-object LogFormScreenRoute
+object LogEntryScreenRoute
 
 @Serializable
 object TargetsFormScreenRoute

@@ -10,11 +10,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dev.skaba.soma.app.ui.features.food.FoodFormScreen
 import dev.skaba.soma.app.ui.features.log.LogScreen
+import dev.skaba.soma.app.ui.features.log_entry.LogEntryScreen
 import dev.skaba.soma.app.ui.features.search.SearchScreen
+import dev.skaba.soma.app.ui.features.targets.TargetsScreen
 import dev.skaba.soma.app.ui.navigation.FoodFormScreenRoute
+import dev.skaba.soma.app.ui.navigation.LogEntryScreenRoute
 import dev.skaba.soma.app.ui.navigation.LogScreenRoute
 import dev.skaba.soma.app.ui.navigation.SearchScreenRoute
 import dev.skaba.soma.app.ui.navigation.SomaNavigationBar
+import dev.skaba.soma.app.ui.navigation.TargetsFormScreenRoute
 import dev.skaba.soma.app.ui.theme.SOMATheme
 
 @Composable
@@ -33,6 +37,8 @@ fun SomaApp() {
       composable<LogScreenRoute> { LogScreen() }
       composable<FoodFormScreenRoute> { FoodFormScreen() }
       composable<SearchScreenRoute> { SearchScreen() }
+      composable<TargetsFormScreenRoute> { TargetsScreen() }
+      composable<LogEntryScreenRoute> { LogEntryScreen() }
     }
   }
 }

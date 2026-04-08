@@ -27,9 +27,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.skaba.soma.app.domain.model.Serving
+import dev.skaba.soma.app.ui.components.buttons.PrimaryButton
 import dev.skaba.soma.app.ui.components.buttons.SecondaryButton
 import dev.skaba.soma.app.ui.components.forms.FormCheckField
 import dev.skaba.soma.app.ui.components.forms.FormImageUpload
+import dev.skaba.soma.app.ui.components.forms.FormNumberField
 import dev.skaba.soma.app.ui.components.forms.FormSection
 import dev.skaba.soma.app.ui.components.forms.FormTextField
 import dev.skaba.soma.app.ui.components.scaffold.SomaTextOnlyAppBar
@@ -56,12 +58,18 @@ fun FoodFormScreen() {
         .verticalScroll(scrollState)
     ) {
       Spacer(modifier = Modifier.height(0.dp))
-      FoodDetailsSection()
-      FoodServingsSection()
-      FoodNutrientsSection()
+      FoodForm()
       Spacer(modifier = Modifier.height(0.dp))
     }
   }
+}
+
+@Composable
+fun FoodForm(modifier: Modifier = Modifier) {
+  FoodDetailsSection()
+  FoodServingsSection()
+  FoodNutrientsSection()
+  PrimaryButton(text="Add", onClick = {}, modifier = Modifier.fillMaxWidth())
 }
 
 @Composable
@@ -74,7 +82,7 @@ fun FoodDetailsSection(modifier: Modifier = Modifier) {
     title = "Food Details",
   ) {
     var selectedImageUri = null
-    // var backendImageUrl = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+    //var backendImageUrl = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
     var backendImageUrl = null
     FormImageUpload(
       imageModel = selectedImageUri ?: backendImageUrl,
@@ -152,11 +160,7 @@ fun ServingEditor(
   modifier: Modifier = Modifier,
 ) {
   val nameInput = remember { mutableStateOf(serving.name) }
-  val sizeInput = remember {
-    mutableStateOf(
-      if (serving.size == 0f) "" else serving.size.toString()
-    )
-  }
+  val sizeInput = remember { mutableStateOf<Int?>(null) }
 
   Row(
     horizontalArrangement = Arrangement.End,
@@ -178,7 +182,7 @@ fun ServingEditor(
     value = nameInput,
     placeholder = "Piece",
   ) { }
-  FormTextField(
+  FormNumberField(
     name = "Size (g)",
     value = sizeInput,
     placeholder = "15 g"
@@ -187,12 +191,12 @@ fun ServingEditor(
 
 @Composable
 fun FoodNutrientsSection(modifier: Modifier = Modifier) {
-  val kcal = remember { mutableStateOf("") }
-  val protein = remember { mutableStateOf("") }
-  val fats = remember { mutableStateOf("") }
-  val carbs = remember { mutableStateOf("") }
-  val fiber = remember { mutableStateOf("") }
-  val sodium = remember { mutableStateOf("") }
+  val kcal = remember { mutableStateOf<Int?>(null) }
+  val protein = remember { mutableStateOf<Int?>(null) }
+  val fats = remember { mutableStateOf<Int?>(null) }
+  val carbs = remember { mutableStateOf<Int?>(null) }
+  val fiber = remember { mutableStateOf<Int?>(null) }
+  val sodium = remember { mutableStateOf<Int?>(null) }
 
   FormSection(
     title = "Nutritional data",
@@ -200,28 +204,28 @@ fun FoodNutrientsSection(modifier: Modifier = Modifier) {
     Text(text = "Please enter values per 100g", style = MaterialTheme.typography.labelMedium)
 
     // macronutrients
-    FormTextField(
+    FormNumberField(
       name = "Energy (kcal)",
       value = kcal,
       placeholder = "150 kcal",
       error = null,
       required = true
     ) { }
-    FormTextField(
+    FormNumberField(
       name = "Fats",
       value = fats,
       placeholder = "10 g",
       error = null,
       required = true
     ) { }
-    FormTextField(
+    FormNumberField(
       name = "Carbohydrates",
       value = carbs,
       placeholder = "67 g",
       error = null,
       required = true
     ) { }
-    FormTextField(
+    FormNumberField(
       name = "Protein",
       value = protein,
       placeholder = "15 g",
@@ -230,14 +234,14 @@ fun FoodNutrientsSection(modifier: Modifier = Modifier) {
     ) { }
 
     // micronutrients
-    FormTextField(
+    FormNumberField(
       name = "Fiber",
       value = fiber,
       placeholder = "2 g",
       error = null,
       required = true
     ) { }
-    FormTextField(
+    FormNumberField(
       name = "Salt",
       value = sodium,
       placeholder = "0.5 g",
