@@ -1,9 +1,10 @@
-package dev.skaba.soma.app.data.local.entity
+package dev.skaba.soma.app.data.log.local
 
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
+import dev.skaba.soma.app.data.food.local.FoodEntity
 
 @Entity(tableName = "diary_entries")
 data class LogEntryEntity(

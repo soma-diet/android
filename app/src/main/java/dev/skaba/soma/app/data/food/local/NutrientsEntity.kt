@@ -1,4 +1,4 @@
-package dev.skaba.soma.app.data.local.entity
+package dev.skaba.soma.app.data.food.local
 
 // jen vnorene -> nejsou realne tabulky
 

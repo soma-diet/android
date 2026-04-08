@@ -19,7 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.skaba.soma.app.domain.model.Serving
+import dev.skaba.soma.app.domain.food.Serving
 import dev.skaba.soma.app.ui.components.buttons.PrimaryButton
 import dev.skaba.soma.app.ui.components.buttons.SecondaryButton
 import dev.skaba.soma.app.ui.components.forms.FormCheckField

@@ -1,7 +1,7 @@
-package dev.skaba.soma.app.data.remote.dto
+package dev.skaba.soma.app.data.food.remote.dto
 
 import dev.skaba.soma.app.data.util.getFoodImages
-import dev.skaba.soma.app.domain.model.Food
+import dev.skaba.soma.app.domain.food.Food
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -40,7 +40,7 @@ fun FoodResponseDto.toDomainModel(): Food {
     name = this.name,
     isMass = this.isMass,
     isPrivate = this.isPrivate,
-    images = images,
+    remoteImages = images,
     author = this.author,
     barcode = this.barcode,
     brand = this.brand,

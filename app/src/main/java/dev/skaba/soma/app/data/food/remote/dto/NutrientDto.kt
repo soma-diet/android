@@ -1,7 +1,7 @@
-package dev.skaba.soma.app.data.remote.dto
+package dev.skaba.soma.app.data.food.remote.dto
 
-import dev.skaba.soma.app.domain.model.Macronutrients
-import dev.skaba.soma.app.domain.model.Micronutrients
+import dev.skaba.soma.app.domain.food.Macronutrients
+import dev.skaba.soma.app.domain.food.Micronutrients
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

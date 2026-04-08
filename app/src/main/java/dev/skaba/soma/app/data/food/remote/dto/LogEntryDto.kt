@@ -1,4 +1,4 @@
-package dev.skaba.soma.app.data.remote.dto
+package dev.skaba.soma.app.data.food.remote.dto
 
 import kotlinx.serialization.Serializable
 

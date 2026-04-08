@@ -1,5 +1,9 @@
-package dev.skaba.soma.app.domain.model
+package dev.skaba.soma.app.domain.log_entry
 
+import dev.skaba.soma.app.domain.food.Food
+import dev.skaba.soma.app.domain.food.Macronutrients
+import dev.skaba.soma.app.domain.food.Micronutrients
+import dev.skaba.soma.app.domain.food.Serving
 import java.time.ZonedDateTime
 
 data class LogEntry(

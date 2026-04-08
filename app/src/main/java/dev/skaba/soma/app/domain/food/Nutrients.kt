@@ -1,4 +1,7 @@
-package dev.skaba.soma.app.domain.model
+package dev.skaba.soma.app.domain.food
+
+import dev.skaba.soma.app.data.food.local.MacronutrientsEntity
+import dev.skaba.soma.app.data.food.local.MicronutrientsEntity
 
 data class Macronutrients(
   val kcal: Float,

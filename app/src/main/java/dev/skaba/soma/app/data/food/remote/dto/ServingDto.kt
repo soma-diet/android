@@ -1,6 +1,6 @@
-package dev.skaba.soma.app.data.remote.dto
+package dev.skaba.soma.app.data.food.remote.dto
 
-import dev.skaba.soma.app.domain.model.Serving
+import dev.skaba.soma.app.domain.food.Serving
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -1,4 +1,7 @@
-package dev.skaba.soma.app.domain.model
+package dev.skaba.soma.app.domain.food
+
+import dev.skaba.soma.app.data.food.local.FoodEntity
+import kotlinx.serialization.json.Json
 
 data class Food(
   val id: String,
@@ -7,7 +10,8 @@ data class Food(
   val isPrivate: Boolean,
 
   // odkazy na obrazky na backendu
-  val images: FoodImages? = null,
+  val localImageUri: String? = null,
+  val remoteImageUrl: String? = null,
 
   val author: String? = null,
   val barcode: String? = null,
@@ -21,7 +25,3 @@ data class Food(
   val servings: List<Serving> = emptyList()
 )
 
-data class FoodImages(
-  val smallUrl: String,
-  val largeUrl: String
-)

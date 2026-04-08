@@ -1,9 +1,9 @@
 package dev.skaba.soma.app.sample
 
-import dev.skaba.soma.app.domain.model.Food
-import dev.skaba.soma.app.domain.model.Macronutrients
-import dev.skaba.soma.app.domain.model.Micronutrients
-import dev.skaba.soma.app.domain.model.Serving
+import dev.skaba.soma.app.domain.food.Food
+import dev.skaba.soma.app.domain.food.Macronutrients
+import dev.skaba.soma.app.domain.food.Micronutrients
+import dev.skaba.soma.app.domain.food.Serving
 
 object FoodPreviewData {
   val sampleFood1 = Food(
