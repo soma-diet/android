@@ -8,7 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import dev.skaba.soma.app.ui.features.food.FoodFormScreen
+import dev.skaba.soma.app.ui.features.food.FoodScreen
 import dev.skaba.soma.app.ui.features.log.LogScreen
 import dev.skaba.soma.app.ui.features.log_entry.LogEntryScreen
 import dev.skaba.soma.app.ui.features.search.SearchScreen
@@ -35,7 +35,7 @@ fun SomaApp() {
       modifier = Modifier.padding(globalPadding)
     ) {
       composable<LogScreenRoute> { LogScreen() }
-      composable<FoodFormScreenRoute> { FoodFormScreen() }
+      composable<FoodFormScreenRoute> { FoodScreen() }
       composable<SearchScreenRoute> { SearchScreen() }
       composable<TargetsFormScreenRoute> { TargetsScreen() }
       composable<LogEntryScreenRoute> { LogEntryScreen() }
