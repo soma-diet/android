@@ -17,4 +17,8 @@ class FoodRepositoryImpl(
   override suspend fun getAllByName(name: String): List<Food> {
     return foodDao.getAllByName(name).map { it.toDomain() }
   }
+
+  override suspend fun deleteById(foodId: String) {
+    foodDao.deleteById(foodId)
+  }
 }

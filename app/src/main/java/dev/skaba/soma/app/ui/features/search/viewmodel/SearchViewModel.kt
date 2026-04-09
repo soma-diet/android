@@ -1,31 +1,43 @@
 package dev.skaba.soma.app.ui.features.search.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dev.skaba.soma.app.domain.food.FoodRepository
 import dev.skaba.soma.app.ui.features.search.model.SearchFilter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
-  foodRepository: FoodRepository
+  private val foodRepository: FoodRepository
 ) : ViewModel() {
   private val _state = MutableStateFlow(SearchState())
   val state: StateFlow<SearchState> = _state.asStateFlow()
 
-  /* #region updates */
-
-  fun updateQuery(newQuery: String) {
-    _state.value = _state.value.copy(query = newQuery)
+  fun onEvent(event: SearchEvent) {
+    when (event) {
+      is SearchEvent.QueryChanged -> {
+        _state.value = _state.value.copy(query = event.query)
+        search(event.query, _state.value.filter)
+      }
+      is SearchEvent.FilterChanged -> {
+        _state.value = _state.value.copy(filter = event.filter)
+        search(_state.value.query, event.filter)
+      }
+      is SearchEvent.EditFood -> {
+        // TODO edit food
+        // TODO navigate to edit screen
+      }
+      is SearchEvent.DeleteFood -> {
+        viewModelScope.launch {
+          foodRepository.deleteById(event.id)
+        }
+      }
+    }
   }
 
-  fun updateFilter(newFilter: SearchFilter) {
-    _state.value = _state.value.copy(filter = newFilter)
+  private fun search(query: String, filter: SearchFilter) {
+    // TODO implement
   }
-
-  // fun updateFoods(newFoods: List<Food>) {
-  //   _state.value = _state.value.copy(foods = newFoods)
-  // }
-
-  /* #endregion */
 }

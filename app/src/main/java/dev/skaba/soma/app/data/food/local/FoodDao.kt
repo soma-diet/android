@@ -7,9 +7,12 @@ import androidx.room.Query
 
 @Dao
 interface FoodDao {
-    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
-    suspend fun insert(food: FoodEntity)
+  @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+  suspend fun insert(food: FoodEntity)
 
-    @Query("SELECT * FROM foods WHERE name LIKE '%' || :name || '%'")
-    suspend fun getAllByName(name: String): List<FoodEntity>
+  @Query("SELECT * FROM foods WHERE name LIKE '%' || :name || '%'")
+  suspend fun getAllByName(name: String): List<FoodEntity>
+
+  @Query("DELETE FROM foods WHERE id = :foodId")
+  suspend fun deleteById(foodId: String)
 }
