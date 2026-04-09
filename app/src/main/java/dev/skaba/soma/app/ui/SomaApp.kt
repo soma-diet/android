@@ -4,11 +4,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dev.skaba.soma.app.SomaApplication
 import dev.skaba.soma.app.ui.features.food.FoodScreen
+import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormViewModel
+import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormViewModelFactory
 import dev.skaba.soma.app.ui.features.log.LogScreen
 import dev.skaba.soma.app.ui.features.log_entry.LogEntryScreen
 import dev.skaba.soma.app.ui.features.search.SearchScreen
@@ -23,6 +28,8 @@ import dev.skaba.soma.app.ui.theme.SOMATheme
 
 @Composable
 fun SomaApp() {
+  val context = LocalContext.current
+  val appContainer = (context.applicationContext as SomaApplication).container
   val navController = rememberNavController()
 
   Scaffold(
@@ -34,8 +41,17 @@ fun SomaApp() {
       startDestination = LogScreenRoute,
       modifier = Modifier.padding(globalPadding)
     ) {
+      composable<FoodFormScreenRoute> {
+        val foodFormViewModel: FoodFormViewModel = viewModel(
+          factory = FoodFormViewModelFactory(
+            foodRepository = appContainer.foodRepository,
+            imageProcessor = appContainer.imageProcessor
+          )
+        )
+        FoodScreen(foodFormViewModel = foodFormViewModel)
+      }
+
       composable<LogScreenRoute> { LogScreen() }
-      composable<FoodFormScreenRoute> { FoodScreen() }
       composable<SearchScreenRoute> { SearchScreen() }
       composable<TargetsFormScreenRoute> { TargetsScreen() }
       composable<LogEntryScreenRoute> { LogEntryScreen() }
@@ -43,7 +59,7 @@ fun SomaApp() {
   }
 }
 
-@Preview(showBackground=true)
+@Preview(showBackground = true)
 @Composable
 private fun SomaAppPreview() {
   SOMATheme {

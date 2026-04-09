@@ -29,7 +29,6 @@ object FoodPreviewData {
     name = "Skyr Natur",
     isMass = true,
     isPrivate = true,
-    author = "Robin",
     brand = "Milko",
     macronutrients = Macronutrients(
       kcal = 62f,
@@ -51,7 +50,6 @@ object FoodPreviewData {
     name = "Horalka",
     isMass = false, // Kusovka
     isPrivate = false,
-    barcode = "8586000130017",
     macronutrients = Macronutrients(
       kcal = 540f,
       protein = 8f,

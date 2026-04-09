@@ -10,16 +10,16 @@ data class MacronutrientsDto(
   @SerialName("kcal") val kcal: Float,
   @SerialName("protein") val protein: Float,
   @SerialName("fats") val fats: Float,
-  @SerialName("carbs") val carbs: Float
+  @SerialName("carbs") val carbs: Float,
 )
 
 @Serializable
 data class MicronutrientsDto(
   @SerialName("fiber") val fiber: Float? = null,
-  @SerialName("sodium") val sodium: Float? = null
+  @SerialName("sodium") val sodium: Float? = null,
 )
 
-fun MacronutrientsDto.toDomainModel(): Macronutrients {
+fun MacronutrientsDto.toDomain(): Macronutrients {
   return Macronutrients(
     kcal = this.kcal,
     protein = this.protein,
@@ -28,7 +28,7 @@ fun MacronutrientsDto.toDomainModel(): Macronutrients {
   )
 }
 
-fun MicronutrientsDto.toDomainModel(): Micronutrients {
+fun MicronutrientsDto.toDomain(): Micronutrients {
   return Micronutrients(
     fiber = this.fiber,
     sodium = this.sodium

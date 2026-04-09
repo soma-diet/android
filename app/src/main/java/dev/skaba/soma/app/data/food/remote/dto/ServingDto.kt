@@ -11,7 +11,7 @@ data class ServingDto(
   @SerialName("size") val size: Float,
 )
 
-fun ServingDto.toDomainModel(): Serving {
+fun ServingDto.toDomain(): Serving {
   return Serving(
     id = this.id,
     name = this.name,

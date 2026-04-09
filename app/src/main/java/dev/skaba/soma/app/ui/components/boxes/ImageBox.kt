@@ -22,46 +22,46 @@ import dev.skaba.soma.app.R
 
 @Composable
 fun ImageBox(
-    imageModel: Any?, // coil prelozi zvladne interpretovat URL i Uri, takze se pouziva any
-    modifier: Modifier = Modifier,
-    subtext: String? = null,
-    content: (@Composable BoxScope.() -> Unit)? = null, // BoxScope aby vedel ze to bude v boxu a mohl pouzit Modifier.align
+  imageModel: Any?, // coil prelozi zvladne interpretovat URL i Uri, takze se pouziva any
+  modifier: Modifier = Modifier,
+  subtext: String? = null,
+  content: (@Composable BoxScope.() -> Unit)? = null, // BoxScope aby vedel ze to bude v boxu a mohl pouzit Modifier.align
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline,
-                shape = MaterialTheme.shapes.medium
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        if (imageModel != null && imageModel.toString().isNotBlank()) {
-            AsyncImage(
-                model = imageModel,
-                contentDescription = "Food image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-            if (content != null) {
-                content()
-            }
-        } else {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.outline_image_24),
-                    contentDescription = "No image",
-                    modifier = Modifier.size(48.dp),
-                )
+  Box(
+    modifier = modifier
+      .fillMaxWidth()
+      .border(
+        width = 1.dp,
+        color = MaterialTheme.colorScheme.outline,
+        shape = MaterialTheme.shapes.medium
+      ),
+    contentAlignment = Alignment.Center
+  ) {
+    if (imageModel != null && imageModel.toString().isNotBlank()) {
+      AsyncImage(
+        model = imageModel,
+        contentDescription = "Food image",
+        contentScale = ContentScale.Fit,
+        modifier = Modifier.fillMaxSize()
+      )
+      if (content != null) {
+        content()
+      }
+    } else {
+      Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+      ) {
+        Icon(
+          painter = painterResource(id = R.drawable.outline_image_24),
+          contentDescription = "No image",
+          modifier = Modifier.size(48.dp),
+        )
 
-                if (subtext != null) {
-                    Text(text = subtext, style = MaterialTheme.typography.labelLarge)
-                }
-            }
+        if (subtext != null) {
+          Text(text = subtext, style = MaterialTheme.typography.labelLarge)
         }
+      }
     }
+  }
 }

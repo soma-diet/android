@@ -29,7 +29,8 @@ fun FormTextField(
     required = required,
   ) {
     BasicTextField(
-      value = value.value, onValueChange = { newValue ->
+      value = value.value,
+      onValueChange = { newValue ->
         value.value = newValue
         onValueChange(newValue)
       }, modifier = modifier, textStyle = MaterialTheme.typography.bodyLarge.copy(

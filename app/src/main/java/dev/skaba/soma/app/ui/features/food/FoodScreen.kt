@@ -14,13 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.skaba.soma.app.ui.components.scaffold.SomaTextOnlyAppBar
 import dev.skaba.soma.app.ui.features.food.components.FoodForm
+import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormViewModel
 import dev.skaba.soma.app.ui.theme.SOMATheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FoodScreen() {
+fun FoodScreen(
+  foodFormViewModel: FoodFormViewModel,
+) {
   val spacing = 16.dp
   val scrollState = rememberScrollState()
 
@@ -38,7 +42,7 @@ fun FoodScreen() {
         .verticalScroll(scrollState)
     ) {
       Spacer(modifier = Modifier.height(0.dp))
-      FoodForm()
+      FoodForm(viewModel = foodFormViewModel)
       Spacer(modifier = Modifier.height(0.dp))
     }
   }
@@ -48,6 +52,6 @@ fun FoodScreen() {
 @Composable
 private fun FoodScreenPreview() {
   SOMATheme {
-    FoodScreen()
+    FoodScreen(viewModel())
   }
 }

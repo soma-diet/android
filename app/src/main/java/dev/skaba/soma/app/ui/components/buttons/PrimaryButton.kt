@@ -8,17 +8,19 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun PrimaryButton(
-    text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+  text: String,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
 ) {
-    Button(
-        onClick = onClick,
-        modifier = modifier,
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodyMedium,
-        )
-    }
+  Button(
+    onClick = onClick,
+    enabled = enabled,
+    modifier = modifier,
+  ) {
+    Text(
+      text = text,
+      style = MaterialTheme.typography.bodyMedium,
+    )
+  }
 }

@@ -2,6 +2,7 @@ plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.compose)
   alias(libs.plugins.kotlin.serialization)
+  alias(libs.plugins.ksp)
 }
 
 android {
@@ -71,10 +72,8 @@ dependencies {
 
   //  https://developer.android.com/jetpack/androidx/releases/room
   implementation(libs.androidx.room.runtime)
-  // optional - Kotlin Extensions and Coroutines support for Room
   implementation(libs.androidx.room.ktx)
-  // optional - Paging 3 Integration
-  implementation(libs.androidx.room.paging)
+  ksp(libs.androidx.room.compiler)
 
   // coil knihovna pro obrazky
   implementation(libs.coil.compose)

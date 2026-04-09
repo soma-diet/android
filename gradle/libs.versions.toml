@@ -14,6 +14,10 @@ navigationCompose = "2.9.7"
 roomRuntime = "2.8.4"
 foundation = "1.10.6"
 
+room = "2.7.1"
+ksp = "2.3.6"
+
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
@@ -42,3 +46,4 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

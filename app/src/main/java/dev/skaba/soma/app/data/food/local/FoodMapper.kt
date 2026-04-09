@@ -13,10 +13,7 @@ fun Food.toEntity(): FoodEntity {
     localImagePath = this.localImageUri,
     remoteImagePath = this.remoteImageUrl,
 
-    author = this.author,
-    barcode = this.barcode,
     brand = this.brand,
-    type = this.type,
     macronutrients = this.macronutrients.toEntity(),
     micronutrients = this.micronutrients?.toEntity(),
     servingsJson = Json.encodeToString(this.servings),
