@@ -15,80 +15,29 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.skaba.soma.app.ui.components.buttons.PrimaryButton
 import dev.skaba.soma.app.ui.components.buttons.SecondaryButton
 import dev.skaba.soma.app.ui.components.forms.FormCheckField
 import dev.skaba.soma.app.ui.components.forms.FormDecimalField
 import dev.skaba.soma.app.ui.components.forms.FormImageUpload
 import dev.skaba.soma.app.ui.components.forms.FormSection
 import dev.skaba.soma.app.ui.components.forms.FormTextField
+import dev.skaba.soma.app.ui.features.food.FoodFormContent
+import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormEvent
 import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormState
-import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormViewModel
 import dev.skaba.soma.app.ui.features.food.viewmodel.ServingState
-
-@Composable
-fun FoodForm(
-  viewModel: FoodFormViewModel,
-  onFoodSaved: () -> Unit,
-  modifier: Modifier = Modifier,
-) {
-  val state by viewModel.state.collectAsState()
-
-  FoodDetailsSection(
-    state = state,
-    onNameChanged = { viewModel.updateName(it) },
-    onBrandChanged = { viewModel.updateBrand(it) },
-    onIsLiquidChanged = { viewModel.updateIsLiquid(it) },
-    onImageChanged = { uriString -> viewModel.updateImageUri(uriString) },
-  )
-
-  FoodServingsSection(
-    state = state,
-    onAddServing = { viewModel.addServing() },
-    onRemoveServing = { viewModel.removeServing(it) },
-    onNameChange = { servingId, newName -> viewModel.updateServingName(servingId, newName) },
-    onSizeChange = { servingId, newSize -> viewModel.updateServingSize(servingId, newSize) },
-  )
-
-  FoodNutrientsSection(
-    state = state,
-    onKcalChanged = { viewModel.updateKcal(it) },
-    onCarbsChanged = { viewModel.updateCarbs(it) },
-    onProteinChanged = { viewModel.updateProtein(it) },
-    onFatsChanged = { viewModel.updateFats(it) },
-    onFiberChanged = { viewModel.updateFiber(it) },
-    onSodiumChanged = { viewModel.updateSodium(it) },
-  )
-
-  PrimaryButton(
-    text = "Add",
-    onClick = {
-      viewModel.saveFood {
-        onFoodSaved()
-      }
-    },
-    enabled = !state.isSaving,
-    modifier = Modifier.fillMaxWidth()
-  )
-}
+import dev.skaba.soma.app.ui.theme.SOMATheme
 
 @Composable
 fun FoodDetailsSection(
   state: FoodFormState,
-
-  onNameChanged: (String) -> Unit,
-  onBrandChanged: (String) -> Unit,
-  onIsLiquidChanged: (Boolean) -> Unit,
-  onImageChanged: (String?) -> Unit,
-
+  onEvent: (FoodFormEvent) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val nameInput = remember(state.name.value) { mutableStateOf(state.name.value) }
@@ -97,10 +46,10 @@ fun FoodDetailsSection(
 
   // nastaveni photo picker launcheru
   val photoPickerLauncher = rememberLauncherForActivityResult(
-    contract = ActivityResultContracts.PickVisualMedia()
+    contract = ActivityResultContracts.PickVisualMedia(),
   ) { uri ->
     if (uri != null) {
-      onImageChanged(uri.toString())
+      onEvent(FoodFormEvent.ImageChanged(uri.toString()))
     }
   }
 
@@ -108,19 +57,23 @@ fun FoodDetailsSection(
     title = "Food Details",
   ) {
     FormImageUpload(
-      imageModel = state.localImageUri.value ?: state.remoteImageUrl, onClick = {
+      imageModel = state.localImageUri.value ?: state.remoteImageUrl,
+      onClick = {
         photoPickerLauncher.launch(
-          PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+          PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
         )
-      }, onClearImage = if (state.localImageUri.value != null) {
-        { onImageChanged(null) }
+      },
+      onClearImage = if (state.localImageUri.value != null) {
+        { onEvent(FoodFormEvent.ImageChanged(null)) }
       } else null, // neukazovat delete moznost pokud je obrazek jen ze serveru
-      error = state.localImageUri.error, modifier = Modifier.height(150.dp))
+      error = state.localImageUri.error,
+      modifier = Modifier.height(150.dp),
+    )
 
     FormTextField(
       name = "Food Name",
       value = nameInput,
-      onValueChange = onNameChanged,
+      onValueChange = { newValue -> onEvent(FoodFormEvent.NameChanged(newValue)) },
       placeholder = "Apple",
       error = state.name.error,
     )
@@ -128,16 +81,16 @@ fun FoodDetailsSection(
     FormTextField(
       name = "Brand",
       value = brandInput,
-      onValueChange = onBrandChanged,
+      onValueChange = { newValue -> onEvent(FoodFormEvent.BrandChanged(newValue)) },
       placeholder = "Walmart",
       error = state.brand.error,
-      required = false
+      required = false,
     )
 
     FormCheckField(
       name = "Is a liquid",
       value = isLiquidInput,
-      onValueChange = onIsLiquidChanged,
+      onValueChange = { newValue -> onEvent(FoodFormEvent.IsLiquidChanged(newValue)) },
     )
   }
 }
@@ -145,28 +98,24 @@ fun FoodDetailsSection(
 @Composable
 fun FoodServingsSection(
   state: FoodFormState,
-  onAddServing: () -> Unit,
-  onRemoveServing: (String) -> Unit,
-  onNameChange: (String, String) -> Unit,
-  onSizeChange: (String, Float?) -> Unit,
+  onEvent: (FoodFormEvent) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   FormSection(
-    title = "Servings"
+    title = "Servings",
   ) {
     state.servings.forEach { servingState ->
       key(servingState.id) {
         ServingEditor(
           state = servingState,
-          onNameChange = { onNameChange(servingState.id, it) },
-          onSizeChange = { onSizeChange(servingState.id, it) },
-          onServingRemoved = { onRemoveServing(servingState.id) })
+          onEvent = onEvent,
+        )
       }
     }
     SecondaryButton(
       text = "Add a serving",
-      onClick = onAddServing,
-      modifier = Modifier.fillMaxWidth()
+      onClick = { onEvent(FoodFormEvent.AddServing) },
+      modifier = Modifier.fillMaxWidth(),
     )
   }
 }
@@ -174,9 +123,7 @@ fun FoodServingsSection(
 @Composable
 fun ServingEditor(
   state: ServingState,
-  onNameChange: (String) -> Unit,
-  onSizeChange: (Float?) -> Unit,
-  onServingRemoved: () -> Unit,
+  onEvent: (FoodFormEvent) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val nameInput = remember(state.name.value) { mutableStateOf(state.name.value) }
@@ -185,13 +132,14 @@ fun ServingEditor(
   Row(
     horizontalArrangement = Arrangement.End,
     verticalAlignment = Alignment.CenterVertically,
-    modifier = Modifier.fillMaxWidth()
+    modifier = Modifier.fillMaxWidth(),
   ) {
     IconButton(
-      onClick = onServingRemoved, modifier = Modifier.padding(0.dp)
+      onClick = { onEvent(FoodFormEvent.RemoveServing(state.id)) },
+      modifier = Modifier.padding(0.dp),
     ) {
       Icon(
-        imageVector = Icons.Default.Clear, contentDescription = "Delete serving"
+        imageVector = Icons.Default.Clear, contentDescription = "Delete serving",
       )
     }
   }
@@ -199,7 +147,7 @@ fun ServingEditor(
   FormTextField(
     name = "Serving name",
     value = nameInput,
-    onValueChange = onNameChange,
+    onValueChange = { newValue -> onEvent(FoodFormEvent.ServingNameChanged(state.id, newValue)) },
     error = state.name.error,
     placeholder = "Piece",
   )
@@ -207,7 +155,7 @@ fun ServingEditor(
   FormDecimalField(
     name = "Size (g)",
     value = sizeInput,
-    onValueChange = onSizeChange,
+    onValueChange = { newValue -> onEvent(FoodFormEvent.ServingSizeChanged(state.id, newValue)) },
     error = state.size.error,
     placeholder = "15 g",
   )
@@ -216,12 +164,7 @@ fun ServingEditor(
 @Composable
 fun FoodNutrientsSection(
   state: FoodFormState,
-  onKcalChanged: (Float?) -> Unit,
-  onCarbsChanged: (Float?) -> Unit,
-  onProteinChanged: (Float?) -> Unit,
-  onFatsChanged: (Float?) -> Unit,
-  onFiberChanged: (Float?) -> Unit,
-  onSodiumChanged: (Float?) -> Unit,
+  onEvent: (FoodFormEvent) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val kcalInput = remember(state.kcal.value) { mutableStateOf(state.kcal.value) }
@@ -234,34 +177,37 @@ fun FoodNutrientsSection(
   FormSection(
     title = "Nutritional data",
   ) {
-    Text(text = "Please enter values per 100g", style = MaterialTheme.typography.labelMedium)
+    Text(
+      text = "Please enter values per 100g",
+      style = MaterialTheme.typography.labelMedium,
+    )
 
     // macronutrients
     FormDecimalField(
       name = "Energy (kcal)",
       value = kcalInput,
-      onValueChange = onKcalChanged,
+      onValueChange = { newValue -> onEvent(FoodFormEvent.KcalChanged(newValue)) },
       error = state.kcal.error,
       placeholder = "150 kcal",
     )
     FormDecimalField(
       name = "Fats",
       value = fatsInput,
-      onValueChange = onFatsChanged,
+      onValueChange = { newValue -> onEvent(FoodFormEvent.FatsChanged(newValue)) },
       error = state.fats.error,
       placeholder = "10 g",
     )
     FormDecimalField(
       name = "Carbohydrates",
       value = carbsInput,
-      onValueChange = onCarbsChanged,
+      onValueChange = { newValue -> onEvent(FoodFormEvent.CarbsChanged(newValue)) },
       error = state.carbs.error,
       placeholder = "67 g",
     )
     FormDecimalField(
       name = "Protein",
       value = proteinInput,
-      onValueChange = onProteinChanged,
+      onValueChange = { newValue -> onEvent(FoodFormEvent.ProteinChanged(newValue)) },
       error = state.protein.error,
       placeholder = "15 g",
     )
@@ -270,18 +216,18 @@ fun FoodNutrientsSection(
     FormDecimalField(
       name = "Fiber",
       value = fiberInput,
-      onValueChange = onFiberChanged,
+      onValueChange = { newValue -> onEvent(FoodFormEvent.FiberChanged(newValue)) },
       error = state.fiber.error,
       placeholder = "2 g",
-      required = false
+      required = false,
     )
     FormDecimalField(
       name = "Salt",
       value = sodiumInput,
-      onValueChange = onSodiumChanged,
+      onValueChange = { newValue -> onEvent(FoodFormEvent.SodiumChanged(newValue)) },
       error = state.sodium.error,
       placeholder = "0.5 g",
-      required = false
+      required = false,
     )
   }
 }

@@ -25,9 +25,34 @@ class FoodFormViewModel(
   private val _state = MutableStateFlow(FoodFormState()) // private state
   val state: StateFlow<FoodFormState> = _state.asStateFlow() // exposed state
 
+  fun onEvent(event: FoodFormEvent) {
+    when (event) {
+      is FoodFormEvent.NameChanged -> updateName(event.name)
+      is FoodFormEvent.BrandChanged -> updateBrand(event.brand)
+      is FoodFormEvent.IsLiquidChanged -> updateIsLiquid(event.isLiquid)
+
+      is FoodFormEvent.ImageChanged -> updateImageUri(event.imageUri)
+
+      is FoodFormEvent.KcalChanged -> updateKcal(event.kcal)
+      is FoodFormEvent.CarbsChanged -> updateCarbs(event.carbs)
+      is FoodFormEvent.ProteinChanged -> updateProtein(event.protein)
+      is FoodFormEvent.FatsChanged -> updateFats(event.fats)
+
+      is FoodFormEvent.FiberChanged -> updateFiber(event.fiber)
+      is FoodFormEvent.SodiumChanged -> updateSodium(event.sodium)
+
+      FoodFormEvent.AddServing -> addServing()
+      is FoodFormEvent.RemoveServing -> removeServing(event.servingId)
+      is FoodFormEvent.ServingNameChanged -> updateServingName(event.servingId, event.newName)
+      is FoodFormEvent.ServingSizeChanged -> updateServingSize(event.servingId, event.newSize)
+
+      is FoodFormEvent.SaveFood -> saveFood(event.onSuccess)
+    }
+  }
+
   /* #region updates */
 
-  fun updateName(newName: String) {
+  private fun updateName(newName: String) {
     _state.update {
       it.copy(
         name = it.name.copy(
@@ -38,7 +63,7 @@ class FoodFormViewModel(
     }
   }
 
-  fun updateBrand(newBrand: String) {
+  private fun updateBrand(newBrand: String) {
     _state.update {
       it.copy(
         brand = it.brand.copy(
@@ -49,7 +74,7 @@ class FoodFormViewModel(
     }
   }
 
-  fun updateIsLiquid(newIsLiquid: Boolean) {
+  private fun updateIsLiquid(newIsLiquid: Boolean) {
     _state.update {
       it.copy(
         isLiquid = it.isLiquid.copy(
@@ -60,7 +85,7 @@ class FoodFormViewModel(
     }
   }
 
-  fun updateImageUri(imageUri: String?) {
+  private fun updateImageUri(imageUri: String?) {
     if (imageUri == null) {
       _state.update {
         it.copy(
@@ -96,7 +121,7 @@ class FoodFormViewModel(
     }
   }
 
-  fun updateKcal(newKcal: Float?) {
+  private fun updateKcal(newKcal: Float?) {
     _state.update {
       it.copy(
         kcal = it.kcal.copy(
@@ -107,7 +132,7 @@ class FoodFormViewModel(
     }
   }
 
-  fun updateCarbs(newCarbs: Float?) {
+  private fun updateCarbs(newCarbs: Float?) {
     _state.update {
       it.copy(
         carbs = it.carbs.copy(
@@ -118,7 +143,7 @@ class FoodFormViewModel(
     }
   }
 
-  fun updateProtein(newProteins: Float?) {
+  private fun updateProtein(newProteins: Float?) {
     _state.update {
       it.copy(
         protein = it.protein.copy(
@@ -129,7 +154,7 @@ class FoodFormViewModel(
     }
   }
 
-  fun updateFats(newFats: Float?) {
+  private fun updateFats(newFats: Float?) {
     _state.update {
       it.copy(
         fats = it.fats.copy(
@@ -140,7 +165,7 @@ class FoodFormViewModel(
     }
   }
 
-  fun updateFiber(newFiber: Float?) {
+  private fun updateFiber(newFiber: Float?) {
     _state.update {
       it.copy(
         fiber = it.fiber.copy(
@@ -151,7 +176,7 @@ class FoodFormViewModel(
     }
   }
 
-  fun updateSodium(newSodium: Float?) {
+  private fun updateSodium(newSodium: Float?) {
     _state.update {
       it.copy(
         sodium = it.sodium.copy(
@@ -164,7 +189,7 @@ class FoodFormViewModel(
 
   /* #region servings */
 
-  fun addServing() {
+  private fun addServing() {
     _state.update {
       it.copy(
         servings = it.servings + ServingState()
@@ -172,7 +197,7 @@ class FoodFormViewModel(
     }
   }
 
-  fun removeServing(servingId: String) {
+  private fun removeServing(servingId: String) {
     _state.update {
       it.copy(
         servings = it.servings.filter { serving -> serving.id != servingId }
@@ -180,7 +205,7 @@ class FoodFormViewModel(
     }
   }
 
-  fun updateServingName(servingId: String, newName: String) {
+  private fun updateServingName(servingId: String, newName: String) {
     _state.update { current ->
       val updatedServings = current.servings.map { serving ->
         if (serving.id == servingId) {
@@ -199,7 +224,7 @@ class FoodFormViewModel(
     }
   }
 
-  fun updateServingSize(servingId: String, newSize: Float?) {
+  private fun updateServingSize(servingId: String, newSize: Float?) {
     _state.update { current ->
       val updatedServings = current.servings.map { serving ->
         if (serving.id == servingId) {
@@ -219,10 +244,9 @@ class FoodFormViewModel(
   }
 
   /* #endregion */
-
   /* #endregion */
 
-  fun saveFood(
+  private fun saveFood(
     onSuccess: () -> Unit,
   ) {
     _state.update { current ->

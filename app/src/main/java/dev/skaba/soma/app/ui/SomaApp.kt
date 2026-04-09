@@ -11,7 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dev.skaba.soma.app.SomaApplication
-import dev.skaba.soma.app.ui.features.food.FoodScreen
+import dev.skaba.soma.app.ui.features.food.FoodFormScreen
 import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormViewModel
 import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormViewModelFactory
 import dev.skaba.soma.app.ui.features.log.LogScreen
@@ -50,8 +50,8 @@ fun SomaApp() {
             imageProcessor = appContainer.imageProcessor
           )
         )
-        FoodScreen(
-          foodFormViewModel = foodFormViewModel,
+        FoodFormScreen(
+          viewModel = foodFormViewModel,
           onFoodSaved = {
             navController.navigate(SearchScreenRoute)
           }
