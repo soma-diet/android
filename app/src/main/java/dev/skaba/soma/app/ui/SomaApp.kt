@@ -48,7 +48,12 @@ fun SomaApp() {
             imageProcessor = appContainer.imageProcessor
           )
         )
-        FoodScreen(foodFormViewModel = foodFormViewModel)
+        FoodScreen(
+          foodFormViewModel = foodFormViewModel,
+          onFoodSaved = {
+            navController.navigate(SearchScreenRoute)
+          }
+        )
       }
 
       composable<LogScreenRoute> { LogScreen() }

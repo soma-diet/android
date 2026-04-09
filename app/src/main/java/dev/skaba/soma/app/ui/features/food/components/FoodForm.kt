@@ -18,28 +18,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.skaba.soma.app.domain.food.Serving
 import dev.skaba.soma.app.ui.components.buttons.PrimaryButton
 import dev.skaba.soma.app.ui.components.buttons.SecondaryButton
 import dev.skaba.soma.app.ui.components.forms.FormCheckField
 import dev.skaba.soma.app.ui.components.forms.FormDecimalField
 import dev.skaba.soma.app.ui.components.forms.FormImageUpload
-import dev.skaba.soma.app.ui.components.forms.FormNumberField
 import dev.skaba.soma.app.ui.components.forms.FormSection
 import dev.skaba.soma.app.ui.components.forms.FormTextField
 import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormState
 import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormViewModel
-import java.util.UUID
+import dev.skaba.soma.app.ui.features.food.viewmodel.ServingState
 
 @Composable
 fun FoodForm(
   viewModel: FoodFormViewModel,
+  onFoodSaved: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val state by viewModel.state.collectAsState()
@@ -52,12 +50,30 @@ fun FoodForm(
     onImageChanged = { uriString -> viewModel.updateImageUri(uriString) },
   )
 
-  FoodServingsSection(viewModel = viewModel)
-  FoodNutrientsSection(viewModel = viewModel)
+  FoodServingsSection(
+    state = state,
+    onAddServing = { viewModel.addServing() },
+    onRemoveServing = { viewModel.removeServing(it) },
+    onNameChange = { servingId, newName -> viewModel.updateServingName(servingId, newName) },
+    onSizeChange = { servingId, newSize -> viewModel.updateServingSize(servingId, newSize) },
+  )
+
+  FoodNutrientsSection(
+    state = state,
+    onKcalChanged = { viewModel.updateKcal(it) },
+    onCarbsChanged = { viewModel.updateCarbs(it) },
+    onProteinChanged = { viewModel.updateProtein(it) },
+    onFatsChanged = { viewModel.updateFats(it) },
+    onFiberChanged = { viewModel.updateFiber(it) },
+    onSodiumChanged = { viewModel.updateSodium(it) },
+  )
+
   PrimaryButton(
     text = "Add",
     onClick = {
-      viewModel.saveFood()
+      viewModel.saveFood {
+        onFoodSaved()
+      }
     },
     enabled = !state.isSaving,
     modifier = Modifier.fillMaxWidth()
@@ -92,19 +108,14 @@ fun FoodDetailsSection(
     title = "Food Details",
   ) {
     FormImageUpload(
-      imageModel = state.localImageUri.value ?: state.remoteImageUrl,
-      onClick = {
+      imageModel = state.localImageUri.value ?: state.remoteImageUrl, onClick = {
         photoPickerLauncher.launch(
           PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
         )
-      },
-      onClearImage =
-        if (state.localImageUri.value != null) {
-          { onImageChanged(null) }
-        } else null, // neukazovat delete moznost pokud je obrazek jen ze serveru
-      error = state.localImageUri.error,
-      modifier = Modifier.height(150.dp)
-    )
+      }, onClearImage = if (state.localImageUri.value != null) {
+        { onImageChanged(null) }
+      } else null, // neukazovat delete moznost pokud je obrazek jen ze serveru
+      error = state.localImageUri.error, modifier = Modifier.height(150.dp))
 
     FormTextField(
       name = "Food Name",
@@ -132,45 +143,44 @@ fun FoodDetailsSection(
 }
 
 @Composable
-fun FoodServingsSection(viewModel: FoodFormViewModel, modifier: Modifier = Modifier) {
-  val servings: MutableList<Serving> = remember {
-    mutableStateListOf(
-      Serving("serving_id1", "Sample name", 50.3f), Serving("serving_id2", "Sample name", 50.3f)
-    )
-  };
+fun FoodServingsSection(
+  state: FoodFormState,
+  onAddServing: () -> Unit,
+  onRemoveServing: (String) -> Unit,
+  onNameChange: (String, String) -> Unit,
+  onSizeChange: (String, Float?) -> Unit,
+  modifier: Modifier = Modifier,
+) {
   FormSection(
     title = "Servings"
   ) {
-    servings.forEachIndexed { index, serving ->
-      key(serving.id) {
+    state.servings.forEach { servingState ->
+      key(servingState.id) {
         ServingEditor(
-          serving = serving, onServingRemoved = {
-            servings.removeAt(index)
-          })
+          state = servingState,
+          onNameChange = { onNameChange(servingState.id, it) },
+          onSizeChange = { onSizeChange(servingState.id, it) },
+          onServingRemoved = { onRemoveServing(servingState.id) })
       }
     }
     SecondaryButton(
-      text = "Add a serving", onClick = {
-        servings.add(
-          Serving(
-            id = UUID.randomUUID().toString(),
-            name = "",
-            size = 0f,
-          )
-        )
-      }, modifier = Modifier.fillMaxWidth()
+      text = "Add a serving",
+      onClick = onAddServing,
+      modifier = Modifier.fillMaxWidth()
     )
   }
 }
 
 @Composable
 fun ServingEditor(
-  serving: Serving,
+  state: ServingState,
+  onNameChange: (String) -> Unit,
+  onSizeChange: (Float?) -> Unit,
   onServingRemoved: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val nameInput = remember { mutableStateOf(serving.name) }
-  val sizeInput = remember { mutableStateOf<Float?>(null) }
+  val nameInput = remember(state.name.value) { mutableStateOf(state.name.value) }
+  val sizeInput = remember(state.size.value) { mutableStateOf(state.size.value) }
 
   Row(
     horizontalArrangement = Arrangement.End,
@@ -185,24 +195,41 @@ fun ServingEditor(
       )
     }
   }
+
   FormTextField(
     name = "Serving name",
     value = nameInput,
+    onValueChange = onNameChange,
+    error = state.name.error,
     placeholder = "Piece",
-  ) { }
+  )
+
   FormDecimalField(
-    name = "Size (g)", value = sizeInput, placeholder = "15 g"
-  ) { }
+    name = "Size (g)",
+    value = sizeInput,
+    onValueChange = onSizeChange,
+    error = state.size.error,
+    placeholder = "15 g",
+  )
 }
 
 @Composable
-fun FoodNutrientsSection(viewModel: FoodFormViewModel, modifier: Modifier = Modifier) {
-  val kcal = remember { mutableStateOf<Int?>(null) }
-  val protein = remember { mutableStateOf<Int?>(null) }
-  val fats = remember { mutableStateOf<Int?>(null) }
-  val carbs = remember { mutableStateOf<Int?>(null) }
-  val fiber = remember { mutableStateOf<Int?>(null) }
-  val sodium = remember { mutableStateOf<Int?>(null) }
+fun FoodNutrientsSection(
+  state: FoodFormState,
+  onKcalChanged: (Float?) -> Unit,
+  onCarbsChanged: (Float?) -> Unit,
+  onProteinChanged: (Float?) -> Unit,
+  onFatsChanged: (Float?) -> Unit,
+  onFiberChanged: (Float?) -> Unit,
+  onSodiumChanged: (Float?) -> Unit,
+  modifier: Modifier = Modifier,
+) {
+  val kcalInput = remember(state.kcal.value) { mutableStateOf(state.kcal.value) }
+  val proteinInput = remember(state.protein.value) { mutableStateOf(state.protein.value) }
+  val fatsInput = remember(state.fats.value) { mutableStateOf(state.fats.value) }
+  val carbsInput = remember(state.carbs.value) { mutableStateOf(state.carbs.value) }
+  val fiberInput = remember(state.fiber.value) { mutableStateOf(state.fiber.value) }
+  val sodiumInput = remember(state.sodium.value) { mutableStateOf(state.sodium.value) }
 
   FormSection(
     title = "Nutritional data",
@@ -210,25 +237,51 @@ fun FoodNutrientsSection(viewModel: FoodFormViewModel, modifier: Modifier = Modi
     Text(text = "Please enter values per 100g", style = MaterialTheme.typography.labelMedium)
 
     // macronutrients
-    FormNumberField(
-      name = "Energy (kcal)", value = kcal, placeholder = "150 kcal", error = null, required = true
-    ) { }
-    FormNumberField(
-      name = "Fats", value = fats, placeholder = "10 g", error = null, required = true
-    ) { }
-    FormNumberField(
-      name = "Carbohydrates", value = carbs, placeholder = "67 g", error = null, required = true
-    ) { }
-    FormNumberField(
-      name = "Protein", value = protein, placeholder = "15 g", error = null, required = true
-    ) { }
+    FormDecimalField(
+      name = "Energy (kcal)",
+      value = kcalInput,
+      onValueChange = onKcalChanged,
+      error = state.kcal.error,
+      placeholder = "150 kcal",
+    )
+    FormDecimalField(
+      name = "Fats",
+      value = fatsInput,
+      onValueChange = onFatsChanged,
+      error = state.fats.error,
+      placeholder = "10 g",
+    )
+    FormDecimalField(
+      name = "Carbohydrates",
+      value = carbsInput,
+      onValueChange = onCarbsChanged,
+      error = state.carbs.error,
+      placeholder = "67 g",
+    )
+    FormDecimalField(
+      name = "Protein",
+      value = proteinInput,
+      onValueChange = onProteinChanged,
+      error = state.protein.error,
+      placeholder = "15 g",
+    )
 
     // micronutrients
-    FormNumberField(
-      name = "Fiber", value = fiber, placeholder = "2 g", error = null, required = true
-    ) { }
-    FormNumberField(
-      name = "Salt", value = sodium, placeholder = "0.5 g", error = null, required = true
-    ) { }
+    FormDecimalField(
+      name = "Fiber",
+      value = fiberInput,
+      onValueChange = onFiberChanged,
+      error = state.fiber.error,
+      placeholder = "2 g",
+      required = false
+    )
+    FormDecimalField(
+      name = "Salt",
+      value = sodiumInput,
+      onValueChange = onSodiumChanged,
+      error = state.sodium.error,
+      placeholder = "0.5 g",
+      required = false
+    )
   }
 }

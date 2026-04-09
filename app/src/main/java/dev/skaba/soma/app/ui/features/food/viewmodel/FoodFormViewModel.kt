@@ -118,7 +118,7 @@ class FoodFormViewModel(
     }
   }
 
-  fun updateProteins(newProteins: Float?) {
+  fun updateProtein(newProteins: Float?) {
     _state.update {
       it.copy(
         protein = it.protein.copy(
@@ -162,9 +162,69 @@ class FoodFormViewModel(
     }
   }
 
+  /* #region servings */
+
+  fun addServing() {
+    _state.update {
+      it.copy(
+        servings = it.servings + ServingState()
+      )
+    }
+  }
+
+  fun removeServing(servingId: String) {
+    _state.update {
+      it.copy(
+        servings = it.servings.filter { serving -> serving.id != servingId }
+      )
+    }
+  }
+
+  fun updateServingName(servingId: String, newName: String) {
+    _state.update { current ->
+      val updatedServings = current.servings.map { serving ->
+        if (serving.id == servingId) {
+          serving.copy(
+            name = serving.name.copy(
+              value = newName,
+              error = null
+            )
+          )
+        } else {
+          serving
+        }
+      }
+
+      current.copy(servings = updatedServings)
+    }
+  }
+
+  fun updateServingSize(servingId: String, newSize: Float?) {
+    _state.update { current ->
+      val updatedServings = current.servings.map { serving ->
+        if (serving.id == servingId) {
+          serving.copy(
+            size = serving.size.copy(
+              value = newSize,
+              error = null
+            )
+          )
+        } else {
+          serving
+        }
+      }
+
+      current.copy(servings = updatedServings)
+    }
+  }
+
   /* #endregion */
 
-  fun saveFood() {
+  /* #endregion */
+
+  fun saveFood(
+    onSuccess: () -> Unit,
+  ) {
     _state.update { current ->
       current.copy(
         name = current.name.validateTextNotEmpty("Name is required"),
@@ -176,17 +236,27 @@ class FoodFormViewModel(
           .validateNumberNotNegative("Protein cannot be negative"),
         fats = current.fats.validateNumberNotEmpty("Fats are required")
           .validateNumberNotNegative("Fats cannot be negative"),
+        servings = current.servings.map { serving ->
+          serving.copy(
+            name = serving.name.validateTextNotEmpty("Serving name required"),
+            size = serving.size.validateNumberNotEmpty("Size required")
+              .validateNumberNotNegative("Size cannot be negative")
+          )
+        }
       )
     }
 
     val validatedState = _state.value
-    val hasError = validatedState.name.error != null ||
+    val hasNormalError = validatedState.name.error != null ||
         validatedState.kcal.error != null ||
         validatedState.carbs.error != null ||
         validatedState.protein.error != null ||
         validatedState.fats.error != null
+    val hasServingError = validatedState.servings.any {
+      it.name.error != null || it.size.error != null
+    }
 
-    if (hasError) return
+    if (hasNormalError || hasServingError) return
 
     _state.update { it.copy(isSaving = true) }
 
@@ -215,6 +285,7 @@ class FoodFormViewModel(
           )
         )
         repository.insert(newFood)
+        onSuccess()
       } catch (e: Exception) {
         // TODO handle chyba (popup? toast popup?)
       } finally {

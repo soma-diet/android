@@ -24,6 +24,7 @@ import dev.skaba.soma.app.ui.theme.SOMATheme
 @Composable
 fun FoodScreen(
   foodFormViewModel: FoodFormViewModel,
+  onFoodSaved: () -> Unit = {},
 ) {
   val spacing = 16.dp
   val scrollState = rememberScrollState()
@@ -42,7 +43,7 @@ fun FoodScreen(
         .verticalScroll(scrollState)
     ) {
       Spacer(modifier = Modifier.height(0.dp))
-      FoodForm(viewModel = foodFormViewModel)
+      FoodForm(viewModel = foodFormViewModel, onFoodSaved = onFoodSaved)
       Spacer(modifier = Modifier.height(0.dp))
     }
   }
