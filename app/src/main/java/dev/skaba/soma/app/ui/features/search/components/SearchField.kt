@@ -11,33 +11,35 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.skaba.soma.app.ui.features.search.model.SearchFilter
 
 @Composable
 fun SearchField(
-  filters: List<String>,
-  selectedFilter: String,
+  selectedFilter: MutableState<SearchFilter>,
   onQueryChanged: (String) -> Unit,
-  onFilterChanged: (String) -> Unit,
+  onFilterChanged: (SearchFilter) -> Unit,
   modifier: Modifier = Modifier,
 ) {
+  val searchFilters = SearchFilter.entries
   var query by remember { mutableStateOf("") }
-  var selectedFilter by remember { mutableStateOf(selectedFilter) }
+
   Box(
     modifier = modifier
   ) {
     Column {
       val elementShape = MaterialTheme.shapes.small
-      OutlinedTextField(
+      TextField(
         value = query,
         onValueChange = { newQuery ->
           query = newQuery
@@ -60,21 +62,21 @@ fun SearchField(
           .fillMaxWidth()
           .height(40.dp)
       ) {
-        filters.forEachIndexed { index, filter ->
+        searchFilters.forEachIndexed { index, filter ->
           val btmEndCorner =
-            if (index == filters.lastIndex) elementShape.bottomEnd else CornerSize(0.dp)
+            if (index == searchFilters.lastIndex) elementShape.bottomEnd else CornerSize(0.dp)
           val btmStartCorner = if (index == 0) elementShape.bottomStart else CornerSize(0.dp)
           Button(
             onClick = {
-              selectedFilter = filter
-              onFilterChanged(filters[index])
+              selectedFilter.value = filter
+              onFilterChanged(searchFilters[index])
             },
             modifier = Modifier
               .weight(1f)
               .fillMaxHeight(),
             colors = ButtonDefaults.buttonColors(
-              containerColor = if (selectedFilter == filter) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
-              contentColor = if (selectedFilter == filter) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+              containerColor = if (selectedFilter.value == filter) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+              contentColor = if (selectedFilter.value == filter) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
             ),
             shape = elementShape.copy(
               topStart = CornerSize(0.dp),
@@ -83,7 +85,7 @@ fun SearchField(
               bottomEnd = btmEndCorner
             )
           ) {
-            Text(text = filter)
+            Text(text = filter.displayName)
           }
         }
       }

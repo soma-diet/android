@@ -21,3 +21,18 @@ fun Food.toEntity(): FoodEntity {
   )
 }
 
+fun FoodEntity.toDomain(): Food {
+  return Food(
+    id = this.id,
+    name = this.name,
+    isMass = this.isMass,
+    isPrivate = this.isPrivate, // stejne by melo byt vzdy true, nemuze si ulozit cizi jidlo (nebo muze kvuli loggum? TODO)
+    localImageUri = this.localImagePath,
+    remoteImageUrl = this.remoteImagePath,
+    brand = this.brand,
+    macronutrients = this.macronutrients.toDomain(),
+    micronutrients = this.micronutrients?.toDomain(),
+    servings = Json.decodeFromString(this.servingsJson),
+  )
+}
+

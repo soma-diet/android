@@ -18,3 +18,19 @@ fun Micronutrients.toEntity(): MicronutrientsEntity {
         sodium = sodium
     )
 }
+
+fun MacronutrientsEntity.toDomain(): Macronutrients {
+    return Macronutrients(
+        kcal = kcal,
+        protein = protein,
+        fats = fats,
+        carbs = carbs
+    )
+}
+
+fun MicronutrientsEntity.toDomain(): Micronutrients {
+    return Micronutrients(
+        fiber = fiber,
+        sodium = sodium
+    )
+}

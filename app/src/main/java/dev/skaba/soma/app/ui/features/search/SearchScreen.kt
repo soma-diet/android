@@ -4,30 +4,30 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.skaba.soma.app.sample.FoodPreviewData
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.skaba.soma.app.ui.components.list.SomaItemList
 import dev.skaba.soma.app.ui.components.list.SomaItemListEntryData
 import dev.skaba.soma.app.ui.components.scaffold.SomaTextOnlyAppBar
 import dev.skaba.soma.app.ui.features.search.components.SearchField
+import dev.skaba.soma.app.ui.features.search.viewmodel.SearchViewModel
 import dev.skaba.soma.app.ui.theme.SOMATheme
 
 @Composable
-fun SearchScreen() {
-  val filters = listOf("All", "Private", "Public")
+fun SearchScreen(
+  searchViewModel: SearchViewModel,
+) {
   val spacing = 16.dp
 
-  val sampleSearchEntries = FoodPreviewData.allSamples.map { food ->
-    SomaItemListEntryData(
-      name = food.name,
-      subtext = food.brand,
-      sidetext = "150 kcal",
-      onDelete = { },
-      onEdit = { }
-    )
-  }
+
+  val state = searchViewModel.state.collectAsState()
+
+  val selectedFilterInput = remember(state.value.filter) { mutableStateOf(state.value.filter) }
 
   Scaffold(
     topBar = {
@@ -42,8 +42,7 @@ fun SearchScreen() {
         .padding(bottom = spacing)
     ) {
       SearchField(
-        filters = filters,
-        selectedFilter = "Private",
+        selectedFilter = selectedFilterInput,
         onQueryChanged = { newQuery ->
           // TODO search query
         },
@@ -53,7 +52,15 @@ fun SearchScreen() {
         modifier = Modifier.padding(spacing)
       )
       SomaItemList(
-        items = sampleSearchEntries
+        items = state.value.foods.map { food ->
+          SomaItemListEntryData(
+            name = food.name,
+            subtext = food.brand,
+            sidetext = "${food.macronutrients.kcal} kcal",
+            onDelete = { }, // TODO on delete
+            onEdit = { } // TODO on edit
+          )
+        }
       )
     }
   }
@@ -63,6 +70,6 @@ fun SearchScreen() {
 @Composable
 private fun SearchScreenPreview() {
   SOMATheme {
-    SearchScreen()
+    SearchScreen(viewModel())
   }
 }
