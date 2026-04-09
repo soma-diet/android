@@ -48,15 +48,20 @@ fun FormDecimalField(
     BasicTextField(
       value = stringValue.value,
       onValueChange = { input ->
-        val safeInput = input.replace(',', '.') // pro ceskou klavesnici
+        var safeInput = input.replace(',', '.') // pro ceskou klavesnici
 
         if (safeInput.isEmpty()) {
           stringValue.value = ""
           value.value = null
           onValueChange(null)
         } else {
-          val converted = safeInput.toFloatOrNull()
+          // parts size == 2: cislo melo tecku, parts[1] - cast za teckou
+          val parts = safeInput.split('.')
+          safeInput = if (parts.size == 2 && parts[1].length > 1) {
+            parts[0] + "." + parts[1].substring(0, 1)
+          } else safeInput
 
+          val converted = safeInput.toFloatOrNull()
           if (converted != null) {
             stringValue.value = safeInput
             value.value = converted

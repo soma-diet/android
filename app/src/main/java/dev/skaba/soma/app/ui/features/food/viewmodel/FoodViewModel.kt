@@ -18,7 +18,7 @@ class FoodViewModel(
     _state.update { it.copy(name = newName) }
   }
 
-  fun updateKcal(kcal: Int?) {
+  fun updateKcal(kcal: Float?) {
     _state.update { it.copy(kcal = kcal) }
   }
 }
