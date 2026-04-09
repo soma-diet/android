@@ -18,7 +18,31 @@ class FoodViewModel(
     _state.update { it.copy(name = newName) }
   }
 
+  fun updateBrand(brand: String) {
+    _state.update { it.copy(brand = brand) }
+  }
+
+  fun updateIsLiquid(isLiquid: Boolean) {
+    _state.update { it.copy(isLiquid = isLiquid) }
+  }
+
   fun updateKcal(kcal: Float?) {
     _state.update { it.copy(kcal = kcal) }
+  }
+
+  fun updateKcal(kcal: Int?) {
+    _state.update { it.copy(energyKcal = kcal) }
+  }
+
+  fun updateCarbs(carbs: Float?) {
+    _state.update { it.copy(carbohydrates = carbs) }
+  }
+
+  fun updateProteins(proteins: Float?) {
+    _state.update { it.copy(proteins = proteins) }
+  }
+
+  fun updateFats(fats: Float?) {
+    _state.update { it.copy(fats = fats) }
   }
 }
