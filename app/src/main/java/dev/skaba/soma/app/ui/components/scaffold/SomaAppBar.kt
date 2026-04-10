@@ -1,48 +1,38 @@
 package dev.skaba.soma.app.ui.components.scaffold
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import dev.skaba.soma.app.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SomaAppBar(
+  title: @Composable () -> Unit,
   modifier: Modifier = Modifier,
-  horizontalArrangement: Arrangement.Horizontal = Arrangement.Center,
-  content: @Composable () -> Unit,
+  navigationIcon: @Composable () -> Unit = {},
+  actions: @Composable RowScope.() -> Unit = {},
 ) {
-  TopAppBar(
-    title = {
-      Row(
-        horizontalArrangement = horizontalArrangement,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-          .fillMaxWidth()
-          .padding(end = 16.dp) // matchnout padding ktery je prirozene v title,
-      ) {
-        content()
-      }
-    },
-    modifier = Modifier
-      .clip(
-        // neoriznout horni rohy
-        MaterialTheme.shapes.medium.copy(
-          topStart = CornerSize(0.dp),
-          topEnd = CornerSize(0.dp)
-        )
-      )
+  CenterAlignedTopAppBar(
+    title = title,
+    navigationIcon = navigationIcon,
+    actions = actions,
+    modifier = modifier.clip(
+      MaterialTheme.shapes.medium.copy(
+        topStart = CornerSize(0.dp),
+        topEnd = CornerSize(0.dp),
+      ),
+    ),
   )
 }
 
@@ -50,13 +40,25 @@ fun SomaAppBar(
 fun SomaTextOnlyAppBar(
   text: String,
   modifier: Modifier = Modifier,
+  onNavigateBack: (() -> Unit)? = null,
 ) {
-  SomaAppBar() {
-    Text(
-      text = text,
-      style = MaterialTheme.typography.headlineMedium,
-      textAlign = TextAlign.Center,
-      modifier = modifier.fillMaxWidth()
-    )
-  }
+  SomaAppBar(
+    title = {
+      Text(
+        text = text,
+        style = MaterialTheme.typography.headlineMedium,
+      )
+    },
+    modifier = modifier,
+    navigationIcon = {
+      if (onNavigateBack != null) {
+        IconButton(onClick = onNavigateBack) {
+          Icon(
+            painter = painterResource(id = R.drawable.arrow_back),
+            contentDescription = "Go back",
+          )
+        }
+      }
+    },
+  )
 }

@@ -24,11 +24,13 @@ import dev.skaba.soma.app.ui.theme.SOMATheme
 @Composable
 fun SearchScreen(
   searchViewModel: SearchViewModel,
+  navigateToEditScreen: (String?) -> Unit = {},
 ) {
   val state by searchViewModel.state.collectAsState()
   SearchScreenContent(
     state = state,
-    onEvent = { event -> searchViewModel.onEvent(event) }
+    onEvent = { event -> searchViewModel.onEvent(event) },
+    navigateToEditScreen = navigateToEditScreen,
   )
 }
 
@@ -36,38 +38,53 @@ fun SearchScreen(
 fun SearchScreenContent(
   state: SearchState,
   onEvent: (SearchEvent) -> Unit,
-  ) {
+  navigateToEditScreen: (String?) -> Unit = {},
+) {
   val selectedFilterInput = remember(state.filter) { mutableStateOf(state.filter) }
 
   val spacing = 16.dp
   Scaffold(
     topBar = {
       SomaTextOnlyAppBar(
-        text = "Food search"
+        text = "Food search",
       )
-    }
+    },
   ) { paddingValues ->
     Column(
       modifier = Modifier
         .padding(paddingValues)
-        .padding(bottom = spacing)
+        .padding(bottom = spacing),
     ) {
       SearchField(
         selectedFilter = selectedFilterInput,
         onQueryChanged = { newQuery -> onEvent(SearchEvent.QueryChanged(newQuery)) },
         onFilterChanged = { newFilter -> onEvent(SearchEvent.FilterChanged(newFilter)) },
-        modifier = Modifier.padding(spacing)
+        modifier = Modifier.padding(spacing),
       )
       SomaItemList(
         items = state.foods.map { food ->
+          val onDelete = if (food.isPrivate) {
+            { onEvent(SearchEvent.DeleteFood(food.id)) }
+          } else {
+            null
+          }
+          val onEdit = if (food.isPrivate) {
+            {
+              // onEvent(SearchEvent.EditFood(food.id))
+              navigateToEditScreen(food.id)
+            }
+          } else {
+            null
+          }
+
           SomaItemListEntryData(
             name = food.name,
             subtext = food.brand,
             sidetext = "${food.macronutrients.kcal} kcal",
-            onDelete = { onEvent(SearchEvent.DeleteFood(food.id)) },
-            onEdit = { onEvent(SearchEvent.EditFood(food.id)) }
+            onDelete = onDelete,
+            onEdit = onEdit,
           )
-        }
+        },
       )
     }
   }
@@ -82,7 +99,7 @@ private fun SearchScreenPreview() {
         query = "Test query",
         foods = FoodPreviewData.allSamples,
       ),
-      onEvent = {}
+      onEvent = {},
     )
   }
 }

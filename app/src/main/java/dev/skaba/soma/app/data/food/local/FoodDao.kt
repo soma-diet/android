@@ -10,6 +10,9 @@ interface FoodDao {
   @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
   suspend fun insert(food: FoodEntity)
 
+  @Query("SELECT * FROM foods WHERE id = :foodId")
+  suspend fun getById(foodId: String): FoodEntity?
+
   @Query("SELECT * FROM foods WHERE name LIKE '%' || :name || '%'")
   suspend fun getAllByName(name: String): List<FoodEntity>
 

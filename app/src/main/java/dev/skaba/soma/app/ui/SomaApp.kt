@@ -35,26 +35,27 @@ fun SomaApp() {
   val navController = rememberNavController()
 
   Scaffold(
-    bottomBar = { SomaNavigationBar(navController = navController) }
+    bottomBar = { SomaNavigationBar(navController = navController) },
   ) { globalPadding -> // odsazeni od spodni listy
 
     NavHost(
       navController = navController,
       startDestination = LogScreenRoute,
-      modifier = Modifier.padding(globalPadding)
+      modifier = Modifier.padding(globalPadding),
     ) {
       composable<FoodFormScreenRoute> {
         val foodFormViewModel: FoodFormViewModel = viewModel(
           factory = FoodFormViewModelFactory(
             foodRepository = appContainer.foodRepository,
-            imageProcessor = appContainer.imageProcessor
-          )
+            imageProcessor = appContainer.imageProcessor,
+          ),
         )
         FoodFormScreen(
           viewModel = foodFormViewModel,
           onFoodSaved = {
             navController.navigate(SearchScreenRoute)
-          }
+          },
+          navigateBack = { navController.popBackStack() },
         )
       }
 
@@ -63,12 +64,14 @@ fun SomaApp() {
       composable<SearchScreenRoute> {
         val searchViewModel: SearchViewModel = viewModel(
           factory = SearchViewModelFactory(
-            foodRepository = appContainer.foodRepository
-          )
+            foodRepository = appContainer.foodRepository,
+          ),
         )
-        SearchScreen(searchViewModel = searchViewModel)
+        SearchScreen(
+          searchViewModel = searchViewModel,
+          navigateToEditScreen = { foodId -> navController.navigate(FoodFormScreenRoute(foodId)) },
+        )
       }
-
 
       composable<TargetsFormScreenRoute> { TargetsScreen() }
       composable<LogEntryScreenRoute> { LogEntryScreen() }

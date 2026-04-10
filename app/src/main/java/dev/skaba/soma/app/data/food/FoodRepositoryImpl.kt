@@ -14,6 +14,10 @@ class FoodRepositoryImpl(
     foodDao.insert(entity)
   }
 
+  override suspend fun getById(foodId: String): Food? {
+    return foodDao.getById(foodId)?.toDomain()
+  }
+
   override suspend fun getAllByName(name: String): List<Food> {
     return foodDao.getAllByName(name).map { it.toDomain() }
   }

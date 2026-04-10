@@ -10,7 +10,7 @@ object SearchScreenRoute
 object LogScreenRoute
 
 @Serializable
-object FoodFormScreenRoute
+data class FoodFormScreenRoute(val foodId: String? = null)
 
 @Serializable
 object LogEntryScreenRoute

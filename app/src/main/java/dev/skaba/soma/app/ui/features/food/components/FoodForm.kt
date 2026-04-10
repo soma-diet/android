@@ -20,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.skaba.soma.app.ui.components.buttons.SecondaryButton
 import dev.skaba.soma.app.ui.components.forms.FormCheckField
@@ -28,11 +27,9 @@ import dev.skaba.soma.app.ui.components.forms.FormDecimalField
 import dev.skaba.soma.app.ui.components.forms.FormImageUpload
 import dev.skaba.soma.app.ui.components.forms.FormSection
 import dev.skaba.soma.app.ui.components.forms.FormTextField
-import dev.skaba.soma.app.ui.features.food.FoodFormContent
 import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormEvent
 import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormState
 import dev.skaba.soma.app.ui.features.food.viewmodel.ServingState
-import dev.skaba.soma.app.ui.theme.SOMATheme
 
 @Composable
 fun FoodDetailsSection(

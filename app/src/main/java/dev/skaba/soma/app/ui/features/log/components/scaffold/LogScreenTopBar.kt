@@ -1,7 +1,5 @@
 package dev.skaba.soma.app.ui.features.log.components.scaffold
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -13,27 +11,33 @@ import dev.skaba.soma.app.R
 import dev.skaba.soma.app.ui.components.scaffold.SomaAppBar
 import dev.skaba.soma.app.ui.theme.SOMATheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LogScreenTopBar(
   onDayBackwards: () -> Unit,
   onDayForwards: () -> Unit,
 ) {
   SomaAppBar(
-    horizontalArrangement = Arrangement.SpaceBetween
-  ) {
-    ChangeDayButton(
-      icon = R.drawable.arrow_back,
-      description = "Go back a day",
-      onClick = onDayBackwards,
-    )
-    Text("Today", style = MaterialTheme.typography.headlineMedium)
-    ChangeDayButton(
-      icon = R.drawable.arrow_forward,
-      description = "Go forward a day",
-      onClick = onDayForwards
-    )
-  }
+    title = {
+      Text(
+        text = "Today",
+        style = MaterialTheme.typography.headlineMedium
+      )
+    },
+    navigationIcon = {
+      ChangeDayButton(
+        icon = R.drawable.arrow_back,
+        description = "Go back a day",
+        onClick = onDayBackwards,
+      )
+    },
+    actions = {
+      ChangeDayButton(
+        icon = R.drawable.arrow_forward,
+        description = "Go forward a day",
+        onClick = onDayForwards
+      )
+    }
+  )
 }
 
 @Composable

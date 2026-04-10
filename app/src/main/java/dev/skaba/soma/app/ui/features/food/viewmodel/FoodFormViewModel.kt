@@ -1,7 +1,9 @@
 package dev.skaba.soma.app.ui.features.food.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import dev.skaba.soma.app.domain.food.Food
 import dev.skaba.soma.app.domain.food.FoodRepository
 import dev.skaba.soma.app.domain.food.Macronutrients
@@ -9,6 +11,7 @@ import dev.skaba.soma.app.domain.food.Micronutrients
 import dev.skaba.soma.app.ui.data.validateNumberNotEmpty
 import dev.skaba.soma.app.ui.data.validateNumberNotNegative
 import dev.skaba.soma.app.ui.data.validateTextNotEmpty
+import dev.skaba.soma.app.ui.navigation.FoodFormScreenRoute
 import dev.skaba.soma.app.util.ImageProcessor
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,12 +21,44 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 class FoodFormViewModel(
+  savedStateHandle: SavedStateHandle,
   private val repository: FoodRepository,
   private val imageProcessor: ImageProcessor,
 ) : ViewModel() // klicova implementace ViewModel!!
 {
   private val _state = MutableStateFlow(FoodFormState()) // private state
   val state: StateFlow<FoodFormState> = _state.asStateFlow() // exposed state
+
+  // id jidla z cesty (pro editaci jidla)
+  private val foodId: String? = savedStateHandle.toRoute<FoodFormScreenRoute>().foodId
+
+  init {
+    foodId?.let { id ->
+      viewModelScope.launch {
+        val food = repository.getById(id)
+        food?.let { loadFoodIntoState(it) }
+      }
+    }
+  }
+
+  // nacist jidlo do state
+  private fun loadFoodIntoState(food: Food) {
+    _state.update {
+      it.copy(
+        name = it.name.copy(value = food.name),
+        brand = it.brand.copy(value = food.brand ?: ""),
+        isLiquid = it.isLiquid.copy(value = !food.isMass),
+        localImageUri = it.localImageUri.copy(value = food.localImageUri),
+        kcal = it.kcal.copy(value = food.macronutrients.kcal),
+        carbs = it.carbs.copy(value = food.macronutrients.carbs),
+        protein = it.protein.copy(value = food.macronutrients.protein),
+        fats = it.fats.copy(value = food.macronutrients.fats),
+        fiber = it.fiber.copy(value = food.micronutrients?.fiber),
+        sodium = it.sodium.copy(value = food.micronutrients?.sodium),
+        isEditMode = true,
+      )
+    }
+  }
 
   fun onEvent(event: FoodFormEvent) {
     when (event) {
@@ -57,8 +92,8 @@ class FoodFormViewModel(
       it.copy(
         name = it.name.copy(
           value = newName,
-          error = null // pri zmene hodnoty se resetuje error na null
-        )
+          error = null, // pri zmene hodnoty se resetuje error na null
+        ),
       )
     }
   }
@@ -68,8 +103,8 @@ class FoodFormViewModel(
       it.copy(
         brand = it.brand.copy(
           value = newBrand,
-          error = null
-        )
+          error = null,
+        ),
       )
     }
   }
@@ -79,8 +114,8 @@ class FoodFormViewModel(
       it.copy(
         isLiquid = it.isLiquid.copy(
           value = newIsLiquid,
-          error = null
-        )
+          error = null,
+        ),
       )
     }
   }
@@ -91,8 +126,8 @@ class FoodFormViewModel(
         it.copy(
           localImageUri = it.localImageUri.copy(
             value = null,
-            error = null
-          )
+            error = null,
+          ),
         )
       }
       return
@@ -105,8 +140,8 @@ class FoodFormViewModel(
         it.copy(
           localImageUri = it.localImageUri.copy(
             value = imageUri,
-            error = null
-          )
+            error = null,
+          ),
         )
       }
     } else {
@@ -114,7 +149,7 @@ class FoodFormViewModel(
         it.copy(
           localImageUri = it.localImageUri.copy(
             value = null,
-            error = "Image size is too large (max 1MB)"
+            error = "Image size is too large (max 1MB)",
           ),
         )
       }
@@ -126,8 +161,8 @@ class FoodFormViewModel(
       it.copy(
         kcal = it.kcal.copy(
           value = newKcal,
-          error = null
-        )
+          error = null,
+        ),
       )
     }
   }
@@ -137,8 +172,8 @@ class FoodFormViewModel(
       it.copy(
         carbs = it.carbs.copy(
           value = newCarbs,
-          error = null
-        )
+          error = null,
+        ),
       )
     }
   }
@@ -148,8 +183,8 @@ class FoodFormViewModel(
       it.copy(
         protein = it.protein.copy(
           value = newProteins,
-          error = null
-        )
+          error = null,
+        ),
       )
     }
   }
@@ -159,8 +194,8 @@ class FoodFormViewModel(
       it.copy(
         fats = it.fats.copy(
           value = newFats,
-          error = null
-        )
+          error = null,
+        ),
       )
     }
   }
@@ -170,8 +205,8 @@ class FoodFormViewModel(
       it.copy(
         fiber = it.fiber.copy(
           value = newFiber,
-          error = null
-        )
+          error = null,
+        ),
       )
     }
   }
@@ -181,8 +216,8 @@ class FoodFormViewModel(
       it.copy(
         sodium = it.sodium.copy(
           value = newSodium,
-          error = null
-        )
+          error = null,
+        ),
       )
     }
   }
@@ -192,7 +227,7 @@ class FoodFormViewModel(
   private fun addServing() {
     _state.update {
       it.copy(
-        servings = it.servings + ServingState()
+        servings = it.servings + ServingState(),
       )
     }
   }
@@ -200,7 +235,7 @@ class FoodFormViewModel(
   private fun removeServing(servingId: String) {
     _state.update {
       it.copy(
-        servings = it.servings.filter { serving -> serving.id != servingId }
+        servings = it.servings.filter { serving -> serving.id != servingId },
       )
     }
   }
@@ -212,8 +247,8 @@ class FoodFormViewModel(
           serving.copy(
             name = serving.name.copy(
               value = newName,
-              error = null
-            )
+              error = null,
+            ),
           )
         } else {
           serving
@@ -231,8 +266,8 @@ class FoodFormViewModel(
           serving.copy(
             size = serving.size.copy(
               value = newSize,
-              error = null
-            )
+              error = null,
+            ),
           )
         } else {
           serving
@@ -264,9 +299,9 @@ class FoodFormViewModel(
           serving.copy(
             name = serving.name.validateTextNotEmpty("Serving name required"),
             size = serving.size.validateNumberNotEmpty("Size required")
-              .validateNumberNotNegative("Size cannot be negative")
+              .validateNumberNotNegative("Size cannot be negative"),
           )
-        }
+        },
       )
     }
 
@@ -287,7 +322,7 @@ class FoodFormViewModel(
     viewModelScope.launch {
       try {
         val newFood = Food(
-          id = UUID.randomUUID().toString(),
+          id = foodId ?: UUID.randomUUID().toString(),
           name = validatedState.name.value,
           isMass = !validatedState.isLiquid.value,
           isPrivate = true,
@@ -306,7 +341,7 @@ class FoodFormViewModel(
           micronutrients = Micronutrients(
             fiber = validatedState.fiber.value,
             sodium = validatedState.sodium.value,
-          )
+          ),
         )
         repository.insert(newFood)
         onSuccess()

@@ -31,12 +31,14 @@ import dev.skaba.soma.app.ui.theme.SOMATheme
 fun FoodFormScreen(
   viewModel: FoodFormViewModel,
   onFoodSaved: () -> Unit = {},
+  navigateBack: (() -> Unit)? = null,
 ) {
   val state by viewModel.state.collectAsState()
   FoodFormContent(
     state = state,
     onEvent = { event: FoodFormEvent -> viewModel.onEvent(event) },
     onFoodSaved = onFoodSaved,
+    onNavigateBack = navigateBack,
   )
 }
 
@@ -45,12 +47,16 @@ fun FoodFormContent(
   state: FoodFormState,
   onEvent: (FoodFormEvent) -> Unit,
   onFoodSaved: () -> Unit,
+  onNavigateBack: (() -> Unit)? = null,
 ) {
   val scrollState = rememberScrollState()
   val spacing = 16.dp
   Scaffold(
     topBar = {
-      SomaTextOnlyAppBar("New Food")
+      SomaTextOnlyAppBar(
+        text = if (state.isEditMode) "Edit Food" else "New Food",
+        onNavigateBack = onNavigateBack,
+      )
     },
   ) { paddingValues ->
     Column(
@@ -79,7 +85,7 @@ fun FoodFormContent(
       )
 
       PrimaryButton(
-        text = "Add",
+        text = if (state.isEditMode) "Edit" else "Add",
         onClick = {
           onEvent(
             FoodFormEvent.SaveFood {

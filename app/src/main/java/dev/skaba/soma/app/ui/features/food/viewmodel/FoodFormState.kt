@@ -21,6 +21,7 @@ data class FoodFormState(
   val fiber: FormFieldState<Float?> = FormFieldState(null),
   val sodium: FormFieldState<Float?> = FormFieldState(null),
 
+  val isEditMode: Boolean = false,
   val isSaving: Boolean = false,
 )
 

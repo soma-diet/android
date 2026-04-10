@@ -2,12 +2,6 @@ package dev.skaba.soma.app.ui.navigation
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -17,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -26,39 +20,30 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import dev.skaba.soma.app.R
 import dev.skaba.soma.app.ui.theme.SOMATheme
 
 data class BottomNavigationItem(
   val name: String, // pro content description
-  val icon: ImageVector,
+  val icon: Int,
   val route: Any,
 )
 
 val navigationItems = listOf(
   BottomNavigationItem(
     name = "Search screen",
-    icon = Icons.Default.Search,
-    route = SearchScreenRoute
+    icon = R.drawable.search_24px,
+    route = SearchScreenRoute,
   ),
   BottomNavigationItem(
     name = "Log screen",
-    icon = Icons.Default.Home,
-    route = LogScreenRoute
-  ),
-  BottomNavigationItem(
-    name = "Food form screen",
-    icon = Icons.Default.Edit,
-    route = FoodFormScreenRoute
+    icon = R.drawable.home_24px,
+    route = LogScreenRoute,
   ),
   BottomNavigationItem(
     name = "Targets form screen",
-    icon = Icons.Default.Star,
-    route = TargetsFormScreenRoute
-  ),
-  BottomNavigationItem(
-    name = "log entry test",
-    icon = Icons.Default.Lock,
-    route = LogEntryScreenRoute
+    icon = R.drawable.target_24px,
+    route = TargetsFormScreenRoute,
   ),
 )
 
@@ -73,8 +58,8 @@ fun SomaNavigationBar(navController: NavHostController) {
       .clip(
         MaterialTheme.shapes.medium.copy(
           bottomStart = CornerSize(0.dp),
-          bottomEnd = CornerSize(0.dp)
-        )
+          bottomEnd = CornerSize(0.dp),
+        ),
       ),
     containerColor = MaterialTheme.colorScheme.surface,
   ) {
@@ -88,8 +73,8 @@ fun SomaNavigationBar(navController: NavHostController) {
         selected = isSelected,
         icon = {
           Icon(
-            imageVector = item.icon,
-            contentDescription = item.name
+            painter = painterResource(item.icon),
+            contentDescription = item.name,
           )
         },
         colors = NavigationBarItemDefaults.colors(
@@ -106,7 +91,7 @@ fun SomaNavigationBar(navController: NavHostController) {
             launchSingleTop = true // neotevirat dvakrat stejnou obrazovku
             restoreState = true // nacist ulozeny stav (pair s saveState)
           }
-        }
+        },
       )
     }
   }
