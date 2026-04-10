@@ -295,6 +295,8 @@ class FoodFormViewModel(
           .validateNumberNotNegative("Protein cannot be negative"),
         fats = current.fats.validateNumberNotEmpty("Fats are required")
           .validateNumberNotNegative("Fats cannot be negative"),
+        fiber = current.fiber.validateNumberNotNegative("Fiber cannot be negative"),
+        sodium = current.sodium.validateNumberNotNegative("Sodium cannot be negative"),
         servings = current.servings.map { serving ->
           serving.copy(
             name = serving.name.validateTextNotEmpty("Serving name required"),

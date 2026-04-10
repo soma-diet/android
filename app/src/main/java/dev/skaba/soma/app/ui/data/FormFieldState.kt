@@ -14,5 +14,5 @@ fun <T : Number> FormFieldState<T?>.validateNumberNotEmpty(errorMsg: String): Fo
 }
 
 fun <T : Number> FormFieldState<T?>.validateNumberNotNegative(errorMsg: String): FormFieldState<T?> {
-  return this.copy(error = if (this.value == null || this.value.toFloat() < 0) errorMsg else null)
+  return this.copy(error = if (this.value != null && this.value.toFloat() < 0) errorMsg else null)
 }

@@ -20,6 +20,8 @@ import dev.skaba.soma.app.ui.features.search.SearchScreen
 import dev.skaba.soma.app.ui.features.search.viewmodel.SearchViewModel
 import dev.skaba.soma.app.ui.features.search.viewmodel.SearchViewModelFactory
 import dev.skaba.soma.app.ui.features.targets.TargetsScreen
+import dev.skaba.soma.app.ui.features.targets.viewmodel.TargetsViewModel
+import dev.skaba.soma.app.ui.features.targets.viewmodel.TargetsViewModelFactory
 import dev.skaba.soma.app.ui.navigation.FoodFormScreenRoute
 import dev.skaba.soma.app.ui.navigation.LogEntryScreenRoute
 import dev.skaba.soma.app.ui.navigation.LogScreenRoute
@@ -73,7 +75,17 @@ fun SomaApp() {
         )
       }
 
-      composable<TargetsFormScreenRoute> { TargetsScreen() }
+      composable<TargetsFormScreenRoute> {
+        val targetsViewModel: TargetsViewModel = viewModel(
+          factory = TargetsViewModelFactory(
+            targetsRepository = appContainer.targetsRepository,
+          ),
+        )
+        TargetsScreen(
+          viewModel = targetsViewModel,
+          navigateBack = { navController.popBackStack() },
+        )
+      }
       composable<LogEntryScreenRoute> { LogEntryScreen() }
     }
   }
