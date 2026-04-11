@@ -6,8 +6,10 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.skaba.soma.app.data.AppDatabase
 import dev.skaba.soma.app.data.food.FoodRepositoryImpl
+import dev.skaba.soma.app.data.log_entry.LogEntryRepositoryImpl
 import dev.skaba.soma.app.data.targets.TargetsRepositoryImpl
 import dev.skaba.soma.app.domain.food.FoodRepository
+import dev.skaba.soma.app.domain.log_entry.LogEntryRepository
 import dev.skaba.soma.app.util.ImageProcessor
 
 class AppContainer(private val context: Context) {
@@ -24,7 +26,7 @@ class AppContainer(private val context: Context) {
         // overridnuti creatuni databaze
         override fun onCreate(db: SupportSQLiteDatabase) {
           super.onCreate(db)
-          db.execSQL("INSERT INTO targets (id) VALUES (1)") // potrebuju inicializovat prazdne targets
+          db.execSQL("INSERT INTO targets (id) VALUES (1)")
         }
       },
     )
@@ -32,7 +34,9 @@ class AppContainer(private val context: Context) {
 
   private val foodDao = database.foodDao()
   private val targetsDao = database.targetsDao()
+  private val logEntryDao = database.logEntryDao()
 
   val foodRepository: FoodRepository = FoodRepositoryImpl(foodDao)
   val targetsRepository = TargetsRepositoryImpl(targetsDao)
+  val logEntryRepository: LogEntryRepository = LogEntryRepositoryImpl(logEntryDao)
 }

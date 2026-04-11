@@ -1,4 +1,4 @@
-package dev.skaba.soma.app.data.log.local
+package dev.skaba.soma.app.data.log_entry.local
 
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -6,27 +6,21 @@ import androidx.room.PrimaryKey
 import androidx.room.Relation
 import dev.skaba.soma.app.data.food.local.FoodEntity
 
-@Entity(tableName = "diary_entries")
+@Entity(tableName = "log_entries")
 data class LogEntryEntity(
   @PrimaryKey val id: String,
-  val timestamp: String,
+  val timestamp: Long, // epoch milivteriny
 
-  val foodId: String, // odkaz do foods tabulky
-
-  val servingId: String?,
-  val servingName: String?,
-  val servingSize: Float?,
+  val foodId: String,
+  val servingId: String?, // null = 1g
   val quantity: Float,
-
-  val isSynced: Boolean = false
 )
 
-// spojeni -> vraceno pri hledani LogEntry
 data class LogEntryWithFood(
   @Embedded val entry: LogEntryEntity,
   @Relation(
     parentColumn = "foodId",
-    entityColumn = "id"
+    entityColumn = "id",
   )
-  val food: FoodEntity
+  val food: FoodEntity,
 )

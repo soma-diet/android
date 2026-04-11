@@ -4,40 +4,37 @@ import dev.skaba.soma.app.domain.food.Food
 import dev.skaba.soma.app.domain.food.Macronutrients
 import dev.skaba.soma.app.domain.food.Micronutrients
 import dev.skaba.soma.app.domain.food.Serving
-import java.time.ZonedDateTime
 
 data class LogEntry(
   val id: String,
-  val timestamp: ZonedDateTime,
+  val timestamp: Long, // epoch milliseconds
 
   val food: Food,
-  val serving: Serving,
+  val serving: Serving?, // null = 1g default
   val quantity: Float,
 ) {
   val totalMacronutrients: Macronutrients
     get() {
-      val multiplier = getMultiplier(this.serving.size, this.quantity)
+      val servingSize = serving?.size ?: 1.0f
+      val multiplier = (servingSize * quantity) / 100f
 
       return Macronutrients(
         kcal = food.macronutrients.kcal * multiplier,
         protein = food.macronutrients.protein * multiplier,
         carbs = food.macronutrients.carbs * multiplier,
-        fats = food.macronutrients.fats * multiplier
+        fats = food.macronutrients.fats * multiplier,
       )
     }
 
   val totalMicronutrients: Micronutrients?
     get() {
       val baseMicros = food.micronutrients ?: return null
-      val multiplier = getMultiplier(this.serving.size, this.quantity)
+      val servingSize = serving?.size ?: 1.0f
+      val multiplier = (servingSize * quantity) / 100f
 
       return Micronutrients(
         fiber = baseMicros.fiber?.times(multiplier),
-        sodium = baseMicros.sodium?.times(multiplier)
+        sodium = baseMicros.sodium?.times(multiplier),
       )
     }
-}
-
-private fun getMultiplier(servingSize: Float, quantity: Float): Float {
-  return (servingSize * quantity) / 100f
 }
