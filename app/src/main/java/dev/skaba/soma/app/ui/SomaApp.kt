@@ -79,6 +79,7 @@ fun SomaApp(appContainer: AppContainer) {
         TargetsScreen(
           viewModel = targetsViewModel,
           navigateBack = { navController.popBackStack() },
+          navigateToLogScreen = { navController.navigate(LogScreenRoute) },
         )
       }
       composable<LogEntryScreenRoute> { LogEntryScreen() }

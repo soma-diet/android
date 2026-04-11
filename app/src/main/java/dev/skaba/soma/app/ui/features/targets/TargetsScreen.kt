@@ -21,12 +21,14 @@ import dev.skaba.soma.app.ui.theme.SOMATheme
 fun TargetsScreen(
   viewModel: TargetsViewModel,
   navigateBack: () -> Unit,
+  navigateToLogScreen: () -> Unit,
 ) {
   val state by viewModel.state.collectAsStateWithLifecycle()
   TargetsScreenContent(
     state = state,
     onEvent = { event -> viewModel.onEvent(event) },
     navigateBack = navigateBack,
+    navigateToLogScreen = navigateToLogScreen,
   )
 }
 
@@ -35,6 +37,7 @@ fun TargetsScreenContent(
   state: TargetsFormState,
   onEvent: (TargetsFormEvent) -> Unit,
   navigateBack: () -> Unit,
+  navigateToLogScreen: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Scaffold(
@@ -55,7 +58,7 @@ fun TargetsScreenContent(
       TargetsForm(
         state = state,
         onEvent = onEvent,
-        onSuccess = navigateBack,
+        onSuccess = navigateToLogScreen,
       )
     }
   }
@@ -69,6 +72,7 @@ private fun TargetsScreenPreview() {
       state = TargetsFormState(),
       onEvent = {},
       navigateBack = {},
+      navigateToLogScreen = {},
     )
   }
 }

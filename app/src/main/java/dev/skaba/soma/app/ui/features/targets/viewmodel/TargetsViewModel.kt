@@ -1,6 +1,5 @@
 package dev.skaba.soma.app.ui.features.targets.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.skaba.soma.app.domain.targets.Targets
@@ -21,7 +20,6 @@ class TargetsViewModel(
   init {
     viewModelScope.launch {
       targetsRepository.get().collect { targets ->
-        Log.d("TARGETS_VM", "Načteno z repozitáře do ViewModelu: $targets")
         loadTargetsIntoState(targets)
       }
     }
@@ -149,10 +147,10 @@ class TargetsViewModel(
     viewModelScope.launch {
       try {
         val targets = Targets(
-          kcal = validatedState.kcal.value!!,
-          carbs = validatedState.carbs.value!!,
-          protein = validatedState.protein.value!!,
-          fats = validatedState.fats.value!!,
+          kcal = validatedState.kcal.value,
+          carbs = validatedState.carbs.value,
+          protein = validatedState.protein.value,
+          fats = validatedState.fats.value,
           fiber = validatedState.fiber.value,
           sodium = validatedState.sodium.value,
         )
