@@ -35,6 +35,7 @@ class SearchViewModel(
       is SearchEvent.DeleteFood -> {
         viewModelScope.launch {
           foodRepository.deleteById(event.id)
+          search(_state.value.query, _state.value.filter) // aktulizovat data
         }
       }
     }

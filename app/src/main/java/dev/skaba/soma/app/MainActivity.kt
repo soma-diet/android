@@ -11,9 +11,14 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
+
+    val appContainer = (application as SomaApplication).container
+
     setContent {
       SOMATheme {
-        SomaApp()
+        SomaApp(
+          appContainer = appContainer,
+        )
       }
     }
   }

@@ -1,4 +1,4 @@
-package dev.skaba.soma.app.ui.navigation
+package dev.skaba.soma.app.ui.components.scaffold
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CornerSize
@@ -21,6 +21,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dev.skaba.soma.app.R
+import dev.skaba.soma.app.ui.navigation.LogScreenRoute
+import dev.skaba.soma.app.ui.navigation.SearchScreenRoute
+import dev.skaba.soma.app.ui.navigation.TargetsFormScreenRoute
 import dev.skaba.soma.app.ui.theme.SOMATheme
 
 data class BottomNavigationItem(

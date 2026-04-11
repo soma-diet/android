@@ -1,6 +1,7 @@
 package dev.skaba.soma.app.ui.components.scaffold
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +34,7 @@ fun SomaAppBar(
         topEnd = CornerSize(0.dp),
       ),
     ),
+    windowInsets = WindowInsets(0.dp),
   )
 }
 

@@ -1,6 +1,7 @@
 package dev.skaba.soma.app.ui.features.log
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -18,24 +19,22 @@ fun LogScreen() {
   val spacing = 16.dp
   val sampleEntries = listOf(
     SomaItemListEntryData(
+      id = "asd",
       name = "Sample entry 1",
       subtext = "2x serving",
       sidetext = "300 kcal",
       onDelete = { },
-      onEdit = { }
-    ), SomaItemListEntryData(
+      onEdit = { },
+    ),
+    SomaItemListEntryData(
+      id = "asddasdas",
       name = "Sample entry 2",
       subtext = "1x whole",
       sidetext = "1445 kcal",
       onDelete = { },
-      onEdit = { }
-    ), SomaItemListEntryData(
-      name = "Sample entry 3",
-      subtext = "3x pieces",
-      sidetext = "457 kcal",
-      onDelete = { },
-      onEdit = { }
-    ))
+      onEdit = { },
+    ),
+  )
 
   Scaffold(
     topBar = {
@@ -44,11 +43,16 @@ fun LogScreen() {
         onDayForwards = {},
       )
     },
+    contentWindowInsets = WindowInsets(0.dp), // ignorovat inset od vnejsiho scaffoldu
   ) { paddingValues ->
-    Column(modifier = Modifier.padding(paddingValues).padding(bottom = spacing)) {
+    Column(
+      modifier = Modifier
+        .padding(paddingValues)
+        .padding(bottom = spacing),
+    ) {
       ProgressOverview(modifier = Modifier.padding(spacing))
       SomaItemList(
-        items = sampleEntries
+        items = sampleEntries,
       )
     }
   }

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 data class SomaItemListEntryData(
+  val id: String,
   val name: String,
   val subtext: String?,
   val sidetext: String,
@@ -50,12 +51,15 @@ fun SomaItemList(
   val spacing = 8.dp
   Surface(
     shape = MaterialTheme.shapes.medium,
-    modifier = modifier.fillMaxSize()
+    modifier = modifier.fillMaxSize(),
   ) {
     LazyColumn(
       verticalArrangement = Arrangement.spacedBy(spacing),
     ) {
-      itemsIndexed(items) { index, item ->
+      itemsIndexed(
+        items = items,
+        key = { _, item -> item.id }, // key aby pochopil pri updatovani ktery je ktery
+      ) { index, item ->
         val topSpacing = if (index == 0) spacing else null
         val bottomSpacing = if (index == items.lastIndex) spacing else null
         SomaItemListEntry(
@@ -102,7 +106,7 @@ private fun SomaItemListEntry(
 
         SwipeToDismissBoxValue.Settled -> false
       }
-    }
+    },
   )
 
   SwipeToDismissBox(
@@ -137,14 +141,14 @@ private fun SomaItemListEntry(
             Text(
               text = subtext,
               style = MaterialTheme.typography.labelMedium,
-              color = MaterialTheme.colorScheme.onSurfaceVariant
+              color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
           }
         }
         Text(
           text = sidetext,
           style = MaterialTheme.typography.labelMedium,
-          color = MaterialTheme.colorScheme.primary
+          color = MaterialTheme.colorScheme.primary,
         )
       }
       if (bottomMargin != null) {
@@ -167,7 +171,7 @@ private fun DismissBackground(dismissState: SwipeToDismissBoxState) {
       deleteDirection -> MaterialTheme.colorScheme.errorContainer // mazani
       editDirection -> MaterialTheme.colorScheme.tertiary // editace
       else -> Color.Transparent
-    }
+    },
   )
 
   // vybrat zarovnani ikonky (nalevo potreba start, napravo end)
@@ -201,14 +205,14 @@ private fun DismissBackground(dismissState: SwipeToDismissBoxState) {
       .fillMaxSize()
       .background(color)
       .padding(horizontal = 20.dp),
-    contentAlignment = alignment
+    contentAlignment = alignment,
   ) {
     // Settled = neswipuje
     if (dismissState.dismissDirection != SwipeToDismissBoxValue.Settled) {
       Icon(
         imageVector = icon,
         contentDescription = contentDescription,
-        tint = iconTint
+        tint = iconTint,
       )
     }
   }

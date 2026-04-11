@@ -1,14 +1,15 @@
 package dev.skaba.soma.app.ui.features.targets
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.skaba.soma.app.ui.components.scaffold.SomaTextOnlyAppBar
 import dev.skaba.soma.app.ui.features.targets.components.TargetsForm
 import dev.skaba.soma.app.ui.features.targets.viewmodel.TargetsFormEvent
@@ -21,7 +22,7 @@ fun TargetsScreen(
   viewModel: TargetsViewModel,
   navigateBack: () -> Unit,
 ) {
-  val state by viewModel.state.collectAsState()
+  val state by viewModel.state.collectAsStateWithLifecycle()
   TargetsScreenContent(
     state = state,
     onEvent = { event -> viewModel.onEvent(event) },
@@ -43,6 +44,7 @@ fun TargetsScreenContent(
         onNavigateBack = navigateBack,
       )
     },
+    contentWindowInsets = WindowInsets(0.dp), // ignorovat inset od vnejsiho scaffoldu
   ) { paddingValues ->
     val spacing = 16.dp
     Column(
@@ -53,7 +55,7 @@ fun TargetsScreenContent(
       TargetsForm(
         state = state,
         onEvent = onEvent,
-        onSuccess = navigateBack
+        onSuccess = navigateBack,
       )
     }
   }

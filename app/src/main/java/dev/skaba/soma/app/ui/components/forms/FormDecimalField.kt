@@ -8,9 +8,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
@@ -21,22 +23,27 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun FormDecimalField(
   name: String,
-  value: MutableState<Float?>,
+  value: Float?,
   placeholder: String,
   modifier: Modifier = Modifier,
   error: String? = null,
   required: Boolean = true,
   onValueChange: (Float?) -> Unit = {},
 ) {
-  // bez by protoze android studio si pak mysli ze je nepouzivana?
-  val stringValue = remember {
-    mutableStateOf(
-      value.value?.let {
-        if (it % 1f == 0f) it.toInt()
-          .toString() // pokud vyjde na cely cislo tak vypsat jako cislo bez tecky
-        else it.toString()  // bohuzel
-      } ?: ""
-    )
+  // pomocna funkce na hezke konvertovani floatu (cele cislo bez tecky)
+  fun Float?.toFormattedString(): String {
+    if (this == null) return ""
+    return if (this % 1f == 0f) this.toInt().toString() else this.toString()
+  }
+
+  var stringValue by remember { mutableStateOf(value.toFormattedString()) }
+
+  // updatovat stringValue podle prichozi hodnoty!
+  LaunchedEffect(value) {
+    val current = stringValue.replace(',', '.').toFloatOrNull()
+    if (current != value) {
+      stringValue = value.toFormattedString()
+    }
   }
 
   FormInputField(
@@ -46,25 +53,23 @@ fun FormDecimalField(
     required = required,
   ) {
     BasicTextField(
-      value = stringValue.value,
+      value = stringValue,
       onValueChange = { input ->
         var safeInput = input.replace(',', '.') // pro ceskou klavesnici
 
         if (safeInput.isEmpty()) {
-          stringValue.value = ""
-          value.value = null
+          stringValue = ""
           onValueChange(null)
         } else {
           // parts size == 2: cislo melo tecku, parts[1] - cast za teckou
           val parts = safeInput.split('.')
           safeInput = if (parts.size == 2 && parts[1].length > 1) {
-            parts[0] + "." + parts[1].substring(0, 1)
+            parts[0] + "." + parts[1][0]
           } else safeInput
 
           val converted = safeInput.toFloatOrNull()
           if (converted != null) {
-            stringValue.value = safeInput
-            value.value = converted
+            stringValue = safeInput
             onValueChange(converted)
           }
         }
@@ -73,7 +78,7 @@ fun FormDecimalField(
       modifier = modifier,
       textStyle = MaterialTheme.typography.bodyLarge.copy(
         color = if (error == null || error == "") MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.error,
-        textAlign = TextAlign.End
+        textAlign = TextAlign.End,
       ),
       singleLine = true,
       cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
@@ -84,16 +89,16 @@ fun FormDecimalField(
             .padding(end = 0.dp),
           contentAlignment = Alignment.CenterEnd,
         ) {
-          if (stringValue.value.isEmpty()) {
+          if (stringValue.isEmpty()) {
             Text(
               text = placeholder,
               style = MaterialTheme.typography.bodyLarge,
-              color = MaterialTheme.colorScheme.onSurfaceVariant
+              color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
           }
           innerTextField()
         }
-      }
+      },
     )
   }
 }

@@ -8,6 +8,7 @@ import dev.skaba.soma.app.domain.food.Food
 import dev.skaba.soma.app.domain.food.FoodRepository
 import dev.skaba.soma.app.domain.food.Macronutrients
 import dev.skaba.soma.app.domain.food.Micronutrients
+import dev.skaba.soma.app.domain.food.Serving
 import dev.skaba.soma.app.ui.data.validateNumberNotEmpty
 import dev.skaba.soma.app.ui.data.validateNumberNotNegative
 import dev.skaba.soma.app.ui.data.validateTextNotEmpty
@@ -55,6 +56,12 @@ class FoodFormViewModel(
         fats = it.fats.copy(value = food.macronutrients.fats),
         fiber = it.fiber.copy(value = food.micronutrients?.fiber),
         sodium = it.sodium.copy(value = food.micronutrients?.sodium),
+        servings = food.servings.map { serving ->
+          ServingState(id = serving.id).copy(
+            name = ServingState().name.copy(value = serving.name),
+            size = ServingState().size.copy(value = serving.size),
+          )
+        },
         isEditMode = true,
       )
     }
@@ -323,16 +330,30 @@ class FoodFormViewModel(
 
     viewModelScope.launch {
       try {
+        // ziskani uri obrazku po ulozeni
+        val currentFoodId = foodId ?: UUID.randomUUID().toString()
+        val finalImageUri = validatedState.localImageUri.value?.let { uri ->
+          imageProcessor.saveImgToStorage(uri, currentFoodId)
+        }
+
         val newFood = Food(
-          id = foodId ?: UUID.randomUUID().toString(),
+          id = currentFoodId,
           name = validatedState.name.value,
           isMass = !validatedState.isLiquid.value,
           isPrivate = true,
 
-          localImageUri = validatedState.localImageUri.value,
+          localImageUri = finalImageUri,
           remoteImageUrl = null,
 
           brand = validatedState.brand.value,
+
+          servings = validatedState.servings.map { servingState ->
+            Serving(
+              id = servingState.id,
+              name = servingState.name.value,
+              size = servingState.size.value!!,
+            )
+          },
 
           macronutrients = Macronutrients(
             kcal = validatedState.kcal.value!!,

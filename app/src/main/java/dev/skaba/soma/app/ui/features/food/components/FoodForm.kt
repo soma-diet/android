@@ -16,8 +16,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -37,10 +35,6 @@ fun FoodDetailsSection(
   onEvent: (FoodFormEvent) -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val nameInput = remember(state.name.value) { mutableStateOf(state.name.value) }
-  val brandInput = remember(state.brand.value) { mutableStateOf(state.brand.value) }
-  val isLiquidInput = remember(state.isLiquid.value) { mutableStateOf(state.isLiquid.value) }
-
   // nastaveni photo picker launcheru
   val photoPickerLauncher = rememberLauncherForActivityResult(
     contract = ActivityResultContracts.PickVisualMedia(),
@@ -69,24 +63,24 @@ fun FoodDetailsSection(
 
     FormTextField(
       name = "Food Name",
-      value = nameInput,
+      value = state.name.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.NameChanged(newValue)) },
-      placeholder = "Apple",
       error = state.name.error,
+      placeholder = "Apple",
     )
 
     FormTextField(
       name = "Brand",
-      value = brandInput,
+      value = state.brand.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.BrandChanged(newValue)) },
-      placeholder = "Walmart",
       error = state.brand.error,
+      placeholder = "Walmart",
       required = false,
     )
 
     FormCheckField(
       name = "Is a liquid",
-      value = isLiquidInput,
+      value = state.isLiquid.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.IsLiquidChanged(newValue)) },
     )
   }
@@ -123,9 +117,6 @@ fun ServingEditor(
   onEvent: (FoodFormEvent) -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val nameInput = remember(state.name.value) { mutableStateOf(state.name.value) }
-  val sizeInput = remember(state.size.value) { mutableStateOf(state.size.value) }
-
   Row(
     horizontalArrangement = Arrangement.End,
     verticalAlignment = Alignment.CenterVertically,
@@ -143,7 +134,7 @@ fun ServingEditor(
 
   FormTextField(
     name = "Serving name",
-    value = nameInput,
+    value = state.name.value,
     onValueChange = { newValue -> onEvent(FoodFormEvent.ServingNameChanged(state.id, newValue)) },
     error = state.name.error,
     placeholder = "Piece",
@@ -151,9 +142,9 @@ fun ServingEditor(
 
   FormDecimalField(
     name = "Size (g)",
-    value = sizeInput,
-    onValueChange = { newValue -> onEvent(FoodFormEvent.ServingSizeChanged(state.id, newValue)) },
+    value = state.size.value,
     error = state.size.error,
+    onValueChange = { newValue -> onEvent(FoodFormEvent.ServingSizeChanged(state.id, newValue)) },
     placeholder = "15 g",
   )
 }
@@ -164,13 +155,6 @@ fun FoodNutrientsSection(
   onEvent: (FoodFormEvent) -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val kcalInput = remember(state.kcal.value) { mutableStateOf(state.kcal.value) }
-  val proteinInput = remember(state.protein.value) { mutableStateOf(state.protein.value) }
-  val fatsInput = remember(state.fats.value) { mutableStateOf(state.fats.value) }
-  val carbsInput = remember(state.carbs.value) { mutableStateOf(state.carbs.value) }
-  val fiberInput = remember(state.fiber.value) { mutableStateOf(state.fiber.value) }
-  val sodiumInput = remember(state.sodium.value) { mutableStateOf(state.sodium.value) }
-
   FormSection(
     title = "Nutritional data",
   ) {
@@ -182,28 +166,28 @@ fun FoodNutrientsSection(
     // macronutrients
     FormDecimalField(
       name = "Energy (kcal)",
-      value = kcalInput,
+      value = state.kcal.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.KcalChanged(newValue)) },
       error = state.kcal.error,
       placeholder = "150 kcal",
     )
     FormDecimalField(
       name = "Fats",
-      value = fatsInput,
+      value = state.fats.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.FatsChanged(newValue)) },
       error = state.fats.error,
       placeholder = "10 g",
     )
     FormDecimalField(
       name = "Carbohydrates",
-      value = carbsInput,
+      value = state.carbs.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.CarbsChanged(newValue)) },
       error = state.carbs.error,
       placeholder = "67 g",
     )
     FormDecimalField(
       name = "Protein",
-      value = proteinInput,
+      value = state.protein.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.ProteinChanged(newValue)) },
       error = state.protein.error,
       placeholder = "15 g",
@@ -212,7 +196,7 @@ fun FoodNutrientsSection(
     // micronutrients
     FormDecimalField(
       name = "Fiber",
-      value = fiberInput,
+      value = state.fiber.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.FiberChanged(newValue)) },
       error = state.fiber.error,
       placeholder = "2 g",
@@ -220,7 +204,7 @@ fun FoodNutrientsSection(
     )
     FormDecimalField(
       name = "Salt",
-      value = sodiumInput,
+      value = state.sodium.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.SodiumChanged(newValue)) },
       error = state.sodium.error,
       placeholder = "0.5 g",

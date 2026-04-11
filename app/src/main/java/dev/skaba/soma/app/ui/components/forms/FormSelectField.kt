@@ -33,89 +33,89 @@ import dev.skaba.soma.app.ui.theme.SOMATheme
 
 @Composable
 fun FormSelectField(
-    name: String,
-    options: List<String>,
-    value: MutableState<String>,
-    modifier: Modifier = Modifier,
-    placeholder: String? = null,
-    required: Boolean = true,
-    onValueChange: (String) -> Unit = {},
+  name: String,
+  options: List<String>,
+  value: MutableState<String>,
+  modifier: Modifier = Modifier,
+  placeholder: String? = null,
+  required: Boolean = true,
+  onValueChange: (String) -> Unit = {},
 ) {
-    var expanded by remember { mutableStateOf(false) }
+  var expanded by remember { mutableStateOf(false) }
 
-    FormInputField(
-        name = name,
-        modifier = modifier,
-        required = required,
+  FormInputField(
+    name = name,
+    modifier = modifier,
+    required = required,
+  ) {
+    Column(
+      verticalArrangement = Arrangement.Top,
+      horizontalAlignment = Alignment.End,
     ) {
-        Column(
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.End
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .clickable { expanded = !expanded }
-                    .padding(vertical = 4.dp)
-            ) {
-                Text(
-                    text = if (value.value != "") value.value else placeholder ?: "",
-                    style = MaterialTheme.typography.bodyLarge,
+      Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier
+          .clickable { expanded = !expanded }
+          .padding(vertical = 4.dp),
+      ) {
+        Text(
+          text = if (value.value != "") value.value else placeholder ?: "",
+          style = MaterialTheme.typography.bodyLarge,
 //                    color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.End
-                )
+          textAlign = TextAlign.End,
+        )
 
-                Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(4.dp))
 
-                Icon(
-                    imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Select option",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
+        Icon(
+          imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+          contentDescription = "Select option",
+          tint = MaterialTheme.colorScheme.onSurfaceVariant,
+          modifier = Modifier.size(20.dp),
+        )
+      }
 
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                containerColor = MaterialTheme.colorScheme.surface,
-                shape = MaterialTheme.shapes.small,
-            ) {
-                options.forEach { option ->
-                    DropdownMenuItem(
-                        text = {
-                            Text(
-                                text = option,
-                                textAlign = TextAlign.End,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        },
-                        onClick = {
-                            value.value = option
-                            onValueChange(option)
-                            expanded = false
-                        },
-                    )
-                }
-            }
+      DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { expanded = false },
+        containerColor = MaterialTheme.colorScheme.surface,
+        shape = MaterialTheme.shapes.small,
+      ) {
+        options.forEach { option ->
+          DropdownMenuItem(
+            text = {
+              Text(
+                text = option,
+                textAlign = TextAlign.End,
+                modifier = Modifier.fillMaxWidth(),
+              )
+            },
+            onClick = {
+              value.value = option
+              onValueChange(option)
+              expanded = false
+            },
+          )
         }
+      }
     }
+  }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun FormSelectFieldPreview() {
-    SOMATheme {
-        FormSection(
-            title = "test section"
-        ) {
-            FormSelectField(
-                name = "testovaci pole",
-                options = listOf("option 1", "option 2"),
-                value = remember { mutableStateOf("option 1") },
-            )
-            Spacer(Modifier.height(300.dp))
-        }
+  SOMATheme {
+    FormSection(
+      title = "test section",
+    ) {
+      FormSelectField(
+        name = "testovaci pole",
+        options = listOf("option 1", "option 2"),
+        value = remember { mutableStateOf("option 1") },
+      )
+      Spacer(Modifier.height(300.dp))
     }
+  }
 }

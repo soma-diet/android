@@ -1,6 +1,7 @@
 package dev.skaba.soma.app.ui.features.log_entry
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -13,26 +14,27 @@ import dev.skaba.soma.app.ui.theme.SOMATheme
 
 @Composable
 fun LogEntryScreen() {
-    Scaffold(
-        topBar = {
-            SomaTextOnlyAppBar("Log food")
-        }
-    ) { paddingValues ->
-        val spacing = 16.dp
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(spacing)
-        ) {
-            LogEntryForm()
-        }
+  Scaffold(
+    topBar = {
+      SomaTextOnlyAppBar("Log food")
+    },
+    contentWindowInsets = WindowInsets(0.dp), // ignorovat inset od vnejsiho scaffoldu
+  ) { paddingValues ->
+    val spacing = 16.dp
+    Column(
+      modifier = Modifier
+        .padding(paddingValues)
+        .padding(spacing),
+    ) {
+      LogEntryForm()
     }
+  }
 }
 
 @Preview
 @Composable
 private fun LogEntryScreenPreview() {
-    SOMATheme {
-        LogEntryScreen()
-    }
+  SOMATheme {
+    LogEntryScreen()
+  }
 }

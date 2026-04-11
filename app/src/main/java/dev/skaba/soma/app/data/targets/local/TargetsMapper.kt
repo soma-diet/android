@@ -4,6 +4,7 @@ import dev.skaba.soma.app.domain.targets.Targets
 
 fun Targets.toEntity(): TargetsEntity {
   return TargetsEntity(
+    id = 1,
     kcal = this.kcal,
     carbs = this.carbs,
     protein = this.protein,
