@@ -14,6 +14,8 @@ import dev.skaba.soma.app.ui.features.food.FoodFormScreen
 import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormViewModel
 import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormViewModelFactory
 import dev.skaba.soma.app.ui.features.log.LogScreen
+import dev.skaba.soma.app.ui.features.log.viewmodel.LogViewModel
+import dev.skaba.soma.app.ui.features.log.viewmodel.LogViewModelFactory
 import dev.skaba.soma.app.ui.features.log_entry.LogEntryScreen
 import dev.skaba.soma.app.ui.features.search.SearchScreen
 import dev.skaba.soma.app.ui.features.search.viewmodel.SearchViewModel
@@ -33,7 +35,7 @@ fun SomaApp(appContainer: AppContainer) {
 
   Scaffold(
     bottomBar = { SomaNavigationBar(navController = navController) },
-  ) { globalPadding -> // odsazeni od spodni listy
+  ) { globalPadding ->
     NavHost(
       navController = navController,
       startDestination = LogScreenRoute,
@@ -55,7 +57,18 @@ fun SomaApp(appContainer: AppContainer) {
         )
       }
 
-      composable<LogScreenRoute> { LogScreen() }
+      composable<LogScreenRoute> {
+        val logViewModel: LogViewModel = viewModel(
+          factory = LogViewModelFactory(
+            logEntryRepository = appContainer.logEntryRepository,
+            targetsRepository = appContainer.targetsRepository,
+          ),
+        )
+        LogScreen(
+          viewModel = logViewModel,
+          onEditEntry = { /* TODO: edit navigation */ }
+        )
+      }
 
       composable<SearchScreenRoute> {
         val searchViewModel: SearchViewModel = viewModel(
@@ -86,11 +99,3 @@ fun SomaApp(appContainer: AppContainer) {
     }
   }
 }
-
-// @Preview(showBackground = true)
-// @Composable
-// private fun SomaAppPreview() {
-//   SOMATheme {
-//     SomaApp(appContainer = FakeAppContainer(LocalContext.current))
-//   }
-// }

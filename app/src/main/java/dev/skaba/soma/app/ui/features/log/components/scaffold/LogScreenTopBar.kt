@@ -6,20 +6,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import dev.skaba.soma.app.R
 import dev.skaba.soma.app.ui.components.scaffold.SomaAppBar
-import dev.skaba.soma.app.ui.theme.SOMATheme
+import java.util.Date
 
 @Composable
 fun LogScreenTopBar(
+  date: Date,
   onDayBackwards: () -> Unit,
   onDayForwards: () -> Unit,
 ) {
   SomaAppBar(
     title = {
       Text(
-        text = "Today",
+        text = date.toString().substring(0, 10), // Simple substring for now
         style = MaterialTheme.typography.headlineMedium
       )
     },
@@ -52,17 +52,6 @@ private fun ChangeDayButton(
     Icon(
       painter = painterResource(icon),
       contentDescription = description
-    )
-  }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun LogScreenTopBarPreview() {
-  SOMATheme {
-    LogScreenTopBar(
-      onDayBackwards = {},
-      onDayForwards = {}
     )
   }
 }
