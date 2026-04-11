@@ -3,13 +3,20 @@ package dev.skaba.soma.app.ui.features.log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.skaba.soma.app.R
+import dev.skaba.soma.app.ui.components.boxes.NoDataBox
 import dev.skaba.soma.app.ui.components.list.SomaItemList
 import dev.skaba.soma.app.ui.components.list.SomaItemListEntryData
 import dev.skaba.soma.app.ui.features.log.components.progress.ProgressOverview
@@ -72,9 +79,27 @@ fun LogScreenContent(
         targets = state.targets,
         modifier = Modifier.padding(spacing),
       )
-      SomaItemList(
-        items = logItems,
-      )
+
+      if (state.entries.isNotEmpty()) {
+        SomaItemList(
+          items = logItems,
+        )
+      } else {
+        NoDataBox(
+          modifier=Modifier.padding(horizontal = spacing)
+        ) {
+          Icon(
+            painter = painterResource(R.drawable.flatware_24px),
+            contentDescription="Flatware icon",
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(80.dp)
+          )
+          Text(
+            text = "Have you eaten yet?",
+            style = MaterialTheme.typography.labelLarge,
+          )
+        }
+      }
     }
   }
 }

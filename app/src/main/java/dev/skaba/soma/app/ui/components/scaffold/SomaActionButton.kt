@@ -1,6 +1,5 @@
 package dev.skaba.soma.app.ui.components.scaffold
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
@@ -19,7 +18,8 @@ fun SomaActionButton(
     containerColor = MaterialTheme.colorScheme.primary,
     contentColor = MaterialTheme.colorScheme.onPrimary,
     shape = MaterialTheme.shapes.medium,
-    modifier = Modifier.padding(16.dp).size(64.dp)
+    modifier = modifier
+      .size(64.dp),
   ) {
     content()
   }

@@ -34,7 +34,7 @@ fun LogEntryForm(
     if (state.selectedServing.value != null) servingToOption(state.selectedServing.value) else defaultServing
 
   FormSection(
-    title = food?.name ?: "Loading...",
+    title = food?.name ?: "",
     modifier = modifier,
     verticalSpacing = 12.dp,
   ) {
