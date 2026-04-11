@@ -19,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,15 +30,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.skaba.soma.app.ui.theme.SOMATheme
 
+data class SelectFieldOption(
+  val id: String?,
+  val name: String,
+)
+
 @Composable
 fun FormSelectField(
   name: String,
-  options: List<String>,
-  value: MutableState<String>,
+  options: List<SelectFieldOption>,
+  value: SelectFieldOption,
+  onValueChange: (SelectFieldOption) -> Unit,
   modifier: Modifier = Modifier,
   placeholder: String? = null,
   required: Boolean = true,
-  onValueChange: (String) -> Unit = {},
 ) {
   var expanded by remember { mutableStateOf(false) }
 
@@ -60,9 +64,8 @@ fun FormSelectField(
           .padding(vertical = 4.dp),
       ) {
         Text(
-          text = if (value.value != "") value.value else placeholder ?: "",
+          text = if (value.name != "") value.name else placeholder ?: "",
           style = MaterialTheme.typography.bodyLarge,
-//                    color = MaterialTheme.colorScheme.onSurface,
           textAlign = TextAlign.End,
         )
 
@@ -86,13 +89,12 @@ fun FormSelectField(
           DropdownMenuItem(
             text = {
               Text(
-                text = option,
+                text = option.name,
                 textAlign = TextAlign.End,
                 modifier = Modifier.fillMaxWidth(),
               )
             },
             onClick = {
-              value.value = option
               onValueChange(option)
               expanded = false
             },
@@ -112,8 +114,13 @@ private fun FormSelectFieldPreview() {
     ) {
       FormSelectField(
         name = "testovaci pole",
-        options = listOf("option 1", "option 2"),
-        value = remember { mutableStateOf("option 1") },
+        options = listOf(
+          SelectFieldOption("1", "Option 1"),
+          SelectFieldOption("2", "Option 2"),
+          SelectFieldOption("3", "Option 3"),
+        ),
+        value = SelectFieldOption("1", "Option 1"),
+        onValueChange = { },
       )
       Spacer(Modifier.height(300.dp))
     }

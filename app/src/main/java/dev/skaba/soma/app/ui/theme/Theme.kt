@@ -30,7 +30,7 @@ private val DarkColorScheme = darkColorScheme(
   error = ColorRed,
   onError = ColorWhite,
   tertiary = ColorGreen,
-  onTertiary = ColorBlack
+  onTertiary = ColorBlack,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -51,13 +51,13 @@ private val LightColorScheme = lightColorScheme(
   error = ColorRed,
   onError = ColorWhite,
   tertiary = ColorGreen,
-  onTertiary = ColorWhite
+  onTertiary = ColorWhite,
 )
 
 @Composable
 fun SOMATheme(
   darkTheme: Boolean = isSystemInDarkTheme(),
-  dynamicColor: Boolean = true,
+  dynamicColor: Boolean = false,
   content: @Composable () -> Unit,
 ) {
   val colorScheme = when {
@@ -71,12 +71,12 @@ fun SOMATheme(
   }
 
   // DEV pro testovani overriduju
-  val overridenScheme = DarkColorScheme
+  // val overridenScheme = DarkColorScheme
 
   MaterialTheme(
-    colorScheme = overridenScheme,
+    colorScheme = colorScheme,
     typography = AppTypography,
     content = content,
-    shapes = AppShapes
+    shapes = AppShapes,
   )
 }

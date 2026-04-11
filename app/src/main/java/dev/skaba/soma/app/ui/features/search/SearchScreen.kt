@@ -32,6 +32,7 @@ fun SearchScreen(
   searchViewModel: SearchViewModel,
   navigateToNewFoodScreen: () -> Unit,
   navigateToEditScreen: (String?) -> Unit,
+  onLogFood: (String) -> Unit,
 ) {
   val state by searchViewModel.state.collectAsState()
   SearchScreenContent(
@@ -39,6 +40,7 @@ fun SearchScreen(
     onEvent = { event -> searchViewModel.onEvent(event) },
     navigateToNewFoodScreen = navigateToNewFoodScreen,
     navigateToEditScreen = navigateToEditScreen,
+    onLogFood = onLogFood,
   )
 }
 
@@ -48,6 +50,7 @@ fun SearchScreenContent(
   onEvent: (SearchEvent) -> Unit,
   navigateToNewFoodScreen: () -> Unit,
   navigateToEditScreen: (String?) -> Unit,
+  onLogFood: (String) -> Unit,
 ) {
   val selectedFilterInput = remember(state.filter) { mutableStateOf(state.filter) }
 
@@ -65,7 +68,7 @@ fun SearchScreenContent(
         Icon(
           painter = painterResource(R.drawable.add_24px),
           contentDescription = "Add food",
-          modifier = Modifier.size(24.dp)
+          modifier = Modifier.size(24.dp),
         )
       }
     },
@@ -103,6 +106,7 @@ fun SearchScreenContent(
             name = food.name,
             subtext = food.brand,
             sidetext = "${food.macronutrients.kcal} kcal",
+            onClick = { onLogFood(food.id) },
             onDelete = onDelete,
             onEdit = onEdit,
           )
@@ -124,6 +128,7 @@ private fun SearchScreenPreview() {
       onEvent = {},
       navigateToNewFoodScreen = {},
       navigateToEditScreen = {},
+      onLogFood = {},
     )
   }
 }

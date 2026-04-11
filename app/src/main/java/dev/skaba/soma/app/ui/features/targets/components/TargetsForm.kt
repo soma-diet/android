@@ -25,6 +25,7 @@ fun TargetsForm(
       error = state.kcal.error,
       onValueChange = { newValue -> onEvent(TargetsFormEvent.KcalChanged(newValue)) },
       placeholder = "170",
+      required = false,
     )
     FormDecimalField(
       name = "Fats",
@@ -32,6 +33,7 @@ fun TargetsForm(
       error = state.fats.error,
       onValueChange = { newValue -> onEvent(TargetsFormEvent.FatsChanged(newValue)) },
       placeholder = "90",
+      required = false,
     )
     FormDecimalField(
       name = "Carbohydrates",
@@ -39,6 +41,7 @@ fun TargetsForm(
       error = state.carbs.error,
       onValueChange = { newValue -> onEvent(TargetsFormEvent.CarbsChanged(newValue)) },
       placeholder = "300",
+      required = false,
     )
     FormDecimalField(
       name = "Protein",
@@ -46,6 +49,7 @@ fun TargetsForm(
       error = state.protein.error,
       onValueChange = { newValue -> onEvent(TargetsFormEvent.ProteinChanged(newValue)) },
       placeholder = "150",
+      required = false,
     )
     FormDecimalField(
       name = "Fiber",
@@ -53,6 +57,7 @@ fun TargetsForm(
       error = state.fiber.error,
       onValueChange = { newValue -> onEvent(TargetsFormEvent.FiberChanged(newValue)) },
       placeholder = "15",
+      required = false,
     )
     FormDecimalField(
       name = "Sodium",
@@ -60,6 +65,7 @@ fun TargetsForm(
       error = state.sodium.error,
       onValueChange = { newValue -> onEvent(TargetsFormEvent.SodiumChanged(newValue)) },
       placeholder = "2",
+      required = false,
     )
     PrimaryButton(
       text = "Set targets",

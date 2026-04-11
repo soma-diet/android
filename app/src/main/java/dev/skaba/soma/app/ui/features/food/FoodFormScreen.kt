@@ -31,7 +31,7 @@ import dev.skaba.soma.app.ui.theme.SOMATheme
 @Composable
 fun FoodFormScreen(
   viewModel: FoodFormViewModel,
-  onFoodSaved: () -> Unit = {},
+  onFoodSaved: () -> Unit,
   navigateBack: (() -> Unit)? = null,
 ) {
   val state by viewModel.state.collectAsState()

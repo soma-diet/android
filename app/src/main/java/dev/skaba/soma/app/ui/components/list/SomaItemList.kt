@@ -2,6 +2,7 @@ package dev.skaba.soma.app.ui.components.list
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,10 +38,11 @@ import androidx.compose.ui.unit.dp
 data class SomaItemListEntryData(
   val id: String,
   val name: String,
-  val subtext: String?,
   val sidetext: String,
-  val onDelete: (() -> Unit)?,
-  val onEdit: (() -> Unit)?,
+  val subtext: String? = null,
+  val onClick: (() -> Unit)? = null,
+  val onDelete: (() -> Unit)? = null,
+  val onEdit: (() -> Unit)? = null,
 )
 
 @Composable
@@ -68,6 +70,7 @@ fun SomaItemList(
           sidetext = item.sidetext,
           allowDelete = item.onDelete != null,
           allowEdit = item.onEdit != null,
+          onClick = item.onClick,
           onDeleteSwipe = item.onDelete ?: {},
           onEditSwipe = item.onEdit ?: {},
           topMargin = topSpacing,
@@ -83,8 +86,9 @@ private fun SomaItemListEntry(
   name: String,
   sidetext: String,
   subtext: String? = null,
-  allowDelete: Boolean = false,
+  allowDelete: Boolean = false, // TODO predelat na pokud je funkce null..
   allowEdit: Boolean = false,
+  onClick: (() -> Unit)? = null,
   onDeleteSwipe: () -> Unit = {},
   onEditSwipe: () -> Unit = {},
   topMargin: Dp? = null,
@@ -119,6 +123,10 @@ private fun SomaItemListEntry(
       verticalArrangement = Arrangement.Center,
       modifier = Modifier
         .background(MaterialTheme.colorScheme.surface)
+        // podminena vlastjost modifieru
+        .then(
+          if (onClick != null) Modifier.clickable { onClick() } else Modifier,
+        )
         .heightIn(min = 40.dp),
     ) {
       if (topMargin != null) {

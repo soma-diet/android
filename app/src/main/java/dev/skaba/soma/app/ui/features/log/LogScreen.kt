@@ -48,6 +48,7 @@ fun LogScreenContent(
       sidetext = "${entry.totalMacronutrients.kcal.toInt()} kcal",
       onDelete = { onEvent(LogEvent.DeleteEntry(entry.id)) },
       onEdit = { onEditEntry(entry.id) },
+      onClick = null,
     )
   }
 
