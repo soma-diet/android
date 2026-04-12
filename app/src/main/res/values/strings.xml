@@ -17,4 +17,7 @@
     <string name="nutrient_fiber">Fiber</string>
     <string name="nutrient_salt">Salt</string>
     <string name="nutrient_sodium">Sodium</string>
+
+    <string name="notification_permission_title">Notification permission</string>
+    <string name="notification_permission_rationale">This app needs notification permissions to remind you to log your food intake throughout the day.</string>
 </resources>
