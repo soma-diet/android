@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">SOMA</string>
+
+    <string name="title_daily_targets">Daily targets</string>
+    <string name="title_food_search">Food search</string>
+    <string name="title_new_food">New Food</string>
+    <string name="title_edit_food">Edit Food</string>
+    <string name="title_food_details">Food Details</string>
+    <string name="title_servings">Servings</string>
+    <string name="title_nutritional_data">Nutritional data</string>
+    <string name="title_set_targets">Set your targets</string>
+
+    <string name="nutrient_kcal">Energy (kcal)</string>
+    <string name="nutrient_fats">Fats</string>
+    <string name="nutrient_carbs">Carbohydrates</string>
+    <string name="nutrient_protein">Protein</string>
+    <string name="nutrient_fiber">Fiber</string>
+    <string name="nutrient_salt">Salt</string>
+    <string name="nutrient_sodium">Sodium</string>
 </resources>

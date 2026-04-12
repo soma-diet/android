@@ -33,6 +33,8 @@ import dev.skaba.soma.app.ui.features.search.viewmodel.SearchState
 import dev.skaba.soma.app.ui.features.search.viewmodel.SearchViewModel
 import dev.skaba.soma.app.ui.theme.SOMATheme
 
+import androidx.compose.ui.res.stringResource
+
 @Composable
 fun SearchScreen(
   searchViewModel: SearchViewModel,
@@ -64,7 +66,7 @@ fun SearchScreenContent(
   Scaffold(
     topBar = {
       SomaTextOnlyAppBar(
-        text = "Food search",
+        text = stringResource(R.string.title_food_search),
       )
     },
     floatingActionButton = {

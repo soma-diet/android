@@ -17,6 +17,9 @@ import dev.skaba.soma.app.ui.features.targets.viewmodel.TargetsFormState
 import dev.skaba.soma.app.ui.features.targets.viewmodel.TargetsViewModel
 import dev.skaba.soma.app.ui.theme.SOMATheme
 
+import androidx.compose.ui.res.stringResource
+import dev.skaba.soma.app.R
+
 @Composable
 fun TargetsScreen(
   viewModel: TargetsViewModel,
@@ -43,7 +46,7 @@ fun TargetsScreenContent(
   Scaffold(
     topBar = {
       SomaTextOnlyAppBar(
-        text = "Daily targets",
+        text = stringResource(R.string.title_daily_targets),
         onNavigateBack = navigateBack,
       )
     },

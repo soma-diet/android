@@ -7,7 +7,7 @@ import androidx.room.Query
 
 @Dao
 interface FoodDao {
-  @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun insert(food: FoodEntity)
 
   @Query("SELECT * FROM foods WHERE id = :foodId")

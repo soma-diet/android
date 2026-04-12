@@ -29,6 +29,9 @@ import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormEvent
 import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormState
 import dev.skaba.soma.app.ui.features.food.viewmodel.ServingState
 
+import androidx.compose.ui.res.stringResource
+import dev.skaba.soma.app.R
+
 @Composable
 fun FoodDetailsSection(
   state: FoodFormState,
@@ -45,7 +48,7 @@ fun FoodDetailsSection(
   }
 
   FormSection(
-    title = "Food Details",
+    title = stringResource(R.string.title_food_details),
   ) {
     FormImageUpload(
       imageModel = state.localImageUri.value ?: state.remoteImageUrl,
@@ -93,7 +96,7 @@ fun FoodServingsSection(
   modifier: Modifier = Modifier,
 ) {
   FormSection(
-    title = "Servings",
+    title = stringResource(R.string.title_servings),
   ) {
     state.servings.forEach { servingState ->
       key(servingState.id) {
@@ -156,7 +159,7 @@ fun FoodNutrientsSection(
   modifier: Modifier = Modifier,
 ) {
   FormSection(
-    title = "Nutritional data",
+    title = stringResource(R.string.title_nutritional_data),
   ) {
     Text(
       text = "Please enter values per 100g",
@@ -165,28 +168,28 @@ fun FoodNutrientsSection(
 
     // macronutrients
     FormDecimalField(
-      name = "Energy (kcal)",
+      name = stringResource(R.string.nutrient_kcal),
       value = state.kcal.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.KcalChanged(newValue)) },
       error = state.kcal.error,
       placeholder = "150 kcal",
     )
     FormDecimalField(
-      name = "Fats",
+      name = stringResource(R.string.nutrient_fats),
       value = state.fats.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.FatsChanged(newValue)) },
       error = state.fats.error,
       placeholder = "10 g",
     )
     FormDecimalField(
-      name = "Carbohydrates",
+      name = stringResource(R.string.nutrient_carbs),
       value = state.carbs.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.CarbsChanged(newValue)) },
       error = state.carbs.error,
       placeholder = "67 g",
     )
     FormDecimalField(
-      name = "Protein",
+      name = stringResource(R.string.nutrient_protein),
       value = state.protein.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.ProteinChanged(newValue)) },
       error = state.protein.error,
@@ -195,7 +198,7 @@ fun FoodNutrientsSection(
 
     // micronutrients
     FormDecimalField(
-      name = "Fiber",
+      name = stringResource(R.string.nutrient_fiber),
       value = state.fiber.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.FiberChanged(newValue)) },
       error = state.fiber.error,
@@ -203,7 +206,7 @@ fun FoodNutrientsSection(
       required = false,
     )
     FormDecimalField(
-      name = "Salt",
+      name = stringResource(R.string.nutrient_sodium),
       value = state.sodium.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.SodiumChanged(newValue)) },
       error = state.sodium.error,

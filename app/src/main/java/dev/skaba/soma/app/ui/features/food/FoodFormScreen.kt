@@ -15,8 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.skaba.soma.app.R
 import dev.skaba.soma.app.ui.components.buttons.PrimaryButton
 import dev.skaba.soma.app.ui.components.scaffold.SomaTextOnlyAppBar
 import dev.skaba.soma.app.ui.features.food.components.FoodDetailsSection
@@ -55,7 +57,7 @@ fun FoodFormContent(
   Scaffold(
     topBar = {
       SomaTextOnlyAppBar(
-        text = if (state.isEditMode) "Edit Food" else "New Food",
+        text = if (state.isEditMode) stringResource(R.string.title_edit_food) else stringResource(R.string.title_new_food),
         onNavigateBack = onNavigateBack,
       )
     },

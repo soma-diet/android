@@ -9,6 +9,9 @@ import dev.skaba.soma.app.ui.components.forms.FormSection
 import dev.skaba.soma.app.ui.features.targets.viewmodel.TargetsFormEvent
 import dev.skaba.soma.app.ui.features.targets.viewmodel.TargetsFormState
 
+import androidx.compose.ui.res.stringResource
+import dev.skaba.soma.app.R
+
 @Composable
 fun TargetsForm(
   state: TargetsFormState,
@@ -17,10 +20,10 @@ fun TargetsForm(
   modifier: Modifier = Modifier,
 ) {
   FormSection(
-    title = "Set your targets",
+    title = stringResource(R.string.title_set_targets),
   ) {
     FormDecimalField(
-      name = "Energy (kcal)",
+      name = stringResource(R.string.nutrient_kcal),
       value = state.kcal.value,
       error = state.kcal.error,
       onValueChange = { newValue -> onEvent(TargetsFormEvent.KcalChanged(newValue)) },
@@ -28,7 +31,7 @@ fun TargetsForm(
       required = false,
     )
     FormDecimalField(
-      name = "Fats",
+      name = stringResource(R.string.nutrient_fats),
       value = state.fats.value,
       error = state.fats.error,
       onValueChange = { newValue -> onEvent(TargetsFormEvent.FatsChanged(newValue)) },
@@ -36,7 +39,7 @@ fun TargetsForm(
       required = false,
     )
     FormDecimalField(
-      name = "Carbohydrates",
+      name = stringResource(R.string.nutrient_carbs),
       value = state.carbs.value,
       error = state.carbs.error,
       onValueChange = { newValue -> onEvent(TargetsFormEvent.CarbsChanged(newValue)) },
@@ -44,7 +47,7 @@ fun TargetsForm(
       required = false,
     )
     FormDecimalField(
-      name = "Protein",
+      name = stringResource(R.string.nutrient_protein),
       value = state.protein.value,
       error = state.protein.error,
       onValueChange = { newValue -> onEvent(TargetsFormEvent.ProteinChanged(newValue)) },
@@ -52,7 +55,7 @@ fun TargetsForm(
       required = false,
     )
     FormDecimalField(
-      name = "Fiber",
+      name = stringResource(R.string.nutrient_fiber),
       value = state.fiber.value,
       error = state.fiber.error,
       onValueChange = { newValue -> onEvent(TargetsFormEvent.FiberChanged(newValue)) },
@@ -60,7 +63,7 @@ fun TargetsForm(
       required = false,
     )
     FormDecimalField(
-      name = "Sodium",
+      name = stringResource(R.string.nutrient_sodium),
       value = state.sodium.value,
       error = state.sodium.error,
       onValueChange = { newValue -> onEvent(TargetsFormEvent.SodiumChanged(newValue)) },
