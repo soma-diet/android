@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import dev.skaba.soma.app.R
 import dev.skaba.soma.app.domain.food.Serving
 import dev.skaba.soma.app.ui.components.boxes.ImageBox
 import dev.skaba.soma.app.ui.components.buttons.PrimaryButton
@@ -44,7 +46,7 @@ fun LogEntryForm(
     )
 
     FormSelectField(
-      name = "Serving",
+      name = stringResource(R.string.label_serving),
       options = servingOptions,
       value = selectedServing,
       onValueChange = { newServing ->
@@ -55,7 +57,7 @@ fun LogEntryForm(
     )
 
     FormDecimalField(
-      name = "Quantity",
+      name = stringResource(R.string.label_quantity),
       placeholder = "1.0",
       value = state.quantity.value,
       error = state.quantity.error,
@@ -63,7 +65,7 @@ fun LogEntryForm(
     )
 
     PrimaryButton(
-      text = if (state.isEditMode) "Update" else "Log",
+      text = if (state.isEditMode) stringResource(R.string.label_update) else stringResource(R.string.label_log),
       onClick = { onEvent(EntryFormEvent.SaveEntry(onSuccess)) },
       enabled = !state.isSaving && !state.isLoading,
       modifier = Modifier.fillMaxWidth(),

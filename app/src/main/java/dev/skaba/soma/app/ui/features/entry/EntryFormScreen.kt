@@ -11,7 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import dev.skaba.soma.app.R
 import dev.skaba.soma.app.ui.components.scaffold.SomaTextOnlyAppBar
 import dev.skaba.soma.app.ui.features.entry.components.LogEntryForm
 import dev.skaba.soma.app.ui.features.entry.viewmodel.EntryFormViewModel
@@ -27,7 +29,7 @@ fun EntryFormScreen(
   Scaffold(
     topBar = {
       SomaTextOnlyAppBar(
-        text = if (state.isEditMode) "Edit log" else "Log food",
+        text = if (state.isEditMode) stringResource(R.string.title_edit_log) else stringResource(R.string.title_log_food),
         onNavigateBack = navigateToLog,
       )
     },

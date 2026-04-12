@@ -89,7 +89,7 @@ fun FoodFormContent(
       )
 
       PrimaryButton(
-        text = if (state.isEditMode) "Edit" else "Add",
+        text = if (state.isEditMode) stringResource(R.string.label_edit) else stringResource(R.string.label_add),
         onClick = {
           onEvent(
             FoodFormEvent.SaveFood {

@@ -77,7 +77,7 @@ fun ReminderForm(modifier: Modifier = Modifier) {
   ) {
     if (!hasNotificationPermission) {
       PrimaryButton(
-        text = "Allow notifications",
+        text = stringResource(R.string.label_allow_notifications),
         onClick = {
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             showPermissionRationale.value = true
@@ -156,13 +156,13 @@ fun RationaleDialog(
     text = { Text(stringResource(R.string.notification_permission_rationale)) },
     confirmButton = {
       PrimaryButton(
-        text = "OK",
+        text = stringResource(R.string.label_ok),
         onClick = onConfirm,
       )
     },
     dismissButton = {
       SecondaryButton(
-        text = "Cancel",
+        text = stringResource(R.string.label_cancel),
         onClick = onDismiss,
       )
     },
@@ -191,7 +191,7 @@ fun TimePickerDialog(
     onDismissRequest = onDismiss,
     confirmButton = {
       PrimaryButton(
-        text = "Save",
+        text = stringResource(R.string.label_save),
         onClick = {
           onSave(timePickerState.hour, timePickerState.minute)
         },
@@ -199,7 +199,7 @@ fun TimePickerDialog(
     },
     dismissButton = {
       SecondaryButton(
-        text = "Cancel",
+        text = stringResource(R.string.label_cancel),
         onClick = onDismiss,
       )
     },

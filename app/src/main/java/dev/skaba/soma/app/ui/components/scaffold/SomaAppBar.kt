@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.skaba.soma.app.R
 
@@ -57,7 +58,7 @@ fun SomaTextOnlyAppBar(
         IconButton(onClick = onNavigateBack) {
           Icon(
             painter = painterResource(id = R.drawable.arrow_back),
-            contentDescription = "Go back",
+            contentDescription = stringResource(R.string.content_desc_go_back),
           )
         }
       }

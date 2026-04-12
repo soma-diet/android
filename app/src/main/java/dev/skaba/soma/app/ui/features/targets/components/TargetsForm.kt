@@ -71,7 +71,7 @@ fun TargetsForm(
       required = false,
     )
     PrimaryButton(
-      text = "Set targets",
+      text = stringResource(R.string.btn_set_targets),
       onClick = {
         onEvent(
           TargetsFormEvent.SaveTargets {

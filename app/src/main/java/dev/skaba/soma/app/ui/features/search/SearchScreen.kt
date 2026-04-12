@@ -76,7 +76,7 @@ fun SearchScreenContent(
       ) {
         Icon(
           painter = painterResource(R.drawable.add_24px),
-          contentDescription = "Add food",
+          contentDescription = stringResource(R.string.content_desc_add_food),
           modifier = Modifier.size(24.dp),
         )
       }
@@ -129,13 +129,13 @@ fun SearchScreenContent(
         ) {
           Icon(
             painter = painterResource(R.drawable.sentiment_stressed_24px),
-            contentDescription = "Missing data sad face",
+            contentDescription = stringResource(R.string.content_desc_missing_data),
             modifier = Modifier.size(96.dp),
             tint = MaterialTheme.colorScheme.primary
           )
           Spacer(Modifier.height(16.dp))
           Text(
-            text = "No food items found for your query. Try a different one.",
+            text = stringResource(R.string.msg_no_food_found),
             style = MaterialTheme.typography.labelLarge,
             textAlign = TextAlign.Center
           )

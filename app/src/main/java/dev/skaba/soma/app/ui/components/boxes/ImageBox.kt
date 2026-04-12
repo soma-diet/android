@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import dev.skaba.soma.app.R
@@ -40,7 +41,7 @@ fun ImageBox(
     if (imageModel != null && imageModel.toString().isNotBlank()) {
       AsyncImage(
         model = imageModel,
-        contentDescription = "Food image",
+        contentDescription = stringResource(R.string.content_desc_food_image),
         contentScale = ContentScale.Fit,
         modifier = Modifier.fillMaxSize()
       )
@@ -54,7 +55,7 @@ fun ImageBox(
       ) {
         Icon(
           painter = painterResource(id = R.drawable.outline_image_24),
-          contentDescription = "No image",
+          contentDescription = stringResource(R.string.content_desc_no_image),
           modifier = Modifier.size(48.dp),
         )
 

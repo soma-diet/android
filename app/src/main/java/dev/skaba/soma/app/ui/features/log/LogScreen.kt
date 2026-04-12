@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.skaba.soma.app.R
@@ -90,12 +91,12 @@ fun LogScreenContent(
         ) {
           Icon(
             painter = painterResource(R.drawable.flatware_24px),
-            contentDescription="Flatware icon",
+            contentDescription= stringResource(R.string.content_desc_flatware),
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(80.dp)
           )
           Text(
-            text = "Have you eaten yet?",
+            text = stringResource(R.string.msg_have_you_eaten),
             style = MaterialTheme.typography.labelLarge,
           )
         }

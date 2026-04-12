@@ -21,7 +21,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import dev.skaba.soma.app.R
 import dev.skaba.soma.app.ui.features.search.model.SearchFilter
 
 @Composable
@@ -45,7 +47,7 @@ fun SearchField(
           query = newQuery
           onQueryChanged(newQuery)
         },
-        placeholder = { Text(text = "Search foods..") },
+        placeholder = { Text(text = stringResource(R.string.placeholder_search_foods)) },
         modifier = Modifier.fillMaxWidth(),
         colors = OutlinedTextFieldDefaults.colors(
           unfocusedContainerColor = MaterialTheme.colorScheme.surface,

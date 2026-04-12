@@ -65,7 +65,7 @@ fun FoodDetailsSection(
     )
 
     FormTextField(
-      name = "Food Name",
+      name = stringResource(R.string.label_food_name),
       value = state.name.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.NameChanged(newValue)) },
       error = state.name.error,
@@ -73,7 +73,7 @@ fun FoodDetailsSection(
     )
 
     FormTextField(
-      name = "Brand",
+      name = stringResource(R.string.label_brand),
       value = state.brand.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.BrandChanged(newValue)) },
       error = state.brand.error,
@@ -82,7 +82,7 @@ fun FoodDetailsSection(
     )
 
     FormCheckField(
-      name = "Is a liquid",
+      name = stringResource(R.string.label_is_liquid),
       value = state.isLiquid.value,
       onValueChange = { newValue -> onEvent(FoodFormEvent.IsLiquidChanged(newValue)) },
     )
@@ -107,7 +107,7 @@ fun FoodServingsSection(
       }
     }
     SecondaryButton(
-      text = "Add a serving",
+      text = stringResource(R.string.label_add_serving),
       onClick = { onEvent(FoodFormEvent.AddServing) },
       modifier = Modifier.fillMaxWidth(),
     )
@@ -130,13 +130,13 @@ fun ServingEditor(
       modifier = Modifier.padding(0.dp),
     ) {
       Icon(
-        imageVector = Icons.Default.Clear, contentDescription = "Delete serving",
+        imageVector = Icons.Default.Clear, contentDescription = stringResource(R.string.content_desc_delete_serving),
       )
     }
   }
 
   FormTextField(
-    name = "Serving name",
+    name = stringResource(R.string.label_serving_name),
     value = state.name.value,
     onValueChange = { newValue -> onEvent(FoodFormEvent.ServingNameChanged(state.id, newValue)) },
     error = state.name.error,
@@ -144,7 +144,7 @@ fun ServingEditor(
   )
 
   FormDecimalField(
-    name = "Size (g)",
+    name = stringResource(R.string.label_size_g),
     value = state.size.value,
     error = state.size.error,
     onValueChange = { newValue -> onEvent(FoodFormEvent.ServingSizeChanged(state.id, newValue)) },
@@ -162,7 +162,7 @@ fun FoodNutrientsSection(
     title = stringResource(R.string.title_nutritional_data),
   ) {
     Text(
-      text = "Please enter values per 100g",
+      text = stringResource(R.string.label_enter_values_per_100g),
       style = MaterialTheme.typography.labelMedium,
     )
 

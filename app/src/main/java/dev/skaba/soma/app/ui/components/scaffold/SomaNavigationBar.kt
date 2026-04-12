@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -27,24 +28,25 @@ import dev.skaba.soma.app.ui.navigation.TargetsFormScreenRoute
 import dev.skaba.soma.app.ui.theme.SOMATheme
 
 data class BottomNavigationItem(
-  val name: String, // pro content description
+  val nameResId: Int, // pro content description
   val icon: Int,
   val route: Any,
 )
 
-val navigationItems = listOf(
+@Composable
+fun getNavigationItems() = listOf(
   BottomNavigationItem(
-    name = "Search screen",
+    nameResId = R.string.nav_search,
     icon = R.drawable.search_24px,
     route = SearchScreenRoute,
   ),
   BottomNavigationItem(
-    name = "Log screen",
+    nameResId = R.string.nav_log,
     icon = R.drawable.home_24px,
     route = LogScreenRoute,
   ),
   BottomNavigationItem(
-    name = "Targets form screen",
+    nameResId = R.string.nav_targets,
     icon = R.drawable.target_24px,
     route = TargetsFormScreenRoute,
   ),
@@ -54,6 +56,7 @@ val navigationItems = listOf(
 fun SomaNavigationBar(navController: NavHostController) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentDestination = navBackStackEntry?.destination
+  val items = getNavigationItems()
 
   NavigationBar(
     modifier = Modifier
@@ -66,7 +69,7 @@ fun SomaNavigationBar(navController: NavHostController) {
       ),
     containerColor = MaterialTheme.colorScheme.surface,
   ) {
-    navigationItems.forEach { item ->
+    items.forEach { item ->
       // najde jestli v sekvenci navigaci je route na item (::class = route)
       val isSelected = currentDestination?.hierarchy?.any {
         it.hasRoute(item.route::class)
@@ -77,7 +80,7 @@ fun SomaNavigationBar(navController: NavHostController) {
         icon = {
           Icon(
             painter = painterResource(item.icon),
-            contentDescription = item.name,
+            contentDescription = stringResource(item.nameResId),
           )
         },
         colors = NavigationBarItemDefaults.colors(
