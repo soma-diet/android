@@ -68,11 +68,9 @@ fun SomaItemList(
           name = item.name,
           subtext = item.subtext,
           sidetext = item.sidetext,
-          allowDelete = item.onDelete != null,
-          allowEdit = item.onEdit != null,
           onClick = item.onClick,
-          onDeleteSwipe = item.onDelete ?: {},
-          onEditSwipe = item.onEdit ?: {},
+          onDeleteSwipe = item.onDelete,
+          onEditSwipe = item.onEdit,
           topMargin = topSpacing,
           bottomMargin = bottomSpacing,
         )
@@ -86,11 +84,9 @@ private fun SomaItemListEntry(
   name: String,
   sidetext: String,
   subtext: String? = null,
-  allowDelete: Boolean = false, // TODO predelat na pokud je funkce null..
-  allowEdit: Boolean = false,
   onClick: (() -> Unit)? = null,
-  onDeleteSwipe: () -> Unit = {},
-  onEditSwipe: () -> Unit = {},
+  onDeleteSwipe: (() -> Unit)? = null,
+  onEditSwipe: (() -> Unit)? = null,
   topMargin: Dp? = null,
   bottomMargin: Dp? = null,
 ) {
@@ -99,12 +95,16 @@ private fun SomaItemListEntry(
     confirmValueChange = { dismissValue ->
       when (dismissValue) {
         SwipeToDismissBoxValue.EndToStart -> {
-          onEditSwipe()
+          if (onEditSwipe != null) {
+            onEditSwipe()
+          }
           false // nechci aby zmizela
         }
 
         SwipeToDismissBoxValue.StartToEnd -> {
-          onDeleteSwipe()
+          if (onDeleteSwipe != null) {
+            onDeleteSwipe()
+          }
           true // chci aby zmizela
         }
 
@@ -116,8 +116,8 @@ private fun SomaItemListEntry(
   SwipeToDismissBox(
     state = dismissState,
     backgroundContent = { DismissBackground(dismissState) },
-    enableDismissFromStartToEnd = allowDelete,
-    enableDismissFromEndToStart = allowEdit,
+    enableDismissFromStartToEnd = onDeleteSwipe != null,
+    enableDismissFromEndToStart = onEditSwipe != null,
   ) {
     Column(
       verticalArrangement = Arrangement.Center,
