@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.skaba.soma.app.R
 import dev.skaba.soma.app.ui.components.scaffold.SomaTextOnlyAppBar
-import dev.skaba.soma.app.ui.features.targets.components.ReminderSetting
+import dev.skaba.soma.app.ui.features.targets.components.ReminderForm
 import dev.skaba.soma.app.ui.features.targets.components.TargetsForm
 import dev.skaba.soma.app.ui.features.targets.viewmodel.TargetsFormEvent
 import dev.skaba.soma.app.ui.features.targets.viewmodel.TargetsFormState
@@ -65,7 +65,7 @@ fun TargetsScreenContent(
         onEvent = onEvent,
         onSuccess = navigateToLogScreen,
       )
-      ReminderSetting()
+      ReminderForm()
     }
   }
 }

@@ -30,7 +30,7 @@ android {
       buildConfigField(
         "String",
         "BACKEND_URL",
-        "\"htts://debug.soma.skaba.dev\""
+        "\"htts://debug.soma.skaba.dev\"",
       ) // pro debug hostuju custom backend
     }
 
@@ -40,7 +40,7 @@ android {
       isMinifyEnabled = false
       proguardFiles(
         getDefaultProguardFile("proguard-android-optimize.txt"),
-        "proguard-rules.pro"
+        "proguard-rules.pro",
       )
     }
   }
@@ -81,4 +81,7 @@ dependencies {
   // navigace
   implementation(libs.androidx.navigation.compose)
   implementation(libs.kotlinx.serialization.json)
+
+  // datastore
+  implementation(libs.androidx.datastore.preferences)
 }
