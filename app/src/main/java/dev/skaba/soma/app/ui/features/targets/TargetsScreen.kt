@@ -1,5 +1,6 @@
 package dev.skaba.soma.app.ui.features.targets
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
@@ -7,18 +8,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.skaba.soma.app.R
 import dev.skaba.soma.app.ui.components.scaffold.SomaTextOnlyAppBar
+import dev.skaba.soma.app.ui.features.targets.components.ReminderSetting
 import dev.skaba.soma.app.ui.features.targets.components.TargetsForm
 import dev.skaba.soma.app.ui.features.targets.viewmodel.TargetsFormEvent
 import dev.skaba.soma.app.ui.features.targets.viewmodel.TargetsFormState
 import dev.skaba.soma.app.ui.features.targets.viewmodel.TargetsViewModel
 import dev.skaba.soma.app.ui.theme.SOMATheme
-
-import androidx.compose.ui.res.stringResource
-import dev.skaba.soma.app.R
 
 @Composable
 fun TargetsScreen(
@@ -54,6 +55,7 @@ fun TargetsScreenContent(
   ) { paddingValues ->
     val spacing = 16.dp
     Column(
+      verticalArrangement = Arrangement.spacedBy(spacing),
       modifier = Modifier
         .padding(paddingValues)
         .padding(spacing),
@@ -63,6 +65,7 @@ fun TargetsScreenContent(
         onEvent = onEvent,
         onSuccess = navigateToLogScreen,
       )
+      ReminderSetting()
     }
   }
 }
