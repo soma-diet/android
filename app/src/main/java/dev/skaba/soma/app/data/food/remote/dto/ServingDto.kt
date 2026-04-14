@@ -1,14 +1,13 @@
 package dev.skaba.soma.app.data.food.remote.dto
 
 import dev.skaba.soma.app.domain.food.Serving
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ServingDto(
-  @SerialName("id") val id: String,
-  @SerialName("name") val name: String,
-  @SerialName("size") val size: Float,
+  val id: String,
+  val name: String,
+  val size: Float
 )
 
 fun ServingDto.toDomain(): Serving {

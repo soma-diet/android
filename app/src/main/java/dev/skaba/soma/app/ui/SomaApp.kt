@@ -63,6 +63,7 @@ fun SomaApp(appContainer: AppContainer) {
         val searchViewModel: SearchViewModel = viewModel(
           factory = SearchViewModelFactory(
             foodRepository = appContainer.foodRepository,
+            foodApi = appContainer.foodApi,
           ),
         )
         SearchScreen(

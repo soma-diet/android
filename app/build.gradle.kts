@@ -30,7 +30,7 @@ android {
       buildConfigField(
         "String",
         "BACKEND_URL",
-        "\"htts://debug.soma.skaba.dev\"",
+        "\"htts://debug-soma.skaba.dev\"",
       ) // pro debug hostuju custom backend
     }
 
@@ -84,4 +84,9 @@ dependencies {
 
   // datastore
   implementation(libs.androidx.datastore.preferences)
+
+  // internet
+  implementation(libs.retrofit)
+  implementation(libs.retrofit.kotlinx)
+  implementation(libs.okhttp)
 }

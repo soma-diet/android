@@ -4,15 +4,21 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import dev.skaba.soma.app.BuildConfig
 import dev.skaba.soma.app.data.AppDatabase
 import dev.skaba.soma.app.data.food.FoodRepositoryImpl
+import dev.skaba.soma.app.data.food.remote.FoodApi
 import dev.skaba.soma.app.data.log_entry.LogEntryRepositoryImpl
 import dev.skaba.soma.app.data.targets.TargetsRepositoryImpl
 import dev.skaba.soma.app.domain.food.FoodRepository
 import dev.skaba.soma.app.domain.log_entry.LogEntryRepository
 import dev.skaba.soma.app.util.ImageProcessor
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
+import retrofit2.Retrofit
 
-class AppContainer(private val context: Context) {
+class AppContainer(context: Context) {
 
   val imageProcessor = ImageProcessor(context)
 
@@ -35,6 +41,16 @@ class AppContainer(private val context: Context) {
   private val foodDao = database.foodDao()
   private val targetsDao = database.targetsDao()
   private val logEntryDao = database.logEntryDao()
+
+  private val networkJson = Json { ignoreUnknownKeys = true }
+  private val retrofit = Retrofit.Builder()
+    .baseUrl(BuildConfig.BACKEND_URL)
+    .addConverterFactory(networkJson.asConverterFactory("application/json".toMediaType()))
+    .build()
+
+  val foodApi: FoodApi by lazy {
+    retrofit.create(FoodApi::class.java)
+  }
 
   val foodRepository: FoodRepository = FoodRepositoryImpl(foodDao)
   val targetsRepository = TargetsRepositoryImpl(targetsDao)
