@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "790193824164",
+    "project_id": "soma-universe",
+    "storage_bucket": "soma-universe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790193824164:android:d707247883bed220c52131",
+        "android_client_info": {
+          "package_name": "dev.skaba.soma.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "790193824164-p2uahdildd8ushsteqk7ao40u1rbsbkk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkPryx7LfCLcKpIMwTD2gO82QYKVVeFoE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "790193824164-p2uahdildd8ushsteqk7ao40u1rbsbkk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
