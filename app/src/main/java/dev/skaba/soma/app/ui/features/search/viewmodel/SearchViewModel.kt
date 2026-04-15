@@ -1,7 +1,9 @@
 package dev.skaba.soma.app.ui.features.search.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.skaba.soma.app.data.food.remote.FoodApi
 import dev.skaba.soma.app.domain.food.Food
 import dev.skaba.soma.app.domain.food.FoodRepository
 import dev.skaba.soma.app.ui.features.search.model.SearchFilter
@@ -12,12 +14,29 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel(
   private val foodRepository: FoodRepository,
+  private val foodApi: FoodApi,
 ) : ViewModel() {
   private val _state = MutableStateFlow(SearchState())
   val state: StateFlow<SearchState> = _state.asStateFlow()
 
   init {
     search(_state.value.query, _state.value.filter)
+
+    // DEV
+    testApi()
+  }
+
+  private fun testApi() {
+    viewModelScope.launch {
+      try {
+        val testToken = "tvuj.jwt.token"
+        val response = foodApi.getFoods("Bearer $testToken")
+
+        Log.d("API_TEST", "Úspěch: $response")
+      } catch (e: Exception) {
+        Log.e("API_TEST", "Chyba API: ${e.message}", e)
+      }
+    }
   }
 
   fun onEvent(event: SearchEvent) {

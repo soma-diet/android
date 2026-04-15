@@ -31,7 +31,7 @@ android {
       buildConfigField(
         "String",
         "BACKEND_URL",
-        "\"htts://debug.soma.skaba.dev\"",
+        "\"htts://debug-soma.skaba.dev\"",
       ) // pro debug hostuju custom backend
     }
 
@@ -89,4 +89,9 @@ dependencies {
   // firebase
   implementation(platform(libs.firebase.bom))
   implementation(libs.firebase.auth)
+
+  // internet
+  implementation(libs.retrofit)
+  implementation(libs.retrofit.kotlinx)
+  implementation(libs.okhttp)
 }

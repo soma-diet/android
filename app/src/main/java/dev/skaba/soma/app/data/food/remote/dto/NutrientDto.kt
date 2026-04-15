@@ -2,21 +2,20 @@ package dev.skaba.soma.app.data.food.remote.dto
 
 import dev.skaba.soma.app.domain.food.Macronutrients
 import dev.skaba.soma.app.domain.food.Micronutrients
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class MacronutrientsDto(
-  @SerialName("kcal") val kcal: Float,
-  @SerialName("protein") val protein: Float,
-  @SerialName("fats") val fats: Float,
-  @SerialName("carbs") val carbs: Float,
+  val kcal: Float,
+  val protein: Float,
+  val carbs: Float,
+  val fats: Float
 )
 
 @Serializable
 data class MicronutrientsDto(
-  @SerialName("fiber") val fiber: Float? = null,
-  @SerialName("sodium") val sodium: Float? = null,
+  val fiber: Float? = null,
+  val sodium: Float? = null
 )
 
 fun MacronutrientsDto.toDomain(): Macronutrients {
