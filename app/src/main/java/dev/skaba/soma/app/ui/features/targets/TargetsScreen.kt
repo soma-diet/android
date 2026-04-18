@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.skaba.soma.app.R
+import dev.skaba.soma.app.ui.components.hints.LoadingFiller
 import dev.skaba.soma.app.ui.components.scaffold.SomaTextOnlyAppBar
 import dev.skaba.soma.app.ui.features.targets.components.ReminderForm
 import dev.skaba.soma.app.ui.features.targets.components.TargetsForm
@@ -67,11 +68,16 @@ fun TargetsScreenContent(
         .fillMaxWidth()
         .verticalScroll(scrollState),
     ) {
-      TargetsForm(
-        state = state,
-        onEvent = onEvent,
-        onSuccess = navigateToLogScreen,
-      )
+      if (state.isLoading) {
+        LoadingFiller()
+      } else {
+        TargetsForm(
+          state = state,
+          onEvent = onEvent,
+          onSuccess = navigateToLogScreen,
+        )
+      }
+
       ReminderForm()
     }
   }

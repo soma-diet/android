@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.skaba.soma.app.R
 import dev.skaba.soma.app.ui.components.boxes.ContentSurface
+import dev.skaba.soma.app.ui.components.hints.LoadingFiller
 import dev.skaba.soma.app.ui.components.list.SomaItemList
 import dev.skaba.soma.app.ui.components.list.SomaItemListEntryData
 import dev.skaba.soma.app.ui.features.log.components.progress.ProgressOverview
@@ -85,6 +86,8 @@ fun LogScreenContent(
         SomaItemList(
           items = logItems,
         )
+      } else if (state.isLoading) {
+        LoadingFiller()
       } else {
         ContentSurface(
           modifier = Modifier.padding(horizontal = spacing),

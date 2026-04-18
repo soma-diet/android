@@ -19,8 +19,18 @@ class TargetsViewModel(
 
   init {
     viewModelScope.launch {
+      _state.update {
+        it.copy(
+          isLoading = true,
+        )
+      }
       targetsRepository.get().collect { targets ->
         loadTargetsIntoState(targets)
+        _state.update {
+          it.copy(
+            isLoading = false,
+          )
+        }
       }
     }
   }

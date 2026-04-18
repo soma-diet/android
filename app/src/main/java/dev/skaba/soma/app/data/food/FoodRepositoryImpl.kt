@@ -1,5 +1,6 @@
 package dev.skaba.soma.app.data.food
 
+import android.util.Log
 import dev.skaba.soma.app.auth.AuthRepository
 import dev.skaba.soma.app.data.food.local.FoodDao
 import dev.skaba.soma.app.data.food.local.toDomain
@@ -30,7 +31,7 @@ class FoodRepositoryImpl(
     // get remote if not local
     try {
       val token = authRepository.getAuthToken()
-      if (token != null) { // neni prihlaseny
+      if (token == null) { // neni prihlaseny
         return null
       }
 
@@ -39,6 +40,7 @@ class FoodRepositoryImpl(
       return food
     } catch (e: Exception) {
       e.printStackTrace()
+      Log.e("LOG", "error getting food by id $foodId")
       return null
     }
   }

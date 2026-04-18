@@ -9,5 +9,6 @@ data class TargetsFormState(
   val fats: FormFieldState<Float?> = FormFieldState(null),
   val fiber: FormFieldState<Float?> = FormFieldState(null),
   val sodium: FormFieldState<Float?> = FormFieldState(null),
+  val isLoading: Boolean = false,
   val isSaving: Boolean = false,
 )

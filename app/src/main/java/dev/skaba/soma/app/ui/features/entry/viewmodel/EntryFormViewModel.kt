@@ -57,6 +57,7 @@ class EntryFormViewModel(
       } else {
         // NOVY LOG
         val food = foodRepository.getById(route.foodId!!)
+
         _state.update {
           it.copy(
             food = food,

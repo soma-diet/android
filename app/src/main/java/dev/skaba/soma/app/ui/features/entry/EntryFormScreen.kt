@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,10 +39,14 @@ fun EntryFormScreen(
     },
     contentWindowInsets = WindowInsets(0.dp),
   ) { paddingValues ->
-    if (state.isLoading || state.food == null) {
-      LoadingFiller(modifier = Modifier.padding(paddingValues))
+    val spacing = 16.dp
+    if (state.isLoading) {
+      LoadingFiller(modifier = Modifier
+        .padding(paddingValues)
+        .padding(spacing))
+    } else if (state.food == null) {
+      Text("what no food??")
     } else {
-      val spacing = 16.dp
       Column(
         verticalArrangement = Arrangement.spacedBy(spacing),
         modifier = Modifier
