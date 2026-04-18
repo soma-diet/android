@@ -67,8 +67,11 @@ fun LogEntryForm(
     PrimaryButton(
       text = if (state.isEditMode) stringResource(R.string.label_update) else stringResource(R.string.label_log),
       onClick = { onEvent(EntryFormEvent.SaveEntry(onSuccess)) },
-      enabled = !state.isSaving,
+      enabled = !state.isSaving && !state.isLoading,
       modifier = Modifier.fillMaxWidth(),
     )
   }
 }
+
+
+

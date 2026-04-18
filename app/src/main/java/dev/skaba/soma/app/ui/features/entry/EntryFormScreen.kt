@@ -1,5 +1,6 @@
 package dev.skaba.soma.app.ui.features.entry
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import dev.skaba.soma.app.R
 import dev.skaba.soma.app.ui.components.hints.LoadingFiller
 import dev.skaba.soma.app.ui.components.scaffold.SomaTextOnlyAppBar
 import dev.skaba.soma.app.ui.features.entry.components.LogEntryForm
+import dev.skaba.soma.app.ui.features.entry.components.NutritionalInformation
 import dev.skaba.soma.app.ui.features.entry.viewmodel.EntryFormViewModel
 
 @Composable
@@ -36,11 +38,12 @@ fun EntryFormScreen(
     },
     contentWindowInsets = WindowInsets(0.dp),
   ) { paddingValues ->
-    if (state.isLoading) {
+    if (state.isLoading || state.food == null) {
       LoadingFiller(modifier = Modifier.padding(paddingValues))
     } else {
       val spacing = 16.dp
       Column(
+        verticalArrangement = Arrangement.spacedBy(spacing),
         modifier = Modifier
           .padding(paddingValues)
           .padding(spacing)
@@ -51,6 +54,12 @@ fun EntryFormScreen(
           state = state,
           onEvent = viewModel::onEvent,
           onSuccess = navigateToLog,
+        )
+
+        NutritionalInformation(
+          food = state.food!!,
+          servingSize = state.selectedServing.value?.size ?: 1f,
+          quantity = state.quantity.value,
         )
       }
     }
