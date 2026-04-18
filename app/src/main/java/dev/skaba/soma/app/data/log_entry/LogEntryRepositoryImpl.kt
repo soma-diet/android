@@ -3,6 +3,7 @@ package dev.skaba.soma.app.data.log_entry
 import dev.skaba.soma.app.data.log_entry.local.LogEntryDao
 import dev.skaba.soma.app.data.log_entry.local.toDomain
 import dev.skaba.soma.app.data.log_entry.local.toEntity
+import dev.skaba.soma.app.domain.food.FoodRepository
 import dev.skaba.soma.app.domain.log_entry.LogEntry
 import dev.skaba.soma.app.domain.log_entry.LogEntryRepository
 import kotlinx.coroutines.flow.Flow
@@ -12,9 +13,11 @@ import java.util.Date
 
 class LogEntryRepositoryImpl(
   private val logEntryDao: LogEntryDao,
+  private val foodRepository: FoodRepository,
 ) : LogEntryRepository {
 
   override suspend fun insert(logEntry: LogEntry) {
+    foodRepository.insert(logEntry.food)
     logEntryDao.insert(logEntry.toEntity())
   }
 

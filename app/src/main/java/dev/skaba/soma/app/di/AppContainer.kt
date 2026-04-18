@@ -56,5 +56,5 @@ class AppContainer(context: Context) {
   val authRepository: AuthRepository = AuthRepository()
   val foodRepository: FoodRepository = FoodRepositoryImpl(foodDao, foodApi, authRepository)
   val targetsRepository = TargetsRepositoryImpl(targetsDao)
-  val logEntryRepository: LogEntryRepository = LogEntryRepositoryImpl(logEntryDao)
+  val logEntryRepository: LogEntryRepository = LogEntryRepositoryImpl(logEntryDao, foodRepository)
 }

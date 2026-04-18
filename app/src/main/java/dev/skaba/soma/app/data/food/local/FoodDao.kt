@@ -13,7 +13,7 @@ interface FoodDao {
   @Query("SELECT * FROM foods WHERE id = :foodId")
   suspend fun getById(foodId: String): FoodEntity?
 
-  @Query("SELECT * FROM foods WHERE name LIKE '%' || :name || '%'")
+  @Query("SELECT * FROM foods WHERE name LIKE '%' || :name || '%' AND isPrivate = 1")
   suspend fun getAllByName(name: String): List<FoodEntity>
 
   @Query("DELETE FROM foods WHERE id = :foodId")

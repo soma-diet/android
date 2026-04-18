@@ -61,8 +61,8 @@ class FoodRepositoryImpl(
       }
     } else emptyList();
 
-    // return mix
-    return localFoods + remoteFoods
+    // return both ( distinctBy = pokud jsou dva results se stejnym id tak zobrazi jen 1 - kvuli cachnutym foods z backendu)
+    return (localFoods + remoteFoods).distinctBy { it.id }
   }
 
   override suspend fun deleteById(foodId: String) {
