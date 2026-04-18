@@ -1,11 +1,12 @@
 package dev.skaba.soma.app
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
-import dev.skaba.soma.app.auth.AuthRepository
 import dev.skaba.soma.app.ui.SomaApp
 import dev.skaba.soma.app.ui.theme.SOMATheme
 import kotlinx.coroutines.launch
@@ -13,18 +14,18 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    enableEdgeToEdge()
+
+    // barvy na transparent aby to matchnulo pozadi appky
+    enableEdgeToEdge(
+      statusBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT),
+      navigationBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT),
+    )
 
     val appContainer = (application as SomaApplication).container
 
-    val authRepo = AuthRepository()
+    val authRepo = appContainer.authRepository
     lifecycleScope.launch {
-      val success = authRepo.signInAnonymously()
-      if (success) {
-        println("Anonymous user signed in, UID: ${authRepo.currentUser?.uid}")
-      } else {
-        println("Sign in error.")
-      }
+      authRepo.signInAnonymously()
     }
 
     setContent {

@@ -30,6 +30,10 @@ class FoodRepositoryImpl(
     // get remote if not local
     try {
       val token = authRepository.getAuthToken()
+      if (token != null) { // neni prihlaseny
+        return null
+      }
+
       val foodResponseDto = foodApi.getFoodById(foodId, "Bearer $token")
       val food = foodResponseDto.toDomain()
       return food
@@ -59,7 +63,7 @@ class FoodRepositoryImpl(
         e.printStackTrace()
         emptyList()
       }
-    } else emptyList();
+    } else emptyList()
 
     // return both ( distinctBy = pokud jsou dva results se stejnym id tak zobrazi jen 1 - kvuli cachnutym foods z backendu)
     return (localFoods + remoteFoods).distinctBy { it.id }
