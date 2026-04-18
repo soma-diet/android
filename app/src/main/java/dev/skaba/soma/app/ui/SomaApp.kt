@@ -4,7 +4,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -12,19 +15,14 @@ import dev.skaba.soma.app.di.AppContainer
 import dev.skaba.soma.app.ui.components.scaffold.SomaNavigationBar
 import dev.skaba.soma.app.ui.features.entry.EntryFormScreen
 import dev.skaba.soma.app.ui.features.entry.viewmodel.EntryFormViewModel
-import dev.skaba.soma.app.ui.features.entry.viewmodel.EntryFormViewModelFactory
 import dev.skaba.soma.app.ui.features.food.FoodFormScreen
 import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormViewModel
-import dev.skaba.soma.app.ui.features.food.viewmodel.FoodFormViewModelFactory
 import dev.skaba.soma.app.ui.features.log.LogScreen
 import dev.skaba.soma.app.ui.features.log.viewmodel.LogViewModel
-import dev.skaba.soma.app.ui.features.log.viewmodel.LogViewModelFactory
 import dev.skaba.soma.app.ui.features.search.SearchScreen
 import dev.skaba.soma.app.ui.features.search.viewmodel.SearchViewModel
-import dev.skaba.soma.app.ui.features.search.viewmodel.SearchViewModelFactory
 import dev.skaba.soma.app.ui.features.targets.TargetsScreen
 import dev.skaba.soma.app.ui.features.targets.viewmodel.TargetsViewModel
-import dev.skaba.soma.app.ui.features.targets.viewmodel.TargetsViewModelFactory
 import dev.skaba.soma.app.ui.navigation.EntryFormScreenRoute
 import dev.skaba.soma.app.ui.navigation.FoodFormScreenRoute
 import dev.skaba.soma.app.ui.navigation.LogScreenRoute
@@ -46,10 +44,14 @@ fun SomaApp(appContainer: AppContainer) {
       // MAIN SCREENS
       composable<LogScreenRoute> {
         val logViewModel: LogViewModel = viewModel(
-          factory = LogViewModelFactory(
-            logEntryRepository = appContainer.logEntryRepository,
-            targetsRepository = appContainer.targetsRepository,
-          ),
+          factory = viewModelFactory {
+            initializer {
+              LogViewModel(
+                logEntryRepository = appContainer.logEntryRepository,
+                targetsRepository = appContainer.targetsRepository,
+              )
+            }
+          },
         )
         LogScreen(
           viewModel = logViewModel,
@@ -61,9 +63,13 @@ fun SomaApp(appContainer: AppContainer) {
 
       composable<SearchScreenRoute> {
         val searchViewModel: SearchViewModel = viewModel(
-          factory = SearchViewModelFactory(
-            foodRepository = appContainer.foodRepository,
-          ),
+          factory = viewModelFactory {
+            initializer {
+              SearchViewModel(
+                foodRepository = appContainer.foodRepository,
+              )
+            }
+          },
         )
         SearchScreen(
           searchViewModel = searchViewModel,
@@ -77,9 +83,13 @@ fun SomaApp(appContainer: AppContainer) {
 
       composable<TargetsFormScreenRoute> {
         val targetsViewModel: TargetsViewModel = viewModel(
-          factory = TargetsViewModelFactory(
-            targetsRepository = appContainer.targetsRepository,
-          ),
+          factory = viewModelFactory {
+            initializer {
+              TargetsViewModel(
+                targetsRepository = appContainer.targetsRepository,
+              )
+            }
+          },
         )
         TargetsScreen(
           viewModel = targetsViewModel,
@@ -92,10 +102,15 @@ fun SomaApp(appContainer: AppContainer) {
 
       composable<FoodFormScreenRoute> {
         val foodFormViewModel: FoodFormViewModel = viewModel(
-          factory = FoodFormViewModelFactory(
-            foodRepository = appContainer.foodRepository,
-            imageProcessor = appContainer.imageProcessor,
-          ),
+          factory = viewModelFactory {
+            initializer {
+              FoodFormViewModel(
+                savedStateHandle = createSavedStateHandle(),
+                repository = appContainer.foodRepository,
+                imageProcessor = appContainer.imageProcessor,
+              )
+            }
+          },
         )
         FoodFormScreen(
           viewModel = foodFormViewModel,
@@ -108,10 +123,15 @@ fun SomaApp(appContainer: AppContainer) {
 
       composable<EntryFormScreenRoute> {
         val entryFormViewModel: EntryFormViewModel = viewModel(
-          factory = EntryFormViewModelFactory(
-            logEntryRepository = appContainer.logEntryRepository,
-            foodRepository = appContainer.foodRepository,
-          ),
+          factory = viewModelFactory {
+            initializer {
+              EntryFormViewModel(
+                savedStateHandle = createSavedStateHandle(),
+                logEntryRepository = appContainer.logEntryRepository,
+                foodRepository = appContainer.foodRepository,
+              )
+            }
+          },
         )
         EntryFormScreen(
           viewModel = entryFormViewModel,
