@@ -14,7 +14,6 @@ import dev.skaba.soma.app.ui.components.forms.FormDecimalField
 import dev.skaba.soma.app.ui.components.forms.FormSection
 import dev.skaba.soma.app.ui.components.forms.FormSelectField
 import dev.skaba.soma.app.ui.components.forms.SelectFieldOption
-import dev.skaba.soma.app.ui.components.hints.LoadingFiller
 import dev.skaba.soma.app.ui.features.entry.viewmodel.EntryFormEvent
 import dev.skaba.soma.app.ui.features.entry.viewmodel.EntryFormState
 
@@ -41,39 +40,35 @@ fun LogEntryForm(
     modifier = modifier,
     verticalSpacing = 12.dp,
   ) {
-    if (state.isLoading) {
-      LoadingFiller()
-    } else {
-      ImageBox(
-        imageModel = food?.localImageUri ?: food?.remoteImageUrl,
-        modifier = Modifier.height(224.dp),
-      )
+    ImageBox(
+      imageModel = food?.localImageUri ?: food?.remoteImageUrl,
+      modifier = Modifier.height(224.dp),
+    )
 
-      FormSelectField(
-        name = stringResource(R.string.label_serving),
-        options = servingOptions,
-        value = selectedServing,
-        onValueChange = { newServing ->
-          val serving =
-            if (newServing.id != null) food?.servings?.find { it.id == newServing.id } else null
-          onEvent(EntryFormEvent.ServingChanged(serving)) // null je default serving
-        },
-      )
+    FormSelectField(
+      name = stringResource(R.string.label_serving),
+      options = servingOptions,
+      value = selectedServing,
+      onValueChange = { newServing ->
+        val serving =
+          if (newServing.id != null) food?.servings?.find { it.id == newServing.id } else null
+        onEvent(EntryFormEvent.ServingChanged(serving)) // null je default serving
+      },
+    )
 
-      FormDecimalField(
-        name = stringResource(R.string.label_quantity),
-        placeholder = "1.0",
-        value = state.quantity.value,
-        error = state.quantity.error,
-        onValueChange = { onEvent(EntryFormEvent.QuantityChanged(it)) },
-      )
+    FormDecimalField(
+      name = stringResource(R.string.label_quantity),
+      placeholder = "1.0",
+      value = state.quantity.value,
+      error = state.quantity.error,
+      onValueChange = { onEvent(EntryFormEvent.QuantityChanged(it)) },
+    )
 
-      PrimaryButton(
-        text = if (state.isEditMode) stringResource(R.string.label_update) else stringResource(R.string.label_log),
-        onClick = { onEvent(EntryFormEvent.SaveEntry(onSuccess)) },
-        enabled = !state.isSaving,
-        modifier = Modifier.fillMaxWidth(),
-      )
-    }
+    PrimaryButton(
+      text = if (state.isEditMode) stringResource(R.string.label_update) else stringResource(R.string.label_log),
+      onClick = { onEvent(EntryFormEvent.SaveEntry(onSuccess)) },
+      enabled = !state.isSaving,
+      modifier = Modifier.fillMaxWidth(),
+    )
   }
 }

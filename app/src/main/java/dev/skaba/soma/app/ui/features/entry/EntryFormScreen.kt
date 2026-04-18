@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.skaba.soma.app.R
+import dev.skaba.soma.app.ui.components.hints.LoadingFiller
 import dev.skaba.soma.app.ui.components.scaffold.SomaTextOnlyAppBar
 import dev.skaba.soma.app.ui.features.entry.components.LogEntryForm
 import dev.skaba.soma.app.ui.features.entry.viewmodel.EntryFormViewModel
@@ -35,19 +36,23 @@ fun EntryFormScreen(
     },
     contentWindowInsets = WindowInsets(0.dp),
   ) { paddingValues ->
-    val spacing = 16.dp
-    Column(
-      modifier = Modifier
-        .padding(paddingValues)
-        .padding(spacing)
-        .fillMaxWidth()
-        .verticalScroll(scrollState),
-    ) {
-      LogEntryForm(
-        state = state,
-        onEvent = viewModel::onEvent,
-        onSuccess = navigateToLog,
-      )
+    if (state.isLoading) {
+      LoadingFiller(modifier = Modifier.padding(paddingValues))
+    } else {
+      val spacing = 16.dp
+      Column(
+        modifier = Modifier
+          .padding(paddingValues)
+          .padding(spacing)
+          .fillMaxWidth()
+          .verticalScroll(scrollState),
+      ) {
+        LogEntryForm(
+          state = state,
+          onEvent = viewModel::onEvent,
+          onSuccess = navigateToLog,
+        )
+      }
     }
   }
 }
