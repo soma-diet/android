@@ -31,12 +31,12 @@ android {
       buildConfigField(
         "String",
         "BACKEND_URL",
-        "\"htts://debug-soma.skaba.dev\"",
+        "\"https://debug-soma.skaba.dev\"",
       ) // pro debug hostuju custom backend
     }
 
     release {
-      buildConfigField("String", "BACKEND_URL", "\"htts://soma.skaba.dev\"")
+      buildConfigField("String", "BACKEND_URL", "\"https://soma.skaba.dev\"")
 
       isMinifyEnabled = false
       proguardFiles(

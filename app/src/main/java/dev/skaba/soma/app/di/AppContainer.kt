@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dev.skaba.soma.app.BuildConfig
+import dev.skaba.soma.app.auth.AuthRepository
 import dev.skaba.soma.app.data.AppDatabase
 import dev.skaba.soma.app.data.food.FoodRepositoryImpl
 import dev.skaba.soma.app.data.food.remote.FoodApi
@@ -52,7 +53,8 @@ class AppContainer(context: Context) {
     retrofit.create(FoodApi::class.java)
   }
 
-  val foodRepository: FoodRepository = FoodRepositoryImpl(foodDao)
+  val authRepository: AuthRepository = AuthRepository()
+  val foodRepository: FoodRepository = FoodRepositoryImpl(foodDao, foodApi, authRepository)
   val targetsRepository = TargetsRepositoryImpl(targetsDao)
   val logEntryRepository: LogEntryRepository = LogEntryRepositoryImpl(logEntryDao)
 }
