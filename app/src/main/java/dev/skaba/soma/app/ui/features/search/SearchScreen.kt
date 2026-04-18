@@ -1,11 +1,14 @@
 package dev.skaba.soma.app.ui.features.search
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -15,14 +18,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.skaba.soma.app.R
 import dev.skaba.soma.app.sample.FoodPreviewData
-import dev.skaba.soma.app.ui.components.boxes.NoDataBox
+import dev.skaba.soma.app.ui.components.boxes.ContentSurface
 import dev.skaba.soma.app.ui.components.list.SomaItemList
 import dev.skaba.soma.app.ui.components.list.SomaItemListEntryData
 import dev.skaba.soma.app.ui.components.scaffold.SomaActionButton
@@ -32,8 +37,6 @@ import dev.skaba.soma.app.ui.features.search.viewmodel.SearchEvent
 import dev.skaba.soma.app.ui.features.search.viewmodel.SearchState
 import dev.skaba.soma.app.ui.features.search.viewmodel.SearchViewModel
 import dev.skaba.soma.app.ui.theme.SOMATheme
-
-import androidx.compose.ui.res.stringResource
 
 @Composable
 fun SearchScreen(
@@ -72,7 +75,7 @@ fun SearchScreenContent(
     floatingActionButton = {
       SomaActionButton(
         onClick = navigateToNewFoodScreen,
-        modifier=Modifier.padding(bottom=spacing)
+        modifier = Modifier.padding(bottom = spacing),
       ) {
         Icon(
           painter = painterResource(R.drawable.add_24px),
@@ -122,22 +125,36 @@ fun SearchScreenContent(
               onEdit = onEdit,
             )
           },
+          isLoading = state.isLoading,
+          onScrolledToBottom = {
+            onEvent(SearchEvent.LoadNextPage)
+          },
         )
+      } else if (state.isLoading) {
+        ContentSurface {
+          Box(
+            modifier = Modifier.fillMaxSize(),
+          ) {
+            CircularProgressIndicator(
+              modifier = Modifier.align(Alignment.Center),
+            )
+          }
+        }
       } else {
-        NoDataBox(
-          modifier = Modifier.padding(horizontal = spacing)
+        ContentSurface(
+          modifier = Modifier.padding(horizontal = spacing),
         ) {
           Icon(
             painter = painterResource(R.drawable.sentiment_stressed_24px),
             contentDescription = stringResource(R.string.content_desc_missing_data),
             modifier = Modifier.size(96.dp),
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.primary,
           )
           Spacer(Modifier.height(16.dp))
           Text(
             text = stringResource(R.string.msg_no_food_found),
             style = MaterialTheme.typography.labelLarge,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
           )
         }
       }

@@ -16,8 +16,8 @@ data class FoodResponseDto(
   val imageFilename: String? = null,
   val isMass: Boolean,
   val isPrivate: Boolean,
-  val macronutrients: MacronutrientsDto,
-  val micronutrients: MicronutrientsDto,
+  val macronutrients: MacronutrientsDto? = null,
+  val micronutrients: MicronutrientsDto? = null,
   val name: String,
   val servings: List<ServingDto>
 )
@@ -29,10 +29,10 @@ fun FoodResponseDto.toDomain(): Food {
     isMass = this.isMass,
     isPrivate = this.isPrivate,
     localImageUri = null,
-    remoteImageUrl = IMAGES_URL + "/large_" + this.imageFilename, // url na serveru
+    remoteImageUrl = if (this.imageFilename != null) IMAGES_URL + "/large_" + this.imageFilename else null,
     brand = this.brand,
-    macronutrients = this.macronutrients.toDomain(),
-    micronutrients = this.micronutrients.toDomain(),
+    macronutrients = this.macronutrients?.toDomain() ?: dev.skaba.soma.app.domain.food.Macronutrients(0f, 0f, 0f, 0f),
+    micronutrients = this.micronutrients?.toDomain() ?: dev.skaba.soma.app.domain.food.Micronutrients(null, null),
     servings = this.servings.map { servingDto -> servingDto.toDomain() }
   )
 }

@@ -15,9 +15,11 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,12 +30,16 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 
 data class SomaItemListEntryData(
   val id: String,
@@ -49,13 +55,32 @@ data class SomaItemListEntryData(
 fun SomaItemList(
   items: List<SomaItemListEntryData>,
   modifier: Modifier = Modifier,
+  isLoading: Boolean = false,
+  onScrolledToBottom: (() -> Unit)? = null,
 ) {
   val spacing = 8.dp
+  val listState = rememberLazyListState()
+
+  LaunchedEffect(listState) {
+    snapshotFlow {
+      val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
+      lastVisibleItem?.index
+    }
+      .filter { index ->
+        index != null && index >= items.size - 5 && !isLoading
+      }
+      .distinctUntilChanged()
+      .collect {
+        onScrolledToBottom?.invoke()
+      }
+  }
+
   Surface(
     shape = MaterialTheme.shapes.medium,
     modifier = modifier.fillMaxSize(),
   ) {
     LazyColumn(
+      state = listState,
       verticalArrangement = Arrangement.spacedBy(spacing),
     ) {
       itemsIndexed(
@@ -74,6 +99,20 @@ fun SomaItemList(
           topMargin = topSpacing,
           bottomMargin = bottomSpacing,
         )
+      }
+
+      if (isLoading) {
+        item {
+          Box(
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(spacing),
+          ) {
+            CircularProgressIndicator(
+              modifier = Modifier.align(Alignment.Center),
+            )
+          }
+        }
       }
     }
   }

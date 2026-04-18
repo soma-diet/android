@@ -24,9 +24,9 @@ class FoodRepositoryImpl(
     return foodDao.getById(foodId)?.toDomain()
   }
 
-  override suspend fun searchByName(name: String, filter: SearchFilter): List<Food> {
-    // get local
-    val localFoods = if (filter != SearchFilter.PUBLIC) {
+  override suspend fun searchByName(name: String, filter: SearchFilter, page: Int): List<Food> {
+    // get local (jen na page = 0, jinak by se nacitalo pri scrollovani)
+    val localFoods = if (page == 0 && filter != SearchFilter.PUBLIC) {
       foodDao.getAllByName(name).map { it.toDomain() }
     } else emptyList()
 
@@ -35,7 +35,7 @@ class FoodRepositoryImpl(
       try {
         val token = authRepository.getAuthToken()
         if (token != null) {
-          val response = foodApi.searchFoods("Bearer $token", name)
+          val response = foodApi.searchFoods("Bearer $token", name, page = page)
           response.content.map { it.toDomain() }
         } else {
           emptyList()

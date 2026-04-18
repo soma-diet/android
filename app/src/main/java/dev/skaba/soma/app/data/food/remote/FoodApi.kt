@@ -12,6 +12,8 @@ interface FoodApi {
   suspend fun searchFoods(
     @Header("Authorization") authHeader: String,
     @Query("query") name: String? = null,
+    @Query("page") page: Int? = null,
+    @Query("size") size: Int? = null,
   ): PagedFoodResponse
 
   @GET("api/foods/{id}")

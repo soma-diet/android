@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun NoDataBox(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun ContentSurface(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
   Surface(
     shape = MaterialTheme.shapes.medium,
     modifier = Modifier.fillMaxSize(),

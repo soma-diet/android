@@ -37,13 +37,33 @@ class SearchViewModel(
           search(_state.value.query, _state.value.filter) // aktulizovat data
         }
       }
+
+      SearchEvent.LoadNextPage -> {
+        if (!_state.value.isLastPage && !_state.value.isLoading) {
+          search(_state.value.query, _state.value.filter, reset = false)
+        }
+      }
     }
   }
 
-  private fun search(query: String, filter: SearchFilter) {
+  private fun search(query: String, filter: SearchFilter, reset: Boolean = true) {
     viewModelScope.launch {
-      val foods = foodRepository.searchByName(query, filter)
-      _state.value = _state.value.copy(foods = foods)
+      val page = if (reset) 0 else _state.value.currentPage + 1
+
+      _state.value = _state.value.copy(
+        isLoading = true,
+        currentPage = page,
+        isLastPage = if (reset) false else _state.value.isLastPage,
+        foods = if (reset) emptyList() else _state.value.foods,
+      )
+
+      val newFoods = foodRepository.searchByName(query, filter, page = page)
+
+      _state.value = _state.value.copy(
+        isLoading = false,
+        isLastPage = newFoods.isEmpty(),
+        foods = if (reset) newFoods else _state.value.foods + newFoods,
+      )
     }
   }
 }

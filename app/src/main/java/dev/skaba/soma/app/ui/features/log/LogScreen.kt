@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.skaba.soma.app.R
-import dev.skaba.soma.app.ui.components.boxes.NoDataBox
+import dev.skaba.soma.app.ui.components.boxes.ContentSurface
 import dev.skaba.soma.app.ui.components.list.SomaItemList
 import dev.skaba.soma.app.ui.components.list.SomaItemListEntryData
 import dev.skaba.soma.app.ui.features.log.components.progress.ProgressOverview
@@ -86,14 +86,14 @@ fun LogScreenContent(
           items = logItems,
         )
       } else {
-        NoDataBox(
-          modifier=Modifier.padding(horizontal = spacing)
+        ContentSurface(
+          modifier = Modifier.padding(horizontal = spacing),
         ) {
           Icon(
             painter = painterResource(R.drawable.flatware_24px),
-            contentDescription= stringResource(R.string.content_desc_flatware),
+            contentDescription = stringResource(R.string.content_desc_flatware),
             tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.size(80.dp)
+            modifier = Modifier.size(80.dp),
           )
           Text(
             text = stringResource(R.string.msg_have_you_eaten),
