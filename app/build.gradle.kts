@@ -78,6 +78,7 @@ dependencies {
 
   // coil knihovna pro obrazky
   implementation(libs.coil.compose)
+  implementation(libs.coil.network.okhttp)
 
   // navigace
   implementation(libs.androidx.navigation.compose)

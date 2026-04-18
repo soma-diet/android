@@ -1,5 +1,6 @@
 package dev.skaba.soma.app.data.food.remote.dto
 
+import android.util.Log
 import dev.skaba.soma.app.BuildConfig
 import dev.skaba.soma.app.domain.food.Food
 import kotlinx.serialization.Serializable
@@ -19,20 +20,25 @@ data class FoodResponseDto(
   val macronutrients: MacronutrientsDto? = null,
   val micronutrients: MicronutrientsDto? = null,
   val name: String,
-  val servings: List<ServingDto>
+  val servings: List<ServingDto>,
 )
 
 fun FoodResponseDto.toDomain(): Food {
+  val remoteImageUrl =
+    if (this.imageFilename != null) IMAGES_URL + "/large_" + this.imageFilename else null
+  Log.d("FOOD", remoteImageUrl.toString())
   return Food(
     id = this.id,
     name = this.name,
     isMass = this.isMass,
     isPrivate = this.isPrivate,
     localImageUri = null,
-    remoteImageUrl = if (this.imageFilename != null) IMAGES_URL + "/large_" + this.imageFilename else null,
+    remoteImageUrl = remoteImageUrl,
     brand = this.brand,
-    macronutrients = this.macronutrients?.toDomain() ?: dev.skaba.soma.app.domain.food.Macronutrients(0f, 0f, 0f, 0f),
-    micronutrients = this.micronutrients?.toDomain() ?: dev.skaba.soma.app.domain.food.Micronutrients(null, null),
-    servings = this.servings.map { servingDto -> servingDto.toDomain() }
+    macronutrients = this.macronutrients?.toDomain()
+      ?: dev.skaba.soma.app.domain.food.Macronutrients(0f, 0f, 0f, 0f),
+    micronutrients = this.micronutrients?.toDomain()
+      ?: dev.skaba.soma.app.domain.food.Micronutrients(null, null),
+    servings = this.servings.map { servingDto -> servingDto.toDomain() },
   )
 }

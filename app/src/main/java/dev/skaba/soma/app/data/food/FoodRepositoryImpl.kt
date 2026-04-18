@@ -21,7 +21,22 @@ class FoodRepositoryImpl(
   }
 
   override suspend fun getById(foodId: String): Food? {
-    return foodDao.getById(foodId)?.toDomain()
+    // get local
+    val localFood = foodDao.getById(foodId)?.toDomain()
+    if (localFood != null) {
+      return localFood
+    }
+
+    // get remote if not local
+    try {
+      val token = authRepository.getAuthToken()
+      val foodResponseDto = foodApi.getFoodById(foodId, "Bearer $token")
+      val food = foodResponseDto.toDomain()
+      return food
+    } catch (e: Exception) {
+      e.printStackTrace()
+      return null
+    }
   }
 
   override suspend fun searchByName(name: String, filter: SearchFilter, page: Int): List<Food> {
