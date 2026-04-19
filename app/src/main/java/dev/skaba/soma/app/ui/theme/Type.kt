@@ -12,14 +12,14 @@ val OutfitFontFamily = FontFamily(
   Font(R.font.outfit_light, FontWeight.Light),
   Font(R.font.outfit_regular, FontWeight.Normal),
   Font(R.font.outfit_semibold, FontWeight.SemiBold),
-  Font(R.font.outfit_bold, FontWeight.Bold)
+  Font(R.font.outfit_bold, FontWeight.Bold),
 )
 
 val AppTypography = Typography(
   headlineLarge = TextStyle(
     fontFamily = OutfitFontFamily,
     fontWeight = FontWeight.Bold,
-    fontSize = 28.sp
+    fontSize = 28.sp,
   ),
   headlineMedium = TextStyle(
     fontFamily = OutfitFontFamily,
@@ -29,7 +29,7 @@ val AppTypography = Typography(
   headlineSmall = TextStyle(
     fontFamily = OutfitFontFamily,
     fontWeight = FontWeight.SemiBold,
-    fontSize = 20.sp,
+    fontSize = 18.sp,
   ),
 
   bodyLarge = TextStyle(
@@ -62,5 +62,5 @@ val AppTypography = Typography(
     fontFamily = OutfitFontFamily,
     fontWeight = FontWeight.ExtraLight,
     fontSize = 8.sp,
-  )
+  ),
 )

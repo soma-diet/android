@@ -61,17 +61,19 @@ fun SomaItemList(
   val spacing = 8.dp
   val listState = rememberLazyListState()
 
+  // detekce scrollingu na konec seznamu
   LaunchedEffect(listState) {
-    snapshotFlow {
-      val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
-      lastVisibleItem?.index
+    snapshotFlow { // brani az moc recompositions
+      val lastVisibleItem =
+        listState.layoutInfo.visibleItemsInfo.lastOrNull() // posledni item ktery je videt na obrazovce
+      lastVisibleItem?.index // jeho index
     }
       .filter { index ->
-        index != null && index >= items.size - 5 && !isLoading
+        index != null && index >= items.size - 5 && !isLoading // posledni item je mezi 5 poslednimi itemy v seznamu
       }
-      .distinctUntilChanged()
-      .collect {
-        onScrolledToBottom?.invoke()
+      .distinctUntilChanged() // blokuje konstantni reloadovani pokud zustava na konci seznamu
+      .collect { // kdyz vsechno je splneno
+        onScrolledToBottom?.invoke() // zavolat load more
       }
   }
 
@@ -101,6 +103,7 @@ fun SomaItemList(
         )
       }
 
+      // loading effect
       if (isLoading) {
         item {
           Box(
@@ -126,13 +129,14 @@ private fun SomaItemListEntry(
   onClick: (() -> Unit)? = null,
   onDeleteSwipe: (() -> Unit)? = null,
   onEditSwipe: (() -> Unit)? = null,
-  topMargin: Dp? = null,
+  topMargin: Dp? = null, // pro itemy na vrchu seznamu aby jejich swipe pozadi bylo vetsi
   bottomMargin: Dp? = null,
 ) {
   val dismissState = rememberSwipeToDismissBoxState(
-    positionalThreshold = { requiredDistance -> requiredDistance * 0.25f },
+    positionalThreshold = { requiredDistance -> requiredDistance * 0.2f }, // triggernout na 20%
     confirmValueChange = { dismissValue ->
       when (dismissValue) {
+        // <-------
         SwipeToDismissBoxValue.EndToStart -> {
           if (onEditSwipe != null) {
             onEditSwipe()
@@ -140,6 +144,7 @@ private fun SomaItemListEntry(
           false // nechci aby zmizela
         }
 
+        // ------>
         SwipeToDismissBoxValue.StartToEnd -> {
           if (onDeleteSwipe != null) {
             onDeleteSwipe()
@@ -152,15 +157,11 @@ private fun SomaItemListEntry(
     },
   )
 
-  SwipeToDismissBox(
-    state = dismissState,
-    backgroundContent = { DismissBackground(dismissState) },
-    enableDismissFromStartToEnd = onDeleteSwipe != null,
-    enableDismissFromEndToStart = onEditSwipe != null,
-  ) {
+  // wrapnuti obsahu do funkce, aby se mohlo odlisit zda bude v dismiss boxu nebo samotne
+  val itemContent = @Composable { modifier: Modifier ->
     Column(
       verticalArrangement = Arrangement.Center,
-      modifier = Modifier
+      modifier = modifier
         .background(MaterialTheme.colorScheme.surface)
         // podminena vlastjost modifieru
         .then(
@@ -178,7 +179,6 @@ private fun SomaItemListEntry(
           .fillMaxWidth()
           .padding(horizontal = 16.dp),
       ) {
-
         Column {
           Text(
             text = name,
@@ -203,45 +203,73 @@ private fun SomaItemListEntry(
       }
     }
   }
+
+  // pokud lze swipeovat -> itemContent je v DismissBoxu!!!
+  if (onDeleteSwipe != null || onEditSwipe != null) {
+    SwipeToDismissBox(
+      state = dismissState,
+      backgroundContent = {
+        DismissBackground(
+          dismissState = dismissState,
+          enableDelete = onDeleteSwipe != null,
+          enableEdit = onEditSwipe != null,
+        )
+      },
+      enableDismissFromStartToEnd = onDeleteSwipe != null,
+      enableDismissFromEndToStart = onEditSwipe != null,
+    ) {
+      itemContent(Modifier)
+    }
+  } else {
+    itemContent(Modifier.fillMaxWidth()) // NELZE SWIPEOVAT -> uplne ignoruje swipe box
+  }
 }
 
-// pozadi swipe itemu
+// pozadi swipe itemu (barva + ikonka)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DismissBackground(dismissState: SwipeToDismissBoxState) {
+private fun DismissBackground(
+  dismissState: SwipeToDismissBoxState,
+  enableDelete: Boolean,
+  enableEdit: Boolean,
+) {
   val deleteDirection = SwipeToDismissBoxValue.StartToEnd
   val editDirection = SwipeToDismissBoxValue.EndToStart
 
+  val direction = dismissState.dismissDirection
+
   // vybrat barvu pozadi podle toho na jakou stranu swipuje
   val color by animateColorAsState(
-    when (dismissState.dismissDirection) {
-      deleteDirection -> MaterialTheme.colorScheme.errorContainer // mazani
-      editDirection -> MaterialTheme.colorScheme.tertiary // editace
+    when (direction) {
+      deleteDirection -> if (enableDelete) MaterialTheme.colorScheme.errorContainer else Color.Transparent
+      editDirection -> if (enableEdit) MaterialTheme.colorScheme.tertiary else Color.Transparent
       else -> Color.Transparent
     },
   )
 
   // vybrat zarovnani ikonky (nalevo potreba start, napravo end)
-  val alignment = when (dismissState.dismissDirection) {
+  val alignment = when (direction) {
     deleteDirection -> Alignment.CenterStart
     editDirection -> Alignment.CenterEnd
     else -> Alignment.Center
   }
 
   // vybrat ikonku (nalevo Edit, napravo Delete)
-  val icon = when (dismissState.dismissDirection) {
+  val icon = when (direction) {
     deleteDirection -> Icons.Default.Delete
     editDirection -> Icons.Default.Edit
     else -> Icons.Default.Delete
   }
 
-  val iconTint = when (dismissState.dismissDirection) {
+  // barva ikonky podle typu akce
+  val iconTint = when (direction) {
     deleteDirection -> MaterialTheme.colorScheme.onError
-    editDirection -> MaterialTheme.colorScheme.onTertiary // TODO onTeriary nemam definovanou
+    editDirection -> MaterialTheme.colorScheme.onTertiary
     else -> MaterialTheme.colorScheme.onSurface
   }
 
-  val contentDescription = when (dismissState.dismissDirection) {
+  // accessibility popisky
+  val contentDescription = when (direction) {
     deleteDirection -> "Delete"
     editDirection -> "Edit"
     else -> "Swipe action"
@@ -254,8 +282,11 @@ private fun DismissBackground(dismissState: SwipeToDismissBoxState) {
       .padding(horizontal = 20.dp),
     contentAlignment = alignment,
   ) {
-    // Settled = neswipuje
-    if (dismissState.dismissDirection != SwipeToDismissBoxValue.Settled) {
+    // ikonka jen pokud je jedna z akci povolena
+    val isSwipingDelete = direction == deleteDirection && enableDelete
+    val isSwipingEdit = direction == editDirection && enableEdit
+
+    if (isSwipingDelete || isSwipingEdit) {
       Icon(
         imageVector = icon,
         contentDescription = contentDescription,

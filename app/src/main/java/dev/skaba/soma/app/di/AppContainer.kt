@@ -21,8 +21,10 @@ import retrofit2.Retrofit
 
 class AppContainer(context: Context) {
 
+  // utils
   val imageProcessor = ImageProcessor(context)
 
+  // db
   private val database = Room.databaseBuilder(
     context,
     AppDatabase::class.java,
@@ -39,20 +41,24 @@ class AppContainer(context: Context) {
     )
     .build()
 
+  // local daos
   private val foodDao = database.foodDao()
   private val targetsDao = database.targetsDao()
   private val logEntryDao = database.logEntryDao()
 
+  // network
   private val networkJson = Json { ignoreUnknownKeys = true }
   private val retrofit = Retrofit.Builder()
     .baseUrl(BuildConfig.BACKEND_URL)
     .addConverterFactory(networkJson.asConverterFactory("application/json".toMediaType()))
     .build()
 
+  // apis
   val foodApi: FoodApi by lazy {
     retrofit.create(FoodApi::class.java)
   }
 
+  // repositories
   val authRepository: AuthRepository = AuthRepository()
   val foodRepository: FoodRepository = FoodRepositoryImpl(foodDao, foodApi, authRepository)
   val targetsRepository = TargetsRepositoryImpl(targetsDao)

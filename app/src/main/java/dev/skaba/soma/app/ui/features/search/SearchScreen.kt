@@ -19,10 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.skaba.soma.app.R
-import dev.skaba.soma.app.sample.FoodPreviewData
 import dev.skaba.soma.app.ui.components.boxes.ContentSurface
 import dev.skaba.soma.app.ui.components.hints.LoadingFiller
 import dev.skaba.soma.app.ui.components.list.SomaItemList
@@ -33,7 +31,6 @@ import dev.skaba.soma.app.ui.features.search.components.SearchField
 import dev.skaba.soma.app.ui.features.search.viewmodel.SearchEvent
 import dev.skaba.soma.app.ui.features.search.viewmodel.SearchState
 import dev.skaba.soma.app.ui.features.search.viewmodel.SearchViewModel
-import dev.skaba.soma.app.ui.theme.SOMATheme
 
 @Composable
 fun SearchScreen(
@@ -148,22 +145,5 @@ fun SearchScreenContent(
         }
       }
     }
-  }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun SearchScreenPreview() {
-  SOMATheme {
-    SearchScreenContent(
-      state = SearchState(
-        query = "Test query",
-        foods = FoodPreviewData.allSamples,
-      ),
-      onEvent = {},
-      navigateToNewFoodScreen = {},
-      navigateToEditScreen = {},
-      onLogFood = {},
-    )
   }
 }

@@ -7,7 +7,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
 
-// classa, ktera validuje velikost obrazku (vygenerovano gemini)
+// classa, ktera validuje velikost obrazku
 class ImageProcessor(private val context: Context) {
   fun isImageSizeValid(uriString: String, maxMb: Int = 1): Boolean {
     val uri = uriString.toUri()

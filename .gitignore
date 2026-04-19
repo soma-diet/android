@@ -7,3 +7,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+tree.txt
+sign_keys
+*.jks
+*.keystore

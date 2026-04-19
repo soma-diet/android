@@ -2,7 +2,6 @@ package dev.skaba.soma.app.domain.log_entry
 
 import dev.skaba.soma.app.domain.food.Food
 import dev.skaba.soma.app.domain.food.Macronutrients
-import dev.skaba.soma.app.domain.food.Micronutrients
 import dev.skaba.soma.app.domain.food.Serving
 
 data class LogEntry(
@@ -23,18 +22,6 @@ data class LogEntry(
         protein = food.macronutrients.protein * multiplier,
         carbs = food.macronutrients.carbs * multiplier,
         fats = food.macronutrients.fats * multiplier,
-      )
-    }
-
-  val totalMicronutrients: Micronutrients?
-    get() {
-      val baseMicros = food.micronutrients ?: return null
-      val servingSize = serving?.size ?: 1.0f
-      val multiplier = (servingSize * quantity) / 100f
-
-      return Micronutrients(
-        fiber = baseMicros.fiber?.times(multiplier),
-        sodium = baseMicros.sodium?.times(multiplier),
       )
     }
 }

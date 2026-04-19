@@ -31,9 +31,9 @@ fun FormTextField(
       value = value,
       onValueChange = onValueChange,
       modifier = modifier,
-      textStyle = MaterialTheme.typography.bodyLarge.copy(
+      textStyle = MaterialTheme.typography.bodyMedium.copy(
         color = if (error == null || error == "") MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.error,
-        textAlign = TextAlign.End
+        textAlign = TextAlign.End,
       ),
       // primary color indikator psani
       cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
@@ -48,14 +48,14 @@ fun FormTextField(
           if (value.isEmpty()) {
             Text(
               text = placeholder,
-              style = MaterialTheme.typography.bodyLarge,
-              color = MaterialTheme.colorScheme.onSurfaceVariant
+              style = MaterialTheme.typography.bodyMedium,
+              color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
           }
 
           innerTextField()
         }
-      }
+      },
     )
   }
 }

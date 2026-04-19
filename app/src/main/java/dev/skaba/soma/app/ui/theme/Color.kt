@@ -9,7 +9,6 @@ val ColorWhite = Color(0xffffffff)
 val ColorSemiWhite = Color(0xFF888888)
 
 val ColorRed = Color(0xffff0000)
-val ColorSemiRed = Color(0xfffd3e3e)
 
 val ColorGreen = Color(0xff00ff00)
 

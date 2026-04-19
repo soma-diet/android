@@ -30,10 +30,8 @@ class FoodRepositoryImpl(
 
     // get remote if not local
     try {
-      val token = authRepository.getAuthToken()
-      if (token == null) { // neni prihlaseny
-        return null
-      }
+      val token = authRepository.getAuthToken() ?: // neni prihlaseny
+      return null
 
       val foodResponseDto = foodApi.getFoodById(foodId, "Bearer $token")
       val food = foodResponseDto.toDomain()

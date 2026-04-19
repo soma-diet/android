@@ -15,7 +15,7 @@ class TargetsRepositoryImpl(
     targetsDao.insertOrUpdate(targets.toEntity())
   }
 
-  override suspend fun get(): Flow<Targets> {
+  override fun get(): Flow<Targets> {
     return targetsDao.getTargets().map { entity ->
       entity.toDomain()
     }

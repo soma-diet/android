@@ -10,14 +10,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun ContentSurface(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun ContentSurface(
+  modifier: Modifier = Modifier,
+  horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+  verticalArrangement: Arrangement.Vertical = Arrangement.Center,
+  content: @Composable () -> Unit,
+) {
   Surface(
     shape = MaterialTheme.shapes.medium,
     modifier = Modifier.fillMaxSize(),
   ) {
     Column(
-      horizontalAlignment = Alignment.CenterHorizontally,
-      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = horizontalAlignment,
+      verticalArrangement = verticalArrangement,
       modifier = modifier
         .fillMaxSize(),
     ) {

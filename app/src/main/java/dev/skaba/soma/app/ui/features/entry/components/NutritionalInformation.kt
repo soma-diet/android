@@ -9,6 +9,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -40,11 +41,14 @@ fun NutritionalInformation(
     stringResource(R.string.nutrient_sodium) to food.micronutrients?.sodium,
   )
 
-  ContentSurface(modifier = modifier.padding(16.dp)) {
+  ContentSurface(
+    modifier = modifier.padding(16.dp),
+    horizontalAlignment = Alignment.Start,
+  ) {
     Text(
       text = "Nutritional information (per ${totalServingSize.toInt()}g)",
-      style = MaterialTheme.typography.titleMedium,
-      textAlign = TextAlign.Start,
+      style = MaterialTheme.typography.headlineSmall,
+      textAlign = TextAlign.Left,
       modifier = Modifier.padding(bottom = 8.dp),
     )
 

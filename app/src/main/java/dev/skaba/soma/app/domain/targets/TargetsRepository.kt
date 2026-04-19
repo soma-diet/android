@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface TargetsRepository {
   suspend fun update(targets: Targets)
-  suspend fun get(): Flow<Targets>
+  fun get(): Flow<Targets>
 }
