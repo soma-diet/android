@@ -28,7 +28,7 @@ class AppContainer(context: Context) {
   private val database = Room.databaseBuilder(
     context,
     AppDatabase::class.java,
-    "app_database",
+    "soma_db",
   )
     .addCallback(
       object : RoomDatabase.Callback() {
