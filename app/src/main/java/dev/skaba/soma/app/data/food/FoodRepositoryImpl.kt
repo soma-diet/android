@@ -18,7 +18,7 @@ class FoodRepositoryImpl(
 ) : FoodRepository {
   override suspend fun insert(food: Food) {
     val entity = food.toEntity()
-    foodDao.insert(entity)
+    foodDao.upsert(entity)
   }
 
   override suspend fun getById(foodId: String): Food? {

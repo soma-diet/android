@@ -4,11 +4,24 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
 
 @Dao
 interface FoodDao {
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  suspend fun insert(food: FoodEntity)
+  @Insert(onConflict = OnConflictStrategy.IGNORE)
+  suspend fun insert(food: FoodEntity): Long
+
+  @Update
+  suspend fun update(food: FoodEntity)
+
+  @Transaction
+  suspend fun upsert(food: FoodEntity) {
+    val id = insert(food)
+    if (id == -1L) {
+      update(food)
+    }
+  }
 
   @Query("SELECT * FROM foods WHERE id = :foodId")
   suspend fun getById(foodId: String): FoodEntity?
