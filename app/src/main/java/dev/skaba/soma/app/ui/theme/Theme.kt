@@ -70,9 +70,6 @@ fun SOMATheme(
     else -> LightColorScheme
   }
 
-  // DEV pro testovani overriduju
-  // val overridenScheme = DarkColorScheme
-
   MaterialTheme(
     colorScheme = colorScheme,
     typography = AppTypography,

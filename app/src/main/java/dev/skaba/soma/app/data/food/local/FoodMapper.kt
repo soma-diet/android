@@ -17,7 +17,7 @@ fun Food.toEntity(): FoodEntity {
     macronutrients = this.macronutrients.toEntity(),
     micronutrients = this.micronutrients?.toEntity(),
     servingsJson = Json.encodeToString(this.servings),
-    isSynced = false // nova entita
+    isSynced = false, // nova entita
   )
 }
 
@@ -26,7 +26,7 @@ fun FoodEntity.toDomain(): Food {
     id = this.id,
     name = this.name,
     isMass = this.isMass,
-    isPrivate = this.isPrivate, // stejne by melo byt vzdy true, nemuze si ulozit cizi jidlo (nebo muze kvuli loggum? TODO)
+    isPrivate = this.isPrivate,
     localImageUri = this.localImagePath,
     remoteImageUrl = this.remoteImagePath,
     brand = this.brand,

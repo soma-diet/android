@@ -167,7 +167,7 @@ class TargetsViewModel(
         targetsRepository.update(targets)
         onSuccess()
       } catch (e: Exception) {
-        // TODO handle chyba (popup? toast popup?)
+        e.printStackTrace()
       } finally {
         _state.update { it.copy(isSaving = false) }
       }

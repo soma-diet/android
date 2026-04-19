@@ -114,7 +114,7 @@ class EntryFormViewModel(
         logEntryRepository.insert(entry)
         onSuccess()
       } catch (e: Exception) {
-        // TODO Handle error
+        e.printStackTrace()
       } finally {
         _state.update { it.copy(isSaving = false) }
       }
