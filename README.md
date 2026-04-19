@@ -7,12 +7,12 @@
 
 Nativní Android aplikace pro rychlé logování kalorií a živin. Podporuje offline používání.
 
-## Ukázky
+## Screenshoty
 
 <div align="center">
 
 |                     Deník                     |                     Hledání                      |                       Cíle                        |
-| :-------------------------------------------: | :----------------------------------------------: | :-----------------------------------------------: |
+|:---------------------------------------------:|:------------------------------------------------:|:-------------------------------------------------:|
 | <img src="./docs/readme/log.jpg" width="250"> | <img src="./docs/readme/search.jpg" width="250"> | <img src="./docs/readme/targets.jpg" width="250"> |
 
 </div>
@@ -20,7 +20,7 @@ Nativní Android aplikace pro rychlé logování kalorií a živin. Podporuje of
 <div align="center">
 
 |                Detail potraviny                |                 Zápis do deníku                 |
-| :--------------------------------------------: | :---------------------------------------------: |
+|:----------------------------------------------:|:-----------------------------------------------:|
 | <img src="./docs/readme/food.jpg" width="250"> | <img src="./docs/readme/entry.jpg" width="250"> |
 
 </div>
