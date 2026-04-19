@@ -1,3 +1,63 @@
 <resources>
     <string name="app_name">SOMA</string>
+
+    <string name="title_daily_targets">Daily targets</string>
+    <string name="title_food_search">Food search</string>
+    <string name="title_new_food">New Food</string>
+    <string name="title_edit_food">Edit Food</string>
+    <string name="title_food_details">Food Details</string>
+    <string name="title_servings">Servings</string>
+    <string name="title_nutritional_data">Nutritional data</string>
+    <string name="title_set_targets">Set your targets</string>
+
+    <string name="nutrient_kcal">Energy (kcal)</string>
+    <string name="nutrient_fats">Fats</string>
+    <string name="nutrient_carbs">Carbohydrates</string>
+    <string name="nutrient_protein">Protein</string>
+    <string name="nutrient_fiber">Fiber</string>
+    <string name="nutrient_sodium">Sodium</string>
+
+    <string name="notification_permission_title">Notification permission</string>
+    <string name="notification_permission_rationale">This app needs notification permissions to remind you to log your food intake throughout the day.</string>
+
+    <string name="label_update">Update</string>
+    <string name="label_log">Log</string>
+    <string name="label_save">Save</string>
+    <string name="label_add">Add</string>
+    <string name="label_edit">Edit</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_ok">OK</string>
+    <string name="label_allow_notifications">Allow notifications</string>
+
+    <string name="btn_set_targets">Set targets</string>
+
+    <string name="label_food_name">Food Name</string>
+    <string name="label_brand">Brand</string>
+    <string name="label_is_liquid">Is a liquid</string>
+    <string name="label_add_serving">Add a serving</string>
+    <string name="label_serving_name">Serving name</string>
+    <string name="label_size_g">Size (g)</string>
+    <string name="label_enter_values_per_100g">Please enter values per 100g</string>
+    <string name="content_desc_delete_serving">Delete serving</string>
+
+    <string name="content_desc_add_food">Add food</string>
+    <string name="content_desc_missing_data">Missing data sad face</string>
+    <string name="msg_no_food_found">No food items found for your query. Try a different one.</string>
+    <string name="placeholder_search_foods">Search foods..</string>
+
+    <string name="content_desc_flatware">Flatware icon</string>
+    <string name="msg_have_you_eaten">Have you eaten yet?</string>
+
+    <string name="title_log_food">Log food</string>
+    <string name="title_edit_log">Edit log</string>
+    <string name="label_serving">Serving</string>
+    <string name="label_quantity">Quantity</string>
+
+    <string name="nav_search">Search</string>
+    <string name="nav_log">Log</string>
+    <string name="nav_targets">Targets</string>
+
+    <string name="content_desc_go_back">Go back</string>
+    <string name="content_desc_food_image">Food image</string>
+    <string name="content_desc_no_image">No image</string>
 </resources>
